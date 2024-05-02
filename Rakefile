@@ -7,6 +7,7 @@ require 'graphql'
 require 'json'
 
 Rake::TestTask.new do |t|
+  t.warning = false
   t.libs << 'test'
   t.test_files = FileList['test/*_test.rb']
 end
