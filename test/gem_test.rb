@@ -1,4 +1,5 @@
 # typed: true
+
 require 'minitest/autorun'
 require 'fragment_client'
 
