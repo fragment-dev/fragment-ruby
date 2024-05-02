@@ -143,7 +143,7 @@ PLATFORMS
 
 DEPENDENCIES
   fragment-alpha-sdk!
-  graphql
+  graphql-client
   http
   minitest
   pry

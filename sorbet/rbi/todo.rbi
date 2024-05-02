@@ -10,7 +10,6 @@ module ActiveSupport::ArrayInquirer; end
 module ActiveSupport::Multibyte::Chars; end
 module ActiveSupport::SafeBuffer; end
 module ActiveSupport::StringInquirer; end
-module ActiveSupport::TimeZone; end
-module T::Private::Abstract::Hooks; end
-module T::Private::Methods::MethodHooks; end
-module T::Private::Methods::SingletonMethodHooks; end
+module Faraday::ClientError; end
+module Faraday::Connection; end
+class GraphQL::Client::HTTP; end
