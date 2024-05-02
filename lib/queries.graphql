@@ -1,0 +1,378 @@
+mutation StoreSchema($schema: SchemaInput!) {
+  storeSchema(schema: $schema) {
+    ... on StoreSchemaResult {
+      schema {
+        key
+        name
+        version {
+          created
+          version
+        }
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation CreateLedger($ik: SafeString!, $ledger: CreateLedgerInput!, $schema: SchemaMatchInput!) {
+  createLedger(ik: $ik, ledger: $ledger, schema: $schema) {
+    __typename
+    ... on CreateLedgerResult {
+      ledger {
+        id
+        name
+      }
+      isIkReplay
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation CreateLedgerAccounts(
+  $ledger: LedgerMatchInput!
+  $ledgerAccounts: [CreateLedgerAccountsInput!]!
+) {
+  createLedgerAccounts(ledger: $ledger, ledgerAccounts: $ledgerAccounts) {
+    __typename
+    ... on CreateLedgerAccountsResult {
+      ledgerAccounts {
+        id
+        name
+        type
+        ik
+      }
+      ikReplays {
+        ik
+        isIkReplay
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation ReconcileTx($entry: LedgerEntryInput!) {
+  reconcileTx(entry: $entry) {
+    __typename
+    ... on ReconcileTxResult {
+      entry {
+        id
+        date
+        description
+      }
+      lines {
+        id
+        date
+        amount
+        type
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation AddLedgerEntry($entry: LedgerEntryInput!, $ik: SafeString!) {
+  addLedgerEntry(entry: $entry, ik: $ik) {
+    __typename
+    ... on AddLedgerEntryResult {
+      entry {
+        id
+        date
+        description
+      }
+      lines {
+        id
+        date
+        description
+        amount
+        type
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation UpdateLedger($ledger: LedgerMatchInput!, $update: UpdateLedgerInput!) {
+  updateLedger(ledger: $ledger, update: $update) {
+    __typename
+    ... on UpdateLedgerResult {
+      ledger {
+        id
+        name
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation UpdateLedgerAccount(
+  $ledgerAccount: LedgerAccountMatchInput!
+  $update: UpdateLedgerAccountInput!
+) {
+  updateLedgerAccount(ledgerAccount: $ledgerAccount, update: $update) {
+    __typename
+    ... on UpdateLedgerAccountResult {
+      ledgerAccount {
+        id
+        name
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation NewCustomLink($name: String!, $ik: SafeString!) {
+  createCustomLink(name: $name, ik: $ik) {
+    __typename
+    ... on CreateCustomLinkResult {
+      link {
+        id
+        name
+      }
+      isIkReplay
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+mutation SyncBankAccounts(
+  $link: LinkMatchInput!
+  $accounts: [CustomAccountInput!]!
+) {
+  syncCustomAccounts(link: $link, accounts: $accounts) {
+    __typename
+    ... on SyncCustomAccountsResult {
+      accounts {
+        id
+        externalId
+        name
+        currency {
+          code
+          customCurrencyId
+        }
+      }
+    }
+    ... on BadRequestError {
+      code
+      message
+    }
+    ... on InternalError {
+      code
+      message
+    }
+  }
+}
+
+query LedgerEntry($ledgerEntry: LedgerEntryMatchInput!) {
+  ledgerEntry(ledgerEntry: $ledgerEntry) {
+    id
+    date
+    posted
+    created
+    description
+    workspaceId
+    ledgerId
+    lines {
+      nodes {
+        id
+      }
+    }
+  }
+}
+
+# copied from https://fragment.dev/api-reference#query-ledger
+query Ledger($ledger: LedgerMatchInput!) {
+  ledger(ledger: $ledger) {
+    id
+    name
+    type
+    workspaceId
+    created
+    balanceUTCOffset
+    ledgerAccounts {
+      nodes {
+        id
+        ledgerId
+        type
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    ledgerEntries {
+      nodes {
+        id
+        date
+        description
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+}
+
+query GetLedgerAccounts(
+  $ledgerId: ID!
+  $after: String
+  $first: Int
+  $before: String
+) {
+  ledger(ledger: { id: $ledgerId }) {
+    id
+    name
+    ledgerAccounts(after: $after, first: $first, before: $before) {
+      nodes {
+        id
+        name
+        type
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+}
+
+query GetAccountLinesOnDate(
+  $ledgerAccountId: ID!
+  $filter: LedgerLinesFilterSet
+) {
+  ledgerAccount(ledgerAccount: { id: $ledgerAccountId }) {
+    lines(filter: $filter) {
+      nodes {
+        id
+        posted
+        date
+        amount
+        description
+        ledgerEntryId
+      }
+    }
+  }
+}
+
+query GetLedgerEntries($ledgerAccountId: ID!, $filter: LedgerLinesFilterSet) {
+  ledgerAccount(ledgerAccount: { id: $ledgerAccountId }) {
+    lines(filter: $filter) {
+      nodes {
+        id
+        posted
+        date
+        amount
+        description
+        ledgerEntryId
+      }
+    }
+  }
+}
+
+query GetLinkedLedgerAccounts(
+  $ledgerId: ID!
+  $filter: LedgerAccountsFilterSet!
+) {
+  ledger(ledger: { id: $ledgerId }) {
+    id
+    ledgerAccounts(filter: $filter) {
+      nodes {
+        id
+        name
+        linkedAccount {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+query GetBalances($ledgerId: ID!) {
+  ledger(ledger: { id: $ledgerId }) {
+    ledgerAccounts {
+      nodes {
+        id
+        name
+        type
+
+        ownBalance
+        childBalance
+        balance
+
+        childBalances {
+          nodes {
+            currency {
+              code
+            }
+            amount
+          }
+        }
+        balances {
+          nodes {
+            currency {
+              code
+            }
+            amount
+          }
+        }
+      }
+    }
+  }
+}
