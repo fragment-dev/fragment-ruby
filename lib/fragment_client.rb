@@ -60,7 +60,7 @@ class FragmentClient
     @client = T.let(GraphQL::Client.new(schema: FragmentGraphQl::FragmentSchema, execute: @execute), GraphQL::Client)
     @conn = T.let(create_conn, Faraday::Connection)
     # TODO: the token may need to be refreshed if the client is around for a long time
-    @token = T.let(create_token, String)
+    @token = T.let(create_token, Token)
 
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
     return if extra_queries_filename.nil?
