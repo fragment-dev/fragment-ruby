@@ -34,6 +34,12 @@ end
 
 # A client for Fragment
 class FragmentClient
+  # A token for the client with an expiry time
+  class Token < T::Struct
+    const :token, String
+    const :expires_at, Time
+  end
+
   extend T::Sig
 
   sig do
@@ -65,10 +71,11 @@ class FragmentClient
     define_method_from_queries(queries)
   end
 
-
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
-    @client.query(query, variables: variables, context: { access_token: @token })
+    expiry_time_skew = 120
+    @token = create_token if Time.now > @token.expires_at - expiry_time_skew
+    @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
   private
@@ -94,7 +101,7 @@ class FragmentClient
     end, Faraday::Connection)
   end
 
-  sig { returns(String) }
+  sig { returns(Token) }
   def create_token
     begin
       response = @conn.post do |req|
@@ -104,6 +111,9 @@ class FragmentClient
     rescue Faraday::ClientError => e
       raise StandardError, format("oauth Authentication failed: '%s'", e.to_s)
     end
-    T.let(JSON.parse(response.body)['access_token'], String)
+    Token.new(
+      token: T.let(JSON.parse(response.body)['access_token'], String),
+      expires_at: Time.now + T.let(JSON.parse(response.body)['expires_in'], Integer)
+    )
   end
 end
