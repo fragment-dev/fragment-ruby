@@ -65,7 +65,6 @@ class FragmentClient
     define_method_from_queries(queries)
   end
 
-
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
     @client.query(query, variables: variables, context: { access_token: @token })

@@ -1,4 +1,6 @@
+# frozen_string_literal: true
 # typed: true
+
 require 'minitest/autorun'
 require 'fragment_client'
 
