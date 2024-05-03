@@ -9,11 +9,19 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
-Metrics/AbcSize:
-  Max: 25
+require:
+  - rubocop-graphql
+  - rubocop-minitest
+  - rubocop-rake
 
 Metrics/MethodLength:
-  Max: 25
+  Max: 20
 
 Metrics/ParameterLists:
   Max: 8
+
+Metrics/AbcSize:
+  Max: 25
+
+AllCops:
+  TargetRubyVersion: 3.0
