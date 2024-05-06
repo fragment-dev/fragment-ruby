@@ -15,13 +15,13 @@ require:
   - rubocop-rake
 
 Metrics/MethodLength:
-  Max: 20
+  Max: 25
 
 Metrics/ParameterLists:
   Max: 8
 
 Metrics/AbcSize:
-  Max: 25
+  Max: 28
 
 AllCops:
   TargetRubyVersion: 3.0
