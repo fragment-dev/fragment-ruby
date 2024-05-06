@@ -16,6 +16,10 @@ require:
 
 Metrics/MethodLength:
   Max: 25
+  Include:
+    - '**/*.rb'
+  Exclude:
+    - 'test/**/*'
 
 Metrics/ParameterLists:
   Max: 8
@@ -25,3 +29,10 @@ Metrics/AbcSize:
 
 AllCops:
   TargetRubyVersion: 3.0
+
+Layout/LineLength:
+  Max: 120
+  Include:
+    - '**/*.rb'
+  Exclude:
+    - 'test/**/*'
