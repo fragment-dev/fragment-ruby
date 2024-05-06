@@ -16,3 +16,4 @@ gem 'rubocop-rake', group: :development
 gem 'sorbet', group: :development
 gem 'sorbet-runtime'
 gem 'tapioca', group: :development
+gem 'webmock', group: :development

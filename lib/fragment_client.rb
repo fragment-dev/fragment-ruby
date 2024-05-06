@@ -71,6 +71,7 @@ class FragmentClient
   def query(query, variables)
     expiry_time_skew = 120
     @token = create_token if Time.now > @token.expires_at - expiry_time_skew
+    puts query
     @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
