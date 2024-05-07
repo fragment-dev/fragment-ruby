@@ -52,7 +52,7 @@ class FragmentClient
     @client_id = T.let(client_id, String)
     @client_secret = T.let(client_secret, String)
 
-    execute = api_url ? FragmentGraphQl::CustomHTTP.new(URI.parse(api_url.to_s)) : FragmentGraphQl::HTTP
+    execute = api_url ? FragmentGraphQl::CustomHTTP.new(URI.parse(api_url).to_s) : FragmentGraphQl::HTTP
     @execute = T.let(execute, GraphQL::Client::HTTP)
 
     @client = T.let(GraphQL::Client.new(schema: FragmentGraphQl::FragmentSchema, execute: @execute), GraphQL::Client)
@@ -90,7 +90,7 @@ class FragmentClient
 
   sig { returns(Token) }
   def create_token
-    uri = URI.parse(@oauth_url.to_s)
+    uri = URI.parse(@oauth_url)
     post = Net::HTTP::Post.new(uri)
     post.basic_auth(@client_id, @client_secret)
     post.body = format('grant_type=client_credentials&scope=%<scope>s&client_id=%<id>s', scope: @oauth_scope,
