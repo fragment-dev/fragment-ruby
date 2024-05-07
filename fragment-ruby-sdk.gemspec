@@ -1,14 +1,16 @@
 # typed: strict
 # frozen_string_literal: true
 
-require_relative 'lib/fragment_client'
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+
+require 'fragment_client/version'
 
 Gem::Specification.new do |s|
   s.name = 'fragment-ruby-sdk'
-  s.version = FragmentGraphQl::VERSION
+  s.version = FragmentSDK::VERSION
   s.email = 'snoble@fragment.dev'
   s.authors = ['fragment']
-  s.files = ['lib/fragment_client.rb', 'lib/fragment_client.rbi', 'lib/fragment.schema.json', 'lib/queries.graphql']
+  s.files = ['lib/fragment_client.rb', 'lib/fragment_client.rbi', 'lib/fragment.schema.json', 'lib/queries.graphql', 'lib/fragment_client/version.rb']
   s.required_ruby_version = '>= 3.0'
   s.summary = 'the ruby fragment client sdk'
   s.homepage = 'https://fragment.dev'

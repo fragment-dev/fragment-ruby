@@ -7,10 +7,11 @@ require 'graphql/client/http'
 require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
+require 'fragment_client/version'
 
 # A support module for the client
 module FragmentGraphQl
-  VERSION = '1.0.0'
+  VERSION = FragmentSDK::VERSION
   extend T::Sig
 
   CustomHTTP = Class.new(GraphQL::Client::HTTP) do
