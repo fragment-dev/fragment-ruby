@@ -25,7 +25,7 @@ Metrics/ParameterLists:
   Max: 8
 
 Metrics/AbcSize:
-  Max: 28
+  Max: 30
 
 AllCops:
   TargetRubyVersion: 3.0

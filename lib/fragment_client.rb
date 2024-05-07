@@ -7,16 +7,19 @@ require 'graphql/client/http'
 require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
+require 'fragment_client/version'
 
 # A support module for the client
 module FragmentGraphQl
+  VERSION = FragmentSDK::VERSION
   extend T::Sig
 
   CustomHTTP = Class.new(GraphQL::Client::HTTP) do
     extend T::Sig
     sig { params(context: T.untyped).returns(T::Hash[T.untyped, T.untyped]) }
     def headers(context)
-      { 'Authorization' => format('Bearer %s', context[:access_token]) }
+      { 'Authorization' => format('Bearer %s', context[:access_token]),
+        'X-Fragment-Client' => format('ruby-client@%s', FragmentGraphQl::VERSION) }
     end
   end
 

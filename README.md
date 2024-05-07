@@ -4,13 +4,13 @@
 
 ## Installation
 
-To install the Fragment SDK for Ruby, you'll need to build and install the gem. Run the following commands in your terminal:
+To install the Fragment SDK for Ruby, you'll need to install the gem. Run the following command in your terminal:
 
 ```bash
-bundle exec gem build fragment-alpha-sdk.gemspec
-bundle exec gem install ./fragment-alpha-sdk-0.1.7.gem
-bundle install
+gem install fragment-dev
 ```
+
+Or if you are using bundler add `gem fragment-dev` to your Gemfile.
 
 ## Usage
 
