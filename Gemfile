@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'fragment-alpha-sdk', path: './'
+gem 'fragment-ruby-sdk', path: './'
 gem 'graphql-client'
 gem 'http'
 gem 'minitest', group: :development
