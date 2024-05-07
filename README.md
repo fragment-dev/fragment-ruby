@@ -168,7 +168,7 @@ ledger_accounts = result.data.ledger.ledger_accounts
 
 While the SDK comes with GraphQL queries out of the box, you may want to customize these queries for your product. To do that:
 
-1. Define your custom GraphQL queries in a `.graphql` file, for example, in `extra.graphql`.
+1. Define your custom GraphQL queries in a `.graphql` file. For example, in `extra.graphql`.
 
 2. When creating the client, pass the `extra_queries_filename` parameter to specify the path to your custom GraphQL file:
 
