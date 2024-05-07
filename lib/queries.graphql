@@ -1,4 +1,4 @@
-mutation storeSchema($schema: SchemaInput!) {
+mutation StoreSchema($schema: SchemaInput!) {
   storeSchema(schema: $schema) {
     __typename
     ... on StoreSchemaResult {
@@ -18,7 +18,7 @@ mutation storeSchema($schema: SchemaInput!) {
   }
 }
 
-mutation createLedger(
+mutation CreateLedger(
   $ik: SafeString!
   $ledger: CreateLedgerInput!
   $schemaKey: SafeString!
@@ -44,7 +44,7 @@ mutation createLedger(
   }
 }
 
-mutation addLedgerEntry(
+mutation AddLedgerEntry(
   $ik: SafeString!
   $ledgerIk: SafeString!
   $type: String!
@@ -89,7 +89,7 @@ mutation addLedgerEntry(
   }
 }
 
-mutation addLedgerEntryRuntime(
+mutation AddLedgerEntryRuntime(
   $ik: SafeString!
   $type: String!
   $ledgerIk: SafeString!
@@ -134,7 +134,7 @@ mutation addLedgerEntryRuntime(
   }
 }
 
-mutation reconcileTx(
+mutation ReconcileTx(
   $ledgerIk: SafeString!
   $type: String!
   $parameters: JSON!
@@ -176,7 +176,7 @@ mutation reconcileTx(
   }
 }
 
-mutation reconcileTxRuntime(
+mutation ReconcileTxRuntime(
   $ledgerIk: SafeString!
   $type: String!
   $lines: [LedgerLineInput!]!
@@ -218,7 +218,7 @@ mutation reconcileTxRuntime(
   }
 }
 
-mutation updateLedger($ledgerIk: SafeString!, $update: UpdateLedgerInput!) {
+mutation UpdateLedger($ledgerIk: SafeString!, $update: UpdateLedgerInput!) {
   updateLedger(ledger: { ik: $ledgerIk }, update: $update) {
     __typename
     ... on UpdateLedgerResult {
@@ -234,7 +234,7 @@ mutation updateLedger($ledgerIk: SafeString!, $update: UpdateLedgerInput!) {
     }
   }
 }
-mutation createCustomLink($name: String!, $ik: SafeString!) {
+mutation CreateCustomLink($name: String!, $ik: SafeString!) {
   createCustomLink(name: $name, ik: $ik) {
     __typename
     ... on CreateCustomLinkResult {
@@ -252,7 +252,7 @@ mutation createCustomLink($name: String!, $ik: SafeString!) {
   }
 }
 
-mutation syncCustomAccounts($linkId: ID!, $accounts: [CustomAccountInput!]!) {
+mutation SyncCustomAccounts($linkId: ID!, $accounts: [CustomAccountInput!]!) {
   syncCustomAccounts(link: { id: $linkId }, accounts: $accounts) {
     __typename
     ... on SyncCustomAccountsResult {
@@ -273,7 +273,7 @@ mutation syncCustomAccounts($linkId: ID!, $accounts: [CustomAccountInput!]!) {
   }
 }
 
-mutation syncCustomTxs($linkId: ID!, $txs: [CustomTxInput!]!) {
+mutation SyncCustomTxs($linkId: ID!, $txs: [CustomTxInput!]!) {
   syncCustomTxs(link: { id: $linkId }, txs: $txs) {
     __typename
     ... on SyncCustomTxsResult {
@@ -295,7 +295,7 @@ mutation syncCustomTxs($linkId: ID!, $txs: [CustomTxInput!]!) {
   }
 }
 
-query getLedger($ik: SafeString!) {
+query GetLedger($ik: SafeString!) {
   ledger(ledger: { ik: $ik }) {
     id
     ik
@@ -305,7 +305,7 @@ query getLedger($ik: SafeString!) {
   }
 }
 
-query getLedgerEntry($ik: SafeString!, $ledgerIk: SafeString!) {
+query GetLedgerEntry($ik: SafeString!, $ledgerIk: SafeString!) {
   ledgerEntry(ledgerEntry: { ik: $ik, ledger: { ik: $ledgerIk } }) {
     id
     ik
@@ -324,7 +324,7 @@ query getLedgerEntry($ik: SafeString!, $ledgerIk: SafeString!) {
   }
 }
 
-query listLedgerAccounts(
+query ListLedgerAccounts(
   $ledgerIk: SafeString!
   $after: String
   $first: Int
@@ -353,7 +353,7 @@ query listLedgerAccounts(
   }
 }
 
-query listLedgerAccountBalances(
+query ListLedgerAccountBalances(
   $ledgerIk: SafeString!
   $after: String
   $first: Int
@@ -392,7 +392,7 @@ query listLedgerAccountBalances(
   }
 }
 
-query listMultiCurrencyLedgerAccountBalances(
+query ListMultiCurrencyLedgerAccountBalances(
   $ledgerIk: SafeString!
   $after: String
   $first: Int
@@ -453,7 +453,7 @@ query listMultiCurrencyLedgerAccountBalances(
   }
 }
 
-query getLedgerAccountLines(
+query GetLedgerAccountLines(
   $path: String!
   $ledgerIk: SafeString!
   $after: String
@@ -482,7 +482,7 @@ query getLedgerAccountLines(
   }
 }
 
-query getLedgerAccountBalance(
+query GetLedgerAccountBalance(
   $path: String!
   $ledgerIk: SafeString!
   $balanceCurrency: CurrencyMatchInput
@@ -500,7 +500,7 @@ query getLedgerAccountBalance(
   }
 }
 
-query getSchema($key: SafeString!, $version: Int) {
+query GetSchema($key: SafeString!, $version: Int) {
   schema(schema: { key: $key, version: $version }) {
     key
     name

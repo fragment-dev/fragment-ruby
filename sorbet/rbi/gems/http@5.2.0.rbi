@@ -239,6 +239,9 @@ class HTTP::Client
   # source://http//lib/http/client.rb#21
   def initialize(default_options = T.unsafe(nil)); end
 
+  # source://http//lib/http/client.rb#64
+  def __perform__(req, options); end
+
   # Prepare an HTTP request
   #
   # source://http//lib/http/client.rb#40
@@ -249,8 +252,8 @@ class HTTP::Client
 
   # Perform a single (no follow) HTTP request
   #
-  # source://http//lib/http/client.rb#64
-  def perform(req, options); end
+  # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/client.rb#7
+  def perform(request, options); end
 
   # @return [Boolean] whenever client is persistent
   # @see Options#persistent?
@@ -262,6 +265,9 @@ class HTTP::Client
   #
   # source://http//lib/http/client.rb#28
   def request(verb, uri, opts = T.unsafe(nil)); end
+
+  # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/client.rb#13
+  def webmock_enabled?; end
 
   private
 
@@ -1779,6 +1785,9 @@ class HTTP::Request
   # source://http//lib/http/request.rb#80
   def version; end
 
+  # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/request.rb#5
+  def webmock_signature; end
+
   private
 
   # @raise [RequestError]
@@ -2114,6 +2123,9 @@ class HTTP::Response
   # source://forwardable/1.3.3/forwardable.rb#231
   def to_str(*args, **_arg1, &block); end
 
+  # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/response.rb#5
+  def to_webmock; end
+
   # source://forwardable/1.3.3/forwardable.rb#231
   def uri(*args, **_arg1, &block); end
 
@@ -2134,6 +2146,20 @@ class HTTP::Response
   #
   # source://http//lib/http/response.rb#180
   def init_request(opts); end
+
+  # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/response.rb#83
+  def reset_body_to_allow_it_to_be_streamed!(webmock_response); end
+
+  class << self
+    # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/response.rb#58
+    def build_http_rb_response_body_from_webmock_response(webmock_response); end
+
+    # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/response.rb#26
+    def from_webmock(request, webmock_response, request_signature = T.unsafe(nil)); end
+
+    # source://webmock/3.23.0/lib/webmock/http_lib_adapters/http_rb/response.rb#71
+    def normalize_uri(uri); end
+  end
 end
 
 # A streamable response body, also easily converted into a string

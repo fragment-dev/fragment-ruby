@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.summary = 'an alpha version for the fragment client sdk'
   s.homepage = 'https://fragment.dev'
   s.license = 'Nonstandard'
-  s.add_runtime_dependency 'faraday', '~> 2.6'
   s.add_runtime_dependency 'graphql-client', '~> 0.20'
   s.add_runtime_dependency 'sorbet-runtime', '~> 0.5'
 end
