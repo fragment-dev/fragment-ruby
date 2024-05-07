@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fragment-ruby-sdk (1.0.0)
+    fragment-dev (1.0.0)
       graphql-client (~> 0.20)
       sorbet-runtime (~> 0.5)
 
@@ -142,7 +142,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  fragment-ruby-sdk!
+  fragment-dev!
   graphql-client
   http
   minitest

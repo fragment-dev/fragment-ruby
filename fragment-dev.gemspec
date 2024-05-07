@@ -6,7 +6,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'fragment_client/version'
 
 Gem::Specification.new do |s|
-  s.name = 'fragment-ruby-sdk'
+  s.name = 'fragment-dev'
   s.version = FragmentSDK::VERSION
   s.email = 'snoble@fragment.dev'
   s.authors = ['fragment']
