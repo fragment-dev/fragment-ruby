@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.license = 'Apache-2.0'
   s.add_runtime_dependency 'graphql-client', '~> 0.20'
   s.add_runtime_dependency 'sorbet-runtime', '~> 0.5'
+  s.add_runtime_dependency 'graphql', '>= 1.13.0'
 end

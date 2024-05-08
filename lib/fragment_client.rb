@@ -9,6 +9,14 @@ require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 
+module GraphQL
+  module StaticValidation
+    ALL_RULES = GraphQL::StaticValidation::ALL_RULES - [
+      GraphQL::StaticValidation::ArgumentLiteralsAreCompatible
+    ]
+  end
+end
+
 # A support module for the client
 module FragmentGraphQl
   VERSION = FragmentSDK::VERSION
@@ -74,7 +82,6 @@ class FragmentClient
   def query(query, variables)
     expiry_time_skew = 120
     @token = create_token if Time.now > @token.expires_at - expiry_time_skew
-    puts query
     @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
