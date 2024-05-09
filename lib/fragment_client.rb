@@ -15,6 +15,16 @@ module GraphQL
       GraphQL::StaticValidation::ArgumentLiteralsAreCompatible
     ]
   end
+
+  class Client
+    # A monkey patch to change the definition name
+    class Definition
+      alias old_definition_name definition_name
+      def definition_name
+        old_definition_name.gsub(/#<Module.*>/, 'FragmentGraphQl__Dynamic')
+      end
+    end
+  end
 end
 
 # A support module for the client
@@ -53,10 +63,11 @@ class FragmentClient
   extend T::Sig
 
   sig do
-    params(client_id: String, client_secret: String, extra_queries_filename: T.nilable(String),
+    params(client_id: String, client_secret: String, extra_queries_filenames: T.nilable(T::Array[String]),
            api_url: T.nilable(String), oauth_url: T.nilable(String), oauth_scope: T.nilable(String)).void
   end
-  def initialize(client_id, client_secret, extra_queries_filename: nil, api_url: nil,
+
+  def initialize(client_id, client_secret, extra_queries_filenames: nil, api_url: nil,
                  oauth_url: 'https://auth.fragment.dev/oauth2/token', oauth_scope: 'https://api.fragment.dev/*')
     @oauth_scope = T.let(oauth_scope, String)
     @oauth_url = T.let(URI.parse(oauth_url), URI)
@@ -70,12 +81,14 @@ class FragmentClient
     @token = T.let(create_token, Token)
 
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
-    return if extra_queries_filename.nil?
+    return if extra_queries_filenames.nil?
 
-    queries = @client.parse(
-      File.read(extra_queries_filename)
-    )
-    define_method_from_queries(queries)
+    extra_queries_filenames.each do |filename|
+      queries = @client.parse(
+        File.read(filename)
+      )
+      define_method_from_queries(queries)
+    end
   end
 
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
