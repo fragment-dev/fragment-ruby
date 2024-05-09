@@ -170,7 +170,7 @@ While the SDK comes with GraphQL queries out of the box, you may want to customi
 
 1. Define your custom GraphQL queries in a `.graphql` file. For example, in `extra.graphql`.
 
-2. When creating the client, pass the `extra_queries_filename` parameter to specify the path to your custom GraphQL file:
+2. When creating the client, pass the `extra_queries_filenames` parameter to specify the paths to your custom GraphQL file:
 
 ```ruby
 fragment = FragmentClient.new(
@@ -179,7 +179,7 @@ fragment = FragmentClient.new(
   api_url: 'api url from dashboard',
   oauth_url: 'auth url from dashboard',
   oauth_scope: 'scope from dashboard',
-  extra_queries_filename: 'path/to/your/extra.graphql'
+  extra_queries_filenames: ['path/to/your/extra.graphql']
 )
 ```
 
