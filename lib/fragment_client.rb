@@ -11,9 +11,21 @@ require 'fragment_client/version'
 
 module GraphQL
   module StaticValidation
-    ALL_RULES = GraphQL::StaticValidation::ALL_RULES - [
-      GraphQL::StaticValidation::ArgumentLiteralsAreCompatible
-    ]
+    class LiteralValidator
+      alias recursive_validate_old recursively_validate
+      def recursively_validate(ast_value, type)
+        res = catch(:invalid) do
+          recursive_validate_old(ast_value, type)
+        end
+        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)
+          maybe_raise_if_invalid(ast_value) do
+            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response
+          end
+        else
+          res 
+        end
+      end
+    end
   end
 
   class Client
