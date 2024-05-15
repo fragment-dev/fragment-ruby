@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fragment-dev (1.1.1)
+    fragment-dev (1.1.2)
       graphql (~> 1.13, >= 1.13.0)
       graphql-client (~> 0.20)
       sorbet-runtime (~> 0.5)
@@ -139,6 +139,7 @@ GEM
       yard (>= 0.9)
 
 PLATFORMS
+  arm64-darwin-21
   arm64-darwin-22
   arm64-darwin-23
 
