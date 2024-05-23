@@ -27,3 +27,18 @@ jobs:
     
         - name: Run tests
           run: bundle exec rake test
+
+        - name: Verify schema is up-to-date
+          run: |
+            bundle exec rake graphql:update_schema
+            git diff --exit-code
+            exit $?
+
+        - name: Validate GraphQL queries
+          run: |
+            export EXITCODE=$(grep -E '^(mutation|query) [a-z]' lib/queries.graphql || echo $?)
+            if [[ $EXITCODE -eq 0 ]]; then
+              echo "Failed to validate GraphQL queries."
+              echo "Ensure that GraphQL named queries are in TitleCase"
+              exit 1
+            fi

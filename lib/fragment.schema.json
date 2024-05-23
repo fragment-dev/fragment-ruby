@@ -7820,6 +7820,16 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "hasSchema",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "type",
               "description": null,
               "type": {
@@ -8079,7 +8089,7 @@
                 },
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8141,7 +8151,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8186,7 +8196,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8241,7 +8251,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -12054,22 +12064,36 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "groups",
+              "description": "The list of Groups to add to this Ledger Entry.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryGroupInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tags",
               "description": "The list of Tags to add and/or update on this Ledger Entry.",
               "type": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
+                  "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "LedgerEntryTagInput",
-                      "ofType": null
-                    }
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryTagInput",
+                    "ofType": null
                   }
                 }
               },
