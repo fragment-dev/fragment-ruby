@@ -30,7 +30,7 @@ jobs:
 
         - name: Verify schema is up-to-date
           run: |
-            bundle exec graphql:update_schema
+            bundle exec rake graphql:update_schema
             git diff --exit-code
             exit $?
 
