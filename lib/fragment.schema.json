@@ -2459,8 +2459,26 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Link.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "externalAccounts",
-              "description": "ISO-8601 timestamp when the Link was created.",
+              "description": "A list of External Accounts associated with this Link.",
               "args": [
 
               ],
@@ -2818,6 +2836,11 @@
             {
               "kind": "OBJECT",
               "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "NotFoundError",
               "ofType": null
             }
           ]
@@ -3382,8 +3405,26 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Link.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "externalAccounts",
-              "description": "ISO-8601 timestamp when the Link was created.",
+              "description": "A list of External Accounts associated with this Link.",
               "args": [
 
               ],
@@ -3765,6 +3806,24 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Ledger.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": null,
               "args": [
@@ -3784,7 +3843,7 @@
             },
             {
               "name": "ik",
-              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a unique identifier for this ledger.",
+              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a unique identifier for this Ledger.",
               "args": [
 
               ],
@@ -4022,7 +4081,7 @@
             },
             {
               "name": "migrations",
-              "description": "Schema migrations affecting this ledger.",
+              "description": "Schema migrations affecting this Ledger.",
               "args": [
 
               ],
@@ -4036,7 +4095,7 @@
             },
             {
               "name": "name",
-              "description": "The name of the ledger. Can be updated with the [updateLedger](/api-reference#mutations-updateledger) mutation.",
+              "description": "The name of the Ledger. Can be updated with the [updateLedger](/api-reference#mutations-updateledger) mutation.",
               "args": [
 
               ],
@@ -4054,7 +4113,7 @@
             },
             {
               "name": "schema",
-              "description": "Schema key associated with this ledger.",
+              "description": "Schema key associated with this Ledger.",
               "args": [
 
               ],
@@ -5587,6 +5646,24 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Ledger Entry.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -7743,6 +7820,16 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "hasSchema",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "type",
               "description": null,
               "type": {
@@ -7765,6 +7852,24 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Link.",
               "args": [
 
               ],
@@ -7984,7 +8089,7 @@
                 },
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8046,7 +8151,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8091,7 +8196,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8146,7 +8251,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/docs#integrate-the-api-use-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8559,6 +8664,77 @@
           "inputFields": null,
           "interfaces": [
 
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "NotFoundError",
+          "description": "Equivalent to an HTTP 404",
+          "fields": [
+            {
+              "name": "code",
+              "description": "The HTTP status code corresponding to the error",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "message",
+              "description": "The error message",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "retryable",
+              "description": "Whether or not the operation is retryable",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Error",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
@@ -9109,6 +9285,24 @@
                 "kind": "OBJECT",
                 "name": "Tx",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "workspace",
+              "description": "Get the current Workspace",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Workspace",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -10817,8 +11011,26 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Link.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "externalAccounts",
-              "description": "ISO-8601 timestamp when the Link was created.",
+              "description": "A list of External Accounts associated with this Link.",
               "args": [
 
               ],
@@ -11656,8 +11868,26 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Link.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "externalAccounts",
-              "description": "ISO-8601 timestamp when the Link was created.",
+              "description": "A list of External Accounts associated with this Link.",
               "args": [
 
               ],
@@ -11834,22 +12064,36 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "groups",
+              "description": "The list of Groups to add to this Ledger Entry.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryGroupInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tags",
               "description": "The list of Tags to add and/or update on this Ledger Entry.",
               "type": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
+                  "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "LedgerEntryTagInput",
-                      "ofType": null
-                    }
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryTagInput",
+                    "ofType": null
                   }
                 }
               },
@@ -11981,6 +12225,55 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "Ledger",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Workspace",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of the Workspace",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "name",
+              "description": "The name of the Workspace",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -12870,24 +13163,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isOneOf",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "kind",
               "description": null,
               "args": [
@@ -12956,7 +13231,7 @@
               "deprecationReason": null
             },
             {
-              "name": "specifiedByURL",
+              "name": "specifiedByUrl",
               "description": null,
               "args": [
 
@@ -13107,39 +13382,6 @@
                 "ofType": null
               },
               "defaultValue": "\"No longer supported\""
-            }
-          ]
-        },
-        {
-          "name": "oneOf",
-          "description": "Requires that exactly one field must be supplied and that field must not be `null`.",
-          "locations": [
-            "INPUT_OBJECT"
-          ],
-          "args": [
-
-          ]
-        },
-        {
-          "name": "specifiedBy",
-          "description": "Exposes a URL that specifies the behavior of this scalar.",
-          "locations": [
-            "SCALAR"
-          ],
-          "args": [
-            {
-              "name": "url",
-              "description": "The URL that specifies the behavior of this scalar.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
             }
           ]
         }
