@@ -39,6 +39,6 @@ jobs:
             export EXITCODE=$(grep -E '^(mutation|query) [a-z]' lib/queries.graphql || echo $?)
             if [[ $EXITCODE -eq 0 ]]; then
               echo "Failed to validate GraphQL queries."
-              echo "Ensure that GraphQL named queries are in title-case."
+              echo "Ensure that GraphQL named queries are in TitleCase"
               exit 1
             fi
