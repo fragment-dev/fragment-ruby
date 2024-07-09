@@ -3978,9 +3978,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "LedgerEntriesConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntriesConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5177,6 +5181,24 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "groups",
+              "description": "The consistency configuration for groups balances in this account. This is an experimental feature.\nContact support if you are interested in using this feature.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerAccountGroupConsistencyConfigInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "lines",
               "description": "If set to `strong`, then a Ledger Account's `lines` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `lines` updates are applied\nasynchronously and may not be immediately reflected queries.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
               "type": {
@@ -5231,6 +5253,45 @@
                     "name": "LedgerAccountMatchInput",
                     "ofType": null
                   }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerAccountGroupConsistencyConfigInput",
+          "description": "The consistency configuration for groups balances in an account. This is an experimental feature.\n  Contact support if you are interested in using this feature.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "key",
+              "description": "The group key for this configuration.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ownBalanceUpdates",
+              "description": "The consistency configuration for the group's own balance in this Ledger Account.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "BalanceUpdateConsistencyMode",
+                  "ofType": null
                 }
               },
               "defaultValue": null
@@ -5501,15 +5562,19 @@
 
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "LedgerEntry",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerEntry",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -6315,7 +6380,16 @@
               "name": "ownBalance",
               "description": "The total balance change for this Ledger Account and currency.",
               "args": [
-
+                {
+                  "name": "consistencyMode",
+                  "description": "The consistency mode to use when fetching the balance. This is an experimental feature.\nContact support if you are interested in using this feature.",
+                  "type": {
+                    "kind": "ENUM",
+                    "name": "ReadBalanceConsistencyMode",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
               ],
               "type": {
                 "kind": "NON_NULL",

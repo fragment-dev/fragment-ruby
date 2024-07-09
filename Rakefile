@@ -17,7 +17,7 @@ task default: :test
 namespace :graphql do
   desc 'Download and convert GraphQL schema to JSON'
   task :update_schema do
-    schema_url = 'https://api.fragment.dev/schema.graphql'
+    schema_url = 'https://api.us-west-2.fragment.dev/schema.graphql'
     schema_path = 'lib/fragment.schema.json'
 
     response = HTTP.get(schema_url)
