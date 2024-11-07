@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.version = FragmentSDK::VERSION
   s.email = 'snoble@fragment.dev'
   s.authors = ['fragment']
-  s.files = ['lib/fragment_client.rb', 'lib/fragment_client.rbi', 'lib/fragment.schema.json', 'lib/queries.graphql', 'lib/fragment_client/version.rb']
+  s.files = ['lib/fragment_client.rb', 'rbi/fragment_client.rbi', 'lib/fragment.schema.json', 'lib/queries.graphql', 'lib/fragment_client/version.rb']
   s.required_ruby_version = '>= 3.0'
   s.summary = 'the ruby fragment client sdk'
   s.homepage = 'https://fragment.dev'
