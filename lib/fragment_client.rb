@@ -94,11 +94,32 @@ class FragmentClient
     end
   end
 
+  # Move these error class definitions up, before the query method
+  class ResponseError < GraphQL::Client::Error; end
+  class NetworkError < GraphQL::Client::Error; end
+  class AuthenticationError < StandardError; end
+  class TokenExpiredError < StandardError; end
+
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
-    expiry_time_skew = 120
-    @token = create_token if Time.now > @token.expires_at - expiry_time_skew
-    @client.query(query, variables: variables, context: { access_token: @token.token })
+    retries = 0
+    begin
+      refresh_token_if_needed
+      response = @client.query(query, variables: variables, context: { access_token: @token.token })
+      raise GraphQL::Client::Error, "Server returned error status" if response.nil? || response.errors.any?
+      response
+    rescue GraphQL::Client::Error => e
+      logger.error("Query failed: #{e.message}")
+      
+      if retries < self.class.configuration.max_retries
+        retries += 1
+        logger.info("Retrying after error (attempt #{retries}/#{self.class.configuration.max_retries})")
+        sleep(1 * retries) # Exponential backoff
+        retry
+      end
+      
+      raise ResponseError, e.message
+    end
   end
 
   private
@@ -129,17 +150,67 @@ class FragmentClient
 
       case response
       when Net::HTTPSuccess
-        # Parse the response body
         body = JSON.parse(response.body)
         Token.new(
           token: T.let(body['access_token'], String),
           expires_at: Time.now + T.let(body['expires_in'], Integer)
         )
+      when Net::HTTPUnauthorized
+        raise AuthenticationError, "Invalid credentials: #{response.body}"
       else
-        raise StandardError, format("oauth Authentication failed: '%s'", response.body)
+        raise AuthenticationError, "Authentication failed (#{response.code}): #{response.body}"
       end
+    rescue JSON::ParserError => e
+      raise AuthenticationError, "Invalid response format: #{e.message}"
     rescue StandardError => e
-      raise StandardError, format("oauth Authentication failed: '%s'", e.to_s)
+      raise AuthenticationError, "Authentication failed: #{e.message}"
     end
+  end
+
+  class Configuration
+    extend T::Sig
+
+    sig { returns(Integer) }
+    attr_accessor :token_expiry_buffer, :max_retries
+    sig { returns(Logger) }
+    attr_accessor :logger
+
+    sig { void }
+    def initialize
+      @token_expiry_buffer = T.let(120, Integer)
+      @max_retries = T.let(3, Integer)
+      @logger = T.let(Logger.new($stdout), Logger)
+    end
+  end
+
+  class << self
+    extend T::Sig
+
+    sig { returns(Configuration) }
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    # Fix the signature to properly handle the block parameter
+    sig { params(blk: T.proc.params(config: Configuration).void).void }
+    def configure(&blk)
+      yield(configuration)
+    end
+  end
+
+  sig { returns(Logger) }
+  def logger
+    self.class.configuration.logger
+  end
+
+  sig { void }
+  def refresh_token_if_needed
+    return unless token_expired?
+    @token = create_token
+  end
+
+  sig { returns(T::Boolean) }
+  def token_expired?
+    Time.now > @token.expires_at - self.class.configuration.token_expiry_buffer
   end
 end
