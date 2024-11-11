@@ -9,33 +9,23 @@ require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 
-module GraphQL
-  module StaticValidation
-    class LiteralValidator
-      alias recursive_validate_old recursively_validate
-      def recursively_validate(ast_value, type)
-        res = catch(:invalid) do
-          recursive_validate_old(ast_value, type)
-        end
-        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)
-          maybe_raise_if_invalid(ast_value) do
-            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response
-          end
-        else
-          res 
-        end
-      end
-    end
-  end
-
-  class Client
-    # A monkey patch to change the definition name
-    class Definition
-      alias old_definition_name definition_name
-      def definition_name
-        old_definition_name.gsub(/#<Module.*>/, 'FragmentGraphQl__Dynamic')
-      end
-    end
+module GraphQL	
+  module StaticValidation	
+    class LiteralValidator	
+      alias recursive_validate_old recursively_validate	
+      def recursively_validate(ast_value, type)	
+        res = catch(:invalid) do	
+          recursive_validate_old(ast_value, type)	
+        end	
+        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)	
+          maybe_raise_if_invalid(ast_value) do	
+            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response	
+          end	
+        else	
+          res 	
+        end	
+      end	
+    end	
   end
 end
 
@@ -57,7 +47,22 @@ module FragmentGraphQl
 
   FragmentSchema = T.let(GraphQL::Client.load_schema("#{__dir__}/fragment.schema.json"), T.untyped)
 
-  Client = T.let(GraphQL::Client.new(schema: FragmentSchema, execute: HTTP), GraphQL::Client)
+  # Create a custom client class for Fragment-specific behavior
+  class CustomClient < GraphQL::Client
+    class Definition < GraphQL::Client::Definition
+      def definition_name
+        super.gsub(/#<Module.*>/, 'FragmentGraphQl__Dynamic')
+      end
+    end
+
+    # Add this method to allow creating new instances
+    def self.new(schema:, execute:)
+      super(schema: schema, execute: execute)
+    end
+  end
+
+  # Use our custom client instead of the base GraphQL::Client
+  Client = T.let(CustomClient.new(schema: FragmentSchema, execute: HTTP), CustomClient)
 
   FragmentQueries = T.let(Client.parse(
                             File.read("#{__dir__}/queries.graphql")
@@ -89,7 +94,13 @@ class FragmentClient
     execute = api_url ? FragmentGraphQl::CustomHTTP.new(URI.parse(api_url).to_s) : FragmentGraphQl::HTTP
     @execute = T.let(execute, GraphQL::Client::HTTP)
 
-    @client = T.let(GraphQL::Client.new(schema: FragmentGraphQl::FragmentSchema, execute: @execute), GraphQL::Client)
+    @client = T.let(
+      FragmentGraphQl::CustomClient.new(
+        schema: FragmentGraphQl::FragmentSchema, 
+        execute: @execute
+      ), 
+      FragmentGraphQl::CustomClient
+    )
     @token = T.let(create_token, Token)
 
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
@@ -103,10 +114,15 @@ class FragmentClient
     end
   end
 
+  # Move these error class definitions up, before the query method
+  class ResponseError < GraphQL::Client::Error; end
+  class NetworkError < GraphQL::Client::Error; end
+  class AuthenticationError < StandardError; end
+  class TokenExpiredError < StandardError; end
+
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
-    expiry_time_skew = 120
-    @token = create_token if Time.now > @token.expires_at - expiry_time_skew
+    refresh_token_if_needed
     @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
@@ -138,17 +154,65 @@ class FragmentClient
 
       case response
       when Net::HTTPSuccess
-        # Parse the response body
         body = JSON.parse(response.body)
         Token.new(
           token: T.let(body['access_token'], String),
           expires_at: Time.now + T.let(body['expires_in'], Integer)
         )
+      when Net::HTTPUnauthorized
+        raise AuthenticationError, "Invalid credentials: #{response.body}"
       else
-        raise StandardError, format("oauth Authentication failed: '%s'", response.body)
+        raise AuthenticationError, "Authentication failed (#{response.code}): #{response.body}"
       end
+    rescue JSON::ParserError => e
+      raise AuthenticationError, "Invalid response format: #{e.message}"
     rescue StandardError => e
-      raise StandardError, format("oauth Authentication failed: '%s'", e.to_s)
+      raise AuthenticationError, "Authentication failed: #{e.message}"
     end
+  end
+
+  class Configuration
+    extend T::Sig
+
+    sig { returns(Integer) }
+    attr_accessor :token_expiry_buffer
+    sig { returns(Logger) }
+    attr_accessor :logger
+
+    sig { void }
+    def initialize
+      @token_expiry_buffer = T.let(120, Integer)
+      @logger = T.let(Logger.new($stdout), Logger)
+    end
+  end
+
+  class << self
+    extend T::Sig
+
+    sig { returns(Configuration) }
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    sig { params(blk: T.proc.params(config: Configuration).void).void }
+    def configure(&blk)
+      yield(configuration)
+    end
+  end
+
+  sig { returns(Logger) }
+  def logger
+    self.class.configuration.logger
+  end
+
+  sig { void }
+  def refresh_token_if_needed
+    return unless token_expired?
+    @token = create_token
+  end
+
+  sig { returns(T::Boolean) }
+  def token_expired?
+    Time.now > @token.expires_at - self.class.configuration.token_expiry_buffer
   end
 end
