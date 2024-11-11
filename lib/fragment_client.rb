@@ -114,7 +114,7 @@ class FragmentClient
       if retries < self.class.configuration.max_retries
         retries += 1
         logger.info("Retrying after error (attempt #{retries}/#{self.class.configuration.max_retries})")
-        sleep(1 * retries) # Exponential backoff
+        sleep(2 ** retries) # True exponential backoff
         retry
       end
       
@@ -191,7 +191,6 @@ class FragmentClient
       @configuration ||= Configuration.new
     end
 
-    # Fix the signature to properly handle the block parameter
     sig { params(blk: T.proc.params(config: Configuration).void).void }
     def configure(&blk)
       yield(configuration)
