@@ -184,20 +184,20 @@
         {
           "kind": "ENUM",
           "name": "BalanceUpdateConsistencyMode",
-          "description": "Used to configure the write-consistency of a Ledger Account's balance.\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "Used to configure the write-consistency of a Ledger Account's balance. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
             {
               "name": "eventual",
-              "description": "Eventually consistent balance updates.",
+              "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "strong",
-              "description": "Strongly consistent balance updates.",
+              "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -460,8 +460,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Link",
+                  "kind": "OBJECT",
+                  "name": "CustomLink",
                   "ofType": null
                 }
               },
@@ -2728,6 +2728,120 @@
           "possibleTypes": null
         },
         {
+          "kind": "UNION",
+          "name": "DeleteLedgerResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "DeleteLedgerResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteLedgerResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "success",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "DeleteSchemaResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "DeleteSchemaResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteSchemaResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "success",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "EntryGroupMatchInput",
           "description": null,
@@ -3140,7 +3254,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ExternalAccountMatchInput",
-          "description": "Specify an External Account by using `id`, or  `linkId` and `externalId`.",
+          "description": "Specify an External Account by using `id`, or `linkId` and `externalId`.",
           "fields": null,
           "inputFields": [
             {
@@ -5333,7 +5447,7 @@
           "inputFields": [
             {
               "name": "id",
-              "description": "The FRAGMENT ID of the ledger account",
+              "description": "The FRAGMENT ID of the Ledger Account",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -5353,7 +5467,7 @@
             },
             {
               "name": "path",
-              "description": "The unique path of the ledger account.\n\nThis is a slash-delimited string containing the keys of an account and all its direct ancestors.",
+              "description": "The unique path of the Ledger Account.\nThis is a slash-delimited string containing the keys of an account and all its direct ancestors.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5912,6 +6026,20 @@
               "deprecationReason": null
             },
             {
+              "name": "parameters",
+              "description": "The parameters used to post this Ledger Entry.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Parameters",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "posted",
               "description": "ISO-8601 timestamp this LedgerEntry posted to its Ledger.",
               "args": [
@@ -6253,6 +6381,24 @@
               "deprecationReason": null
             },
             {
+              "name": "dashboardUrl",
+              "description": "URL to the Fragment Dashboard for this Ledger Entry Group.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "key",
               "description": "The key of this Ledger Entry Group.",
               "args": [
@@ -6264,6 +6410,24 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledger",
+              "description": "The Ledger that this Ledger Entry Group is within.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Ledger",
                   "ofType": null
                 }
               },
@@ -6331,6 +6495,24 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "LedgerEntriesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerId",
+              "description": "The ID of the Ledger this Ledger Entry Group is within.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
                   "ofType": null
                 }
               },
@@ -6694,7 +6876,7 @@
           "inputFields": [
             {
               "name": "created",
-              "description": "Use to filter ledger groups by their created timestamp",
+              "description": "Use to filter Ledger Entry Groups by their created timestamp",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -6704,7 +6886,17 @@
             },
             {
               "name": "key",
-              "description": "Use to filter ledger groups by their type",
+              "description": "Use to filter Ledger Entry Groups by their key",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "StringFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "value",
+              "description": "Use to filter Ledger Entry Groups by their value",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "StringFilter",
@@ -6844,6 +7036,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "version",
+              "description": "Experimental: This field is reserved for an upcoming feature and is not yet supported.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -6868,7 +7070,7 @@
             },
             {
               "name": "ik",
-              "description": "The IK provided to the `addLedgerEntry` mutation or the `ik` field\nreturned from a `reconcileTx` mutation. This is required if you have not\nprovided `id`.",
+              "description": "The IK provided to the `addLedgerEntry` mutation or the `ik` field returned from a `reconcileTx` mutation. This is required if you have not provided `id`.",
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -6878,7 +7080,7 @@
             },
             {
               "name": "ledger",
-              "description": "The FRAGMENT ID of the Ledger to which this Ledger Entry belongs. This\nis required if you have not provided `id`.",
+              "description": "The FRAGMENT ID of the Ledger to which this Ledger Entry belongs. This is required if you have not provided `id`.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerMatchInput",
@@ -7570,8 +7772,18 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "created",
+              "description": "Filter by the created timestamp of the Ledger Line. This is the wall-clock time when the Ledger Line was created.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "date",
-              "description": null,
+              "description": "Filter by the posted date of the Ledger Line. This is identical to using `posted`, but only supports day-level granularity.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateFilter",
@@ -7591,7 +7803,7 @@
             },
             {
               "name": "posted",
-              "description": null,
+              "description": "Filter by the posted timestamp of the Ledger Line.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -7622,7 +7834,7 @@
           "inputFields": [
             {
               "name": "id",
-              "description": "The FRAGMENT ID of the ledger",
+              "description": "The FRAGMENT ID of the Ledger",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -7632,7 +7844,7 @@
             },
             {
               "name": "ik",
-              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a second unique identifier for this ledger.",
+              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a second unique identifier for this Ledger.",
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -8468,6 +8680,68 @@
               "deprecationReason": null
             },
             {
+              "name": "deleteLedger",
+              "description": "Delete a Ledger",
+              "args": [
+                {
+                  "name": "ledger",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "DeleteLedgerResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "deleteSchema",
+              "description": "Delete a Schema",
+              "args": [
+                {
+                  "name": "schema",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SchemaMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "DeleteSchemaResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "reconcileTx",
               "description": "This mutation is used to [reconcile](https://fragment.dev/docs#reconcile-transactions) transactions from an external system into a Ledger Entry. This mutation does not require an idempotency key since a transaction can only be reconciled once per Linked Ledger Account.  If you are reconciling a transfer between two Link Accounts which are both linked to the same Ledger, use a transit account in between to split the transfer into two `reconcileTx` calls.",
               "args": [
@@ -8930,6 +9204,16 @@
           "kind": "SCALAR",
           "name": "ParameterizedString",
           "description": "A string of non-zero length that can contain parameterized values via handlebars syntax. ex: `\"Hello from {{country}}\"`.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Parameters",
+          "description": "A mapping of parameter keys to values.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -9436,14 +9720,14 @@
         {
           "kind": "ENUM",
           "name": "ReadBalanceConsistencyMode",
-          "description": "The consistency configuration of a Ledger Account's balance queries.\nIf not provided as an argument to a balance query, the default behavior is to read eventually consistent balances.\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The consistency configuration of a Ledger Account's balance queries. If not provided as an argument to a balance query, the default behavior is to read eventually consistent balances. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
             {
               "name": "eventual",
-              "description": "Balance queries will read eventually consistent balances. This is the default behavior if `ReadBalanceConsistencyMode` is not provided as an argument to the balance field.\nBoth Ledger Accounts configured with strongly and eventually consistent balance updates support this enum.",
+              "description": "Balance queries will read eventually consistent balances. This is the default behavior if `ReadBalanceConsistencyMode` is not provided as an argument to the balance field. Both Ledger Accounts configured with strongly and eventually consistent balance updates support this enum.",
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -10603,6 +10887,16 @@
                 }
               },
               "defaultValue": null
+            },
+            {
+              "name": "version",
+              "description": "Experimental: This field is not yet supported.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -10749,7 +11043,7 @@
             },
             {
               "name": "version",
-              "description": "Optional parameter to specify version of requested Schema. If not provided, it defaults to 0,\nrepresenting the latest available version for the provided Schema key.",
+              "description": "Optional parameter to specify version of requested Schema. If not provided, it defaults to 0, representing the latest available version for the provided Schema key.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -11047,6 +11341,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "contains",
+              "description": "Must contain the provided pattern somewhere within the string. For example, 'contains: hat' will match 'hat', 'chat', and 'hate'.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "equalTo",
               "description": "Must exactly equal the provided value",
