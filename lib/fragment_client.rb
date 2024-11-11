@@ -9,6 +9,14 @@ require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 
+unless defined?(GraphQL::StaticValidation::ALL_RULES)
+  module GraphQL
+    module StaticValidation
+      ALL_RULES = []
+    end
+  end
+end
+
 module GraphQL
   module StaticValidation
     class LiteralValidator
