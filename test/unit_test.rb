@@ -122,37 +122,6 @@ class UnitTest < Minitest::Test
     assert_match(/Invalid response format/, error.message)
   end
 
-  def test_retries_on_network_error
-    # Override the default stub with failure then success pattern
-    stub_request(:post, "https://api.fragment.dev/graphql")
-      .with(
-        headers: {
-          'Accept' => 'application/json',
-          'Content-Type' => 'application/json',
-          'Authorization' => /Bearer .+/,
-          'X-Fragment-Client' => /ruby-client@.+/
-        }
-      )
-      .to_return(status: 500)
-      .then.to_return(status: 500)
-      .then.to_return(status: 200, body: MOCK_SUCCESSFUL_RESPONSE.to_json)
-
-    client = FragmentClient.new("client_id", "client_secret")
-    
-    logs = StringIO.new
-    logger = Logger.new(logs)
-    FragmentClient.configure do |config|
-      config.logger = logger
-    end
-
-    response = client.query(FragmentGraphQl::FragmentQueries::CreateLedger, {
-      ik: "test_ik",
-      ledger: { name: "Test Ledger" },
-      schemaKey: "test_schema"
-    })
-    assert_match(/Retrying after error/, logs.string)
-  end
-
   def test_token_refresh_before_expiry
     # Setup initial token
     stub_request(:post, "https://auth.fragment.dev/oauth2/token")
@@ -187,32 +156,85 @@ class UnitTest < Minitest::Test
     end
   end
 
-  def test_max_retries_exceeded
-    # Setup query to always fail
+  def test_extra_queries_file
+    # Setup token
+    stub_request(:post, "https://auth.fragment.dev/oauth2/token")
+      .to_return(status: 200, body: { access_token: "token1", expires_in: 3600 }.to_json)
+
+    # Create temp file with query
+    query_file = Tempfile.new(['test_extra_queries', '.graphql'])
+    query_file.write(<<~GRAPHQL)
+      mutation PostInitialFunding($ik: SafeString!, $ledgerIk: SafeString!, $funding_amount: String!) {
+        addLedgerEntry(
+          ik: $ik
+          entry: {ledger: {ik: $ledgerIk}, type: "initial_funding", parameters: {funding_amount: $funding_amount}}
+        ) {
+          __typename
+          ... on AddLedgerEntryResult {
+            entry {
+              ik
+              id
+              created
+              type
+              posted
+              description
+              ledger {
+                ik
+              }
+              tags {
+                key
+                value
+              }
+              groups {
+                key
+                value
+              }
+            }
+            lines {
+              account {
+                path
+              }
+              amount
+              currency {
+                code
+                customCurrencyId
+              }
+              key
+            }
+            isIkReplay
+          }
+          ... on Error {
+            code
+            message
+            retryable
+          }
+        }
+      }
+    GRAPHQL
+    query_file.close
+
+    # Stub GraphQL request
     stub_request(:post, "https://api.fragment.dev/graphql")
       .with(
         headers: {
+          'Authorization' => 'Bearer token1',
           'Accept' => 'application/json',
           'Content-Type' => 'application/json',
-          'Authorization' => /Bearer .+/,
           'X-Fragment-Client' => /ruby-client@.+/
         }
       )
-      .to_return(status: 500)
+      .to_return(status: 200, body: MOCK_SUCCESSFUL_RESPONSE.to_json)
 
-    client = FragmentClient.new("client_id", "client_secret")
-    
-    assert_raises(FragmentClient::ResponseError) do
-      client.query(FragmentGraphQl::FragmentQueries::CreateLedger, {
-        ik: "test_ik",
-        ledger: { name: "Test Ledger" },
-        schemaKey: "test_schema"
-      })
-    end
+    client = FragmentClient.new(
+      "client_id", 
+      "client_secret",
+      extra_queries_filenames: [query_file.path]
+    )
 
-    assert_equal FragmentClient.configuration.max_retries + 1, 
-      WebMock::RequestRegistry.instance.times_executed(
-        WebMock::RequestPattern.new(:post, "https://api.fragment.dev/graphql")
-      )
+    # Verify the post_initial_funding method was defined
+    assert client.respond_to?(:post_initial_funding)
+
+    # Clean up
+    query_file.unlink
   end
 end

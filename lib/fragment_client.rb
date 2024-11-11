@@ -9,6 +9,26 @@ require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 
+module GraphQL	
+  module StaticValidation	
+    class LiteralValidator	
+      alias recursive_validate_old recursively_validate	
+      def recursively_validate(ast_value, type)	
+        res = catch(:invalid) do	
+          recursive_validate_old(ast_value, type)	
+        end	
+        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)	
+          maybe_raise_if_invalid(ast_value) do	
+            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response	
+          end	
+        else	
+          res 	
+        end	
+      end	
+    end	
+  end
+end
+
 # A support module for the client
 module FragmentGraphQl
   VERSION = FragmentSDK::VERSION
@@ -102,24 +122,8 @@ class FragmentClient
 
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
-    retries = 0
-    begin
-      refresh_token_if_needed
-      response = @client.query(query, variables: variables, context: { access_token: @token.token })
-      raise GraphQL::Client::Error, "Server returned error status" if response.nil? || response.errors.any?
-      response
-    rescue GraphQL::Client::Error => e
-      logger.error("Query failed: #{e.message}")
-      
-      if retries < self.class.configuration.max_retries
-        retries += 1
-        logger.info("Retrying after error (attempt #{retries}/#{self.class.configuration.max_retries})")
-        sleep(2 ** retries) # True exponential backoff
-        retry
-      end
-      
-      raise ResponseError, e.message
-    end
+    refresh_token_if_needed
+    @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
   private
@@ -171,14 +175,13 @@ class FragmentClient
     extend T::Sig
 
     sig { returns(Integer) }
-    attr_accessor :token_expiry_buffer, :max_retries
+    attr_accessor :token_expiry_buffer
     sig { returns(Logger) }
     attr_accessor :logger
 
     sig { void }
     def initialize
       @token_expiry_buffer = T.let(120, Integer)
-      @max_retries = T.let(3, Integer)
       @logger = T.let(Logger.new($stdout), Logger)
     end
   end
