@@ -24,7 +24,7 @@ jobs:
           path: fragment-ruby
 
       - name: Use Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3.6'
 
