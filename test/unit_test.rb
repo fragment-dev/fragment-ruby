@@ -65,6 +65,7 @@ class UnitTest < Minitest::Test
     ... on Error {\
       code\
       message\
+      retryable\
     }\
   }\
 }","operationName":"FragmentGraphQl__FragmentQueries__CreateLedger"}'
@@ -80,7 +81,7 @@ class UnitTest < Minitest::Test
         }
       )
       .to_return(status: 200, body:
-       '{"data": {"createLedger":{"__typename": "CreateLedgerResult", "ledger": {"name": "bert"}}}}',
+       '{"data": {"createLedger":{"__typename": "CreateLedgerResult", "ledger": {"name": "bert", "id": "123", "ik": "test_ik", "created": "2024-03-14T00:00:00Z", "schema": {"key": "test_schema"}}, "isIkReplay": false}}}',
                  headers: {})
 
     stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
