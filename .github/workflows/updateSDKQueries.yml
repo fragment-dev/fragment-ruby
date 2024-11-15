@@ -37,7 +37,7 @@ jobs:
         working-directory: ./fragment-ruby
         run: |
           cp ../graphql-queries/queries.graphql lib/queries.graphql
-          sed -i -e 's/^query \([a-z]\)/query \U\1/g;s/^mutation \([a-z]\)/mutation \U\1/g lib/queries.graphql'
+          sed -i -e 's/^query \([a-z]\)/query \U\1/g;s/^mutation \([a-z]\)/mutation \U\1/g' lib/queries.graphql
 
       - name: Generate SDK
         working-directory: ./fragment-ruby
