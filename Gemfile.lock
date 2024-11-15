@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    fragment-dev (1.1.5)
+    fragment-dev (1.1.6)
       graphql (~> 1.13, >= 1.13.0)
-      graphql-client (~> 0.20)
+      graphql-client (~> 0.23.0)
       sorbet-runtime (~> 0.5)
 
 GEM
@@ -39,7 +39,7 @@ GEM
       rake
     graphql (1.13.23)
       base64
-    graphql-client (0.22.0)
+    graphql-client (0.23.0)
       activesupport (>= 3.0)
       graphql (>= 1.13.0)
     hashdiff (1.1.0)
