@@ -43,9 +43,7 @@
             {
               "name": "entry",
               "description": "The ledger entry that was posted",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -61,9 +59,7 @@
             {
               "name": "isIkReplay",
               "description": "True if this request successfully completed before and the previous response is being returned",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -79,9 +75,7 @@
             {
               "name": "lines",
               "description": "The ledger lines that were created in that entry",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -104,9 +98,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -118,9 +110,7 @@
             {
               "name": "code",
               "description": "The HTTP status code corresponding to the error",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -136,9 +126,7 @@
             {
               "name": "message",
               "description": "The error message",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -154,9 +142,7 @@
             {
               "name": "retryable",
               "description": "Whether or not the operation is retryable",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -182,9 +168,151 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "BalanceChangeDuring",
+          "description": "A single amount and the timestamp requested",
+          "fields": [
+            {
+              "name": "amount",
+              "description": "The balance or balance change",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CurrencyAmount",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "period",
+              "description": "The period of the requested balance change",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Period",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "BalanceChangeDuringConnection",
+          "description": "A paginated list of amounts and their periods",
+          "fields": [
+            {
+              "name": "endTime",
+              "description": "The end time of the period across which the balance changes are requested",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "LastMoment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "granularity",
+              "description": "The granularity of the return data",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Granularity",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nodes",
+              "description": "The current page of results",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "BalanceChangeDuring",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startTime",
+              "description": "The start time of the period across which the balance changes are requested",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "FirstMoment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "ENUM",
           "name": "BalanceUpdateConsistencyMode",
-          "description": "Used to configure the write-consistency of a Ledger Account's balance. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "Used to configure the write-consistency of a Ledger Account's balance. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -244,7 +372,7 @@
             },
             {
               "name": "defaultConsistencyConfig",
-              "description": "The default consistency configuration for all Ledger Accounts in this Schema. \nIf a Ledger Account does not specify its own consistency configuration, it will use the default values provided here. \n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "The default consistency configuration for all Ledger Accounts in this Schema. \nIf a Ledger Account does not specify its own consistency configuration, it will use the default values provided here. \n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -299,7 +427,7 @@
             },
             {
               "name": "customCurrencyId",
-              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference#mutations-createcustomcurrency) mutation.",
+              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -378,9 +506,7 @@
             {
               "name": "customCurrency",
               "description": "The Currency that was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -395,9 +521,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -435,9 +559,7 @@
             {
               "name": "isIkReplay",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -453,9 +575,7 @@
             {
               "name": "link",
               "description": "The custom link that was created. Represents an instance of an external system.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -470,9 +590,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -595,9 +713,7 @@
             {
               "name": "isIkReplay",
               "description": "true if a previous request successfully created this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -613,9 +729,7 @@
             {
               "name": "ledgerAccount",
               "description": "The ledger account that was created",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -630,9 +744,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -662,7 +774,7 @@
             },
             {
               "name": "consistencyConfig",
-              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -706,7 +818,7 @@
             },
             {
               "name": "linkedAccount",
-              "description": "The External Account to link to this Ledger Account. This can only be specified on leaf Ledger Accounts. See [Reconcile transactions](https://fragment.dev/docs#reconcile-transactions).",
+              "description": "The External Account to link to this Ledger Account. This can only be specified on leaf Ledger Accounts. See [Reconcile payments](https://fragment.dev/docs/reconcile-payments).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "ExternalAccountMatchInput",
@@ -787,9 +899,7 @@
             {
               "name": "ikReplays",
               "description": "Whether the ledger accounts were successfully created by a previous request",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -813,9 +923,7 @@
             {
               "name": "ledgerAccounts",
               "description": "The ledger accounts that were created",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -838,9 +946,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -923,9 +1029,7 @@
             {
               "name": "isIkReplay",
               "description": "true if this request successfully completed before and the previous response is being returned",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -941,9 +1045,7 @@
             {
               "name": "ledger",
               "description": "The Ledger that was created",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -958,9 +1060,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -971,10 +1071,8 @@
           "fields": [
             {
               "name": "code",
-              "description": "The currency code. This is an [enum type](https://fragment.dev/api-reference#types-scalars-and-enums-currencycode) .",
-              "args": [
-
-              ],
+              "description": "The currency code. This is an [enum type](https://fragment.dev/api-reference/api-types#scalars-and-enums-currencycode) .",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -990,9 +1088,7 @@
             {
               "name": "customCode",
               "description": "The currency code for custom currencies. This is only set if 'currency' is set to CUSTOM. It can be up to 32 characters long.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -1003,10 +1099,8 @@
             },
             {
               "name": "customCurrencyId",
-              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference#mutations-createcustomcurrency) mutation.",
-              "args": [
-
-              ],
+              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation.",
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -1018,9 +1112,7 @@
             {
               "name": "name",
               "description": "A human readable name for the currency (e.g. United States Dollar). This is used for display purposes.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1036,9 +1128,7 @@
             {
               "name": "precision",
               "description": "The number of decimal places this currency goes to. For example, United States Dollars have a precision of 2 (i.e. 100 cents in a dollar), whereas the Jordanian Dinar has a precision of 3. This is used for display purposes.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1053,9 +1143,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -1067,9 +1155,7 @@
             {
               "name": "amount",
               "description": "Numerical integer value, serialized as a string",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1085,9 +1171,7 @@
             {
               "name": "currency",
               "description": "The currency this amount is in",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1102,9 +1186,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -1116,9 +1198,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1141,10 +1221,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1159,9 +1237,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -2244,7 +2320,7 @@
             },
             {
               "name": "in",
-              "description": "Must match one of the values provided",
+              "description": "Must match one of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -2273,7 +2349,7 @@
           "inputFields": [
             {
               "name": "code",
-              "description": "The currency code. This is an [enum type](https://fragment.dev/api-reference#types-scalars-and-enums-currencycode).",
+              "description": "The currency code. This is an [enum type](https://fragment.dev/api-reference/api-types#scalars-and-enums-currencycode).",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2287,7 +2363,7 @@
             },
             {
               "name": "customCurrencyId",
-              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference#mutations-createcustomcurrency) mutation.",
+              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation.",
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -2390,9 +2466,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2415,10 +2489,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2433,9 +2505,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -2447,9 +2517,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2465,9 +2533,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2483,9 +2549,7 @@
             {
               "name": "externalAccounts",
               "description": "A list of External Accounts associated with this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2501,9 +2565,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of the Custom Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2519,9 +2581,7 @@
             {
               "name": "name",
               "description": "Name of the Link as it appears in the Fragment Dashboard.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2665,7 +2725,7 @@
             },
             {
               "name": "in",
-              "description": null,
+              "description": "Must match one of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -2729,6 +2789,67 @@
         },
         {
           "kind": "UNION",
+          "name": "DeleteCustomTxsResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "DeleteCustomTxsResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteCustomTxsResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "txs",
+              "description": "List of Txs deleted in this operation",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "DeletedCustomTx",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
           "name": "DeleteLedgerResponse",
           "description": null,
           "fields": null,
@@ -2761,9 +2882,7 @@
             {
               "name": "success",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2778,9 +2897,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -2818,9 +2935,7 @@
             {
               "name": "success",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2835,9 +2950,34 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeletedCustomTx",
+          "description": null,
+          "fields": [
+            {
+              "name": "tx",
+              "description": "A deleted Tx",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tx",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
           ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -2888,9 +3028,7 @@
             {
               "name": "code",
               "description": "The HTTP status code corresponding to the error",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2906,9 +3044,7 @@
             {
               "name": "message",
               "description": "The error message",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2924,9 +3060,7 @@
             {
               "name": "retryable",
               "description": "Whether or not the operation is retryable",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2941,9 +3075,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": [
             {
@@ -2966,9 +3098,7 @@
             {
               "name": "currency",
               "description": "The currency of this external account.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Currency",
@@ -2980,9 +3110,7 @@
             {
               "name": "currencyMode",
               "description": "Indicates if the account allows multiple currencies or is restricted to a single currency",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2998,9 +3126,7 @@
             {
               "name": "externalId",
               "description": "ID used for the external account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3016,9 +3142,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of External Account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3037,7 +3161,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3047,7 +3171,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3091,9 +3215,7 @@
             {
               "name": "link",
               "description": "The Link that this External Account belongs to.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3109,9 +3231,7 @@
             {
               "name": "linkId",
               "description": "FRAGMENT ID of this transaction's external link",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3127,9 +3247,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3148,7 +3266,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3158,7 +3276,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3201,9 +3319,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -3225,7 +3341,7 @@
             },
             {
               "name": "in",
-              "description": "Ledger Account can be linked to any of the specified external accounts",
+              "description": "Ledger Account can be linked to any of the specified external accounts. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -3295,9 +3411,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3320,10 +3434,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3338,9 +3450,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -3386,6 +3496,45 @@
           "possibleTypes": null
         },
         {
+          "kind": "SCALAR",
+          "name": "FirstMoment",
+          "description": "The first moment of a specific year, month or day or hour e.g. 1969 or 1969-1 or 1969-1-1 or 1969-1-1T00. All of the previous examples are equivalent to `1969-1-1T00:00:00.000`.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "Granularity",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "daily",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "hourly",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "monthly",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "GroupBalanceAccountFilter",
           "description": "A filter to query balances of a specific subset of accounts",
@@ -3417,6 +3566,148 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "HistoricalBalance",
+          "description": "A single amount and the timestamp requested",
+          "fields": [
+            {
+              "name": "amount",
+              "description": "The balance or balance change",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CurrencyAmount",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "at",
+              "description": "The timestamp of the requested balance",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "LastMoment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "HistoricalBalanceConnection",
+          "description": "A paginated list of amounts and their periods",
+          "fields": [
+            {
+              "name": "endTime",
+              "description": "The end time of the period across which the balance changes are requested",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "LastMoment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "granularity",
+              "description": "The granularity of the return data",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Granularity",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nodes",
+              "description": "The current page of results",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "HistoricalBalance",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startTime",
+              "description": "The start time of the period across which the balance changes are requested",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "FirstMoment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "SCALAR",
           "name": "ID",
           "description": "Represents a unique identifier that is Base64 obfuscated. It is often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"VXNlci0xMA==\"`) or integer (such as `4`) input value will be accepted as an ID.",
@@ -3434,9 +3725,7 @@
             {
               "name": "ik",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3452,9 +3741,7 @@
             {
               "name": "isIkReplay",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3469,9 +3756,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -3506,9 +3791,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3524,9 +3807,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3542,9 +3823,7 @@
             {
               "name": "externalAccounts",
               "description": "A list of External Accounts associated with this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3560,9 +3839,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of the Increase Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3578,9 +3855,7 @@
             {
               "name": "increaseEnv",
               "description": "The environment of the Increase Link, either sandbox or production.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3596,9 +3871,7 @@
             {
               "name": "name",
               "description": "Name of the Link as it appears in the Dashboard.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3651,9 +3924,7 @@
             {
               "name": "eq",
               "description": "Amount must exactly match this value. You may not specify this alongside `gte` or `lte`.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Int96",
@@ -3665,9 +3936,7 @@
             {
               "name": "gte",
               "description": "Amount must be greater than or equal to this value.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Int96",
@@ -3679,9 +3948,7 @@
             {
               "name": "lte",
               "description": "Amount must be less than or equal to this value.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Int96",
@@ -3692,9 +3959,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -3798,9 +4063,7 @@
             {
               "name": "code",
               "description": "The HTTP status code corresponding to the error",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3816,9 +4079,7 @@
             {
               "name": "message",
               "description": "The error message",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3834,9 +4095,7 @@
             {
               "name": "retryable",
               "description": "Whether or not the operation is retryable",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3889,9 +4148,7 @@
             {
               "name": "balanceUTCOffset",
               "description": "When aggregating balances, all transactions within a 24 hour period starting at midnight UTC plus this offset are included in each day.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3907,9 +4164,7 @@
             {
               "name": "created",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3925,9 +4180,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Ledger.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3943,9 +4196,7 @@
             {
               "name": "id",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3960,10 +4211,8 @@
             },
             {
               "name": "ik",
-              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a unique identifier for this Ledger.",
-              "args": [
-
-              ],
+              "description": "The IK passed into the [createLedger](/api-reference/api-mutations#createledger) mutation. This is treated as a unique identifier for this Ledger.",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3982,7 +4231,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3992,7 +4241,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4002,7 +4251,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](https://fragment.dev/docs#query-data-ledger-accounts).",
+                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](https://fragment.dev/docs/query-data/ledger-accounts).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerAccountsFilterSet",
@@ -4049,7 +4298,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4059,7 +4308,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4069,7 +4318,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Entries returned. Learn more about [querying Ledger Entries](https://fragment.dev/docs#query-data-ledger-entries).",
+                  "description": "Filter the Ledger Entries returned. Learn more about [querying Ledger Entries](https://fragment.dev/docs/query-data#ledger-entries).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerEntriesFilterSet",
@@ -4147,7 +4396,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4157,7 +4406,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4211,9 +4460,7 @@
             {
               "name": "migrations",
               "description": "Schema migrations affecting this Ledger.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4228,10 +4475,8 @@
             },
             {
               "name": "name",
-              "description": "The name of the Ledger. Can be updated with the [updateLedger](/api-reference#mutations-updateledger) mutation.",
-              "args": [
-
-              ],
+              "description": "The name of the Ledger. Can be updated with the [updateLedger](/api-reference/api-mutations#updateledger) mutation.",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4247,9 +4492,7 @@
             {
               "name": "schema",
               "description": "Schema key associated with this Ledger.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Schema",
@@ -4261,9 +4504,7 @@
             {
               "name": "type",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4279,9 +4520,7 @@
             {
               "name": "workspaceId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4296,9 +4535,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -4417,6 +4654,75 @@
               "deprecationReason": null
             },
             {
+              "name": "balanceChangesDuring",
+              "description": "How much did the ledger account's balances change over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance changes for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BalanceChangeDuringConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "balances",
               "description": "Total of all lines in this ledger account and child ledger accounts in all currencies",
               "args": [
@@ -4437,6 +4743,75 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "CurrencyAmountConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "balancesDuring",
+              "description": "The ledger account's balances over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HistoricalBalanceConnection",
                   "ofType": null
                 }
               },
@@ -4553,6 +4928,75 @@
               "deprecationReason": null
             },
             {
+              "name": "childBalanceChangesDuring",
+              "description": "How much did the ledger account's childBalances change over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance changes for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BalanceChangeDuringConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "childBalances",
               "description": "Total of all lines in child ledger accounts of this ledger in all currencies",
               "args": [
@@ -4580,12 +5024,81 @@
               "deprecationReason": null
             },
             {
+              "name": "childBalancesDuring",
+              "description": "The ledger account's childBalances over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HistoricalBalanceConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "childLedgerAccounts",
               "description": "The child Ledger Accounts of this Ledger Accountw",
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4595,7 +5108,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4639,9 +5152,7 @@
             {
               "name": "consistencyConfig",
               "description": "The consistency configuration for this Ledger Account. This defines how updates to this Ledger Account's ownBalance are handled.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4657,9 +5168,7 @@
             {
               "name": "created",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4675,9 +5184,7 @@
             {
               "name": "currency",
               "description": "Currency of this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Currency",
@@ -4689,9 +5196,7 @@
             {
               "name": "currencyMode",
               "description": "Indicates if the account allows multiple currencies or is restricted to a single currency",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4707,9 +5212,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Ledger Account.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4725,9 +5228,7 @@
             {
               "name": "id",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4743,9 +5244,7 @@
             {
               "name": "ik",
               "description": "The idempotency key used to create this account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4761,9 +5260,7 @@
             {
               "name": "ledger",
               "description": "Ledger this account is in",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4779,9 +5276,7 @@
             {
               "name": "ledgerId",
               "description": "ID of the ledger this account is in",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4800,7 +5295,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4810,7 +5305,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4820,7 +5315,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Lines returned. Learn more about [querying Ledger Lines](https://fragment.dev/docs#query-data-ledger-lines).",
+                  "description": "Filter the Ledger Lines returned. Learn more about [querying Ledger Lines](https://fragment.dev/docs/query-data#ledger-lines).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerLinesFilterSet",
@@ -4864,9 +5359,7 @@
             {
               "name": "link",
               "description": "The Link for the External Account that is linked to this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "INTERFACE",
                 "name": "Link",
@@ -4878,9 +5371,7 @@
             {
               "name": "linkedAccount",
               "description": "External Account that is linked to this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "ExternalAccount",
@@ -4892,9 +5383,7 @@
             {
               "name": "name",
               "description": "The name of your Ledger Account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5023,6 +5512,75 @@
               "deprecationReason": null
             },
             {
+              "name": "ownBalanceChangesDuring",
+              "description": "How much did the ledger account's ownBalances change over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance changes for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BalanceChangeDuringConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ownBalances",
               "description": "Total of all lines across all currencies in this ledger account, excluding all child ledger accounts",
               "args": [
@@ -5060,11 +5618,78 @@
               "deprecationReason": null
             },
             {
+              "name": "ownBalancesDuring",
+              "description": "The ledger account's ownBalances over a time period with a specified granularity.\nFor example, if the period is 1969-07 and the granularity is daily, the query will return the balance for each day in the month.",
+              "args": [
+                {
+                  "name": "currency",
+                  "description": "The currency of the balance changes to query. Required if the account is a multi-currency Ledger Account.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CurrencyMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "duration",
+                  "description": "The duration of the period to query in units of the granularity. The duration can be positive or negative.\nNegative durations will return the balance changes for the period before the startTime.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "The granularity of the balance changes to query.\nFor yearly or quarterly periods, the granularity should be \"monthly\", \"daily\", or \"hourly\".\nFor monthly periods, the granularity should be \"daily\" or \"hourly\".\nFor daily periods, the granularity should be \"hourly\".",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "startTime",
+                  "description": "Specifies the start time from which to calculate the balance differences for the given duration e.g. 1969 or 1969-Q3 or 1969-07 or 1969-07-21 or 1969-07-21T02",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "FirstMoment",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HistoricalBalanceConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "parentLedgerAccount",
               "description": "The parent ledger account of this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "LedgerAccount",
@@ -5076,9 +5701,7 @@
             {
               "name": "parentLedgerAccountId",
               "description": "ID of the parent ledger account of this ledger account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -5090,9 +5713,7 @@
             {
               "name": "path",
               "description": "The unique Path of the ledger account. This is a slash-delimited string containing the location of an account in its chart of accounts.\nFor accounts created with a schema, this will be composed of account keys. Else, for accounts created with the createLedgerAccounts API,\nthis will be composed of the IKs of an account and its ancestors.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5108,9 +5729,7 @@
             {
               "name": "type",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5129,7 +5748,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5139,7 +5758,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5183,9 +5802,7 @@
             {
               "name": "workspaceId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5200,9 +5817,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5213,10 +5828,8 @@
           "fields": [
             {
               "name": "ownBalance",
-              "description": "A condition that the `ownBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs#read-balances) for more on the different types of Ledger Account balances.",
-              "args": [
-
-              ],
+              "description": "A condition that the `ownBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs/read-balances) for more on the different types of Ledger Account balances.",
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Int96Condition",
@@ -5227,9 +5840,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5241,7 +5852,7 @@
           "inputFields": [
             {
               "name": "ownBalance",
-              "description": "A condition that the ownBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs#read-balances) for more on the different types of Ledger Account balances.",
+              "description": "A condition that the ownBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/read-balances) for more on the different types of Ledger Account balances.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5261,14 +5872,12 @@
         {
           "kind": "OBJECT",
           "name": "LedgerAccountConsistencyConfig",
-          "description": "The consistency configuration of a Ledger Account's balance updates.\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The consistency configuration of a Ledger Account's balance updates.\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": [
             {
               "name": "lines",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5283,10 +5892,8 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
-              "args": [
-
-              ],
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5301,21 +5908,19 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "INPUT_OBJECT",
           "name": "LedgerAccountConsistencyConfigInput",
-          "description": "The payload configuring the consistency for this Ledger Account.\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The payload configuring the consistency for this Ledger Account.\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": null,
           "inputFields": [
             {
               "name": "groups",
-              "description": "The consistency configuration for Ledger Entry Groups affecting this account.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "The consistency configuration for Ledger Entry Groups affecting this account.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -5333,7 +5938,7 @@
             },
             {
               "name": "lines",
-              "description": "If set to `strong`, then a Ledger Account's `lines` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `lines` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `lines` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `lines` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "LedgerLinesConsistencyMode",
@@ -5343,7 +5948,7 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "BalanceUpdateConsistencyMode",
@@ -5417,7 +6022,7 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then Ledger Entry Group `ownBalance`s updates for this account will be strongly consistent with the API response.\nThis Ledger Account's Ledger Entry Group balances will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, Ledger Entry Group `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "If set to `strong`, then Ledger Entry Group `ownBalance`s updates for this account will be strongly consistent with the API response.\nThis Ledger Account's Ledger Entry Group balances will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, Ledger Entry Group `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5557,9 +6162,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5582,10 +6185,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5600,9 +6201,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5695,9 +6294,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5720,10 +6317,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5738,9 +6333,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5813,9 +6406,7 @@
             {
               "name": "conditions",
               "description": "The conditions that were satisfied by this Ledger Entry when it was posted.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5839,9 +6430,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp this LedgerEntry was created in Fragment.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5857,9 +6446,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5875,9 +6462,7 @@
             {
               "name": "date",
               "description": "Date this LedgerEntry posted to its Ledger e.g. \"2021-01-01\".",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5893,9 +6478,7 @@
             {
               "name": "description",
               "description": "Description posted for this Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5907,9 +6490,7 @@
             {
               "name": "groups",
               "description": "The Ledger Entry Groups this Ledger Entry is in.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5933,9 +6514,7 @@
             {
               "name": "id",
               "description": "The ID of this LedgerEntry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5951,9 +6530,7 @@
             {
               "name": "ik",
               "description": "The idempotency key used to post this ledger entry",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5969,9 +6546,7 @@
             {
               "name": "ledger",
               "description": "The Ledger that this Ledger Entry is posted to.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5987,9 +6562,7 @@
             {
               "name": "ledgerId",
               "description": "The ID of the Ledger this Ledger Entry is posted to.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6005,9 +6578,7 @@
             {
               "name": "lines",
               "description": "Lines posted in this Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6023,9 +6594,7 @@
             {
               "name": "parameters",
               "description": "The parameters used to post this Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Parameters",
@@ -6037,9 +6606,7 @@
             {
               "name": "posted",
               "description": "ISO-8601 timestamp this LedgerEntry posted to its Ledger.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6055,9 +6622,7 @@
             {
               "name": "tags",
               "description": "The set of tags attached to this Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6081,9 +6646,7 @@
             {
               "name": "type",
               "description": "The type of the Ledger Entry.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -6095,9 +6658,7 @@
             {
               "name": "workspaceId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6112,9 +6673,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6126,9 +6685,7 @@
             {
               "name": "account",
               "description": "The Ledger Account that must satisfied the provided conditions.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6144,9 +6701,7 @@
             {
               "name": "currency",
               "description": "The currency of the balance associated with this `LedgerEntryCondition`.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6162,9 +6717,7 @@
             {
               "name": "postcondition",
               "description": "The conditions that must be satisfied after the operation.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "LedgerAccountCondition",
@@ -6176,9 +6729,7 @@
             {
               "name": "precondition",
               "description": "The conditions that must be satisfied prior to the operation.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "LedgerAccountCondition",
@@ -6189,9 +6740,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6268,7 +6817,7 @@
             },
             {
               "name": "in",
-              "description": "Result can be any of the specified Ledger Entries.",
+              "description": "Result can be any of the specified Ledger Entries. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -6300,7 +6849,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6310,7 +6859,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6364,9 +6913,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp this LedgerEntryGroup was created in Fragment.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "DateTime",
@@ -6378,9 +6925,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Ledger Entry Group.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6396,9 +6941,7 @@
             {
               "name": "key",
               "description": "The key of this Ledger Entry Group.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6414,9 +6957,7 @@
             {
               "name": "ledger",
               "description": "The Ledger that this Ledger Entry Group is within.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6435,7 +6976,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6445,7 +6986,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6499,9 +7040,7 @@
             {
               "name": "ledgerId",
               "description": "The ID of the Ledger this Ledger Entry Group is within.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6517,9 +7056,7 @@
             {
               "name": "value",
               "description": "The value associated with Ledger Entry Group.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6534,9 +7071,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6548,9 +7083,7 @@
             {
               "name": "account",
               "description": "The Ledger Account whose balance is affected.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6566,9 +7099,7 @@
             {
               "name": "currency",
               "description": "The currency of the affected balance.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6610,9 +7141,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6624,9 +7153,7 @@
             {
               "name": "nodes",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6650,9 +7177,7 @@
             {
               "name": "pageInfo",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6667,9 +7192,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6814,9 +7337,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6840,9 +7361,7 @@
             {
               "name": "pageInfo",
               "description": "Pagination info for this list.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6857,9 +7376,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7096,9 +7613,7 @@
             {
               "name": "key",
               "description": "The key of this tag.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7114,9 +7629,7 @@
             {
               "name": "value",
               "description": "The value associated with this tag's key.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7131,9 +7644,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7184,9 +7695,7 @@
             {
               "name": "account",
               "description": "LedgerAccount that contains this line",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7202,9 +7711,7 @@
             {
               "name": "accountId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7247,9 +7754,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp this LedgerLine was created in Fragment",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "DateTime",
@@ -7261,9 +7766,7 @@
             {
               "name": "currency",
               "description": "Currency of this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Currency",
@@ -7275,9 +7778,7 @@
             {
               "name": "date",
               "description": "Date this LedgerLine posted to its LedgerAccount e.g. \"2021-01-01\"",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -7289,9 +7790,7 @@
             {
               "name": "description",
               "description": "Description of this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7303,9 +7802,7 @@
             {
               "name": "externalTransferId",
               "description": "ID in the external system of the payment or transfer that created the transaction linked to this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7317,9 +7814,7 @@
             {
               "name": "externalTransferType",
               "description": "Whether the transaction linked to this LedgerLine was a payment or transfer",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "ENUM",
                 "name": "ExternalTransferType",
@@ -7331,9 +7826,7 @@
             {
               "name": "externalTxId",
               "description": "ID in the external system of the transaction linked to this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7345,9 +7838,7 @@
             {
               "name": "id",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7363,9 +7854,7 @@
             {
               "name": "key",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7377,9 +7866,7 @@
             {
               "name": "ledger",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7395,13 +7882,15 @@
             {
               "name": "ledgerEntry",
               "description": "LedgerEntry that contains this line",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
-                "kind": "OBJECT",
-                "name": "LedgerEntry",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -7409,13 +7898,15 @@
             {
               "name": "ledgerEntryId",
               "description": "ID of the LedgerEntry that contains this line",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -7423,9 +7914,7 @@
             {
               "name": "ledgerId",
               "description": "Ledger that contains this line",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7441,9 +7930,7 @@
             {
               "name": "otherTxExternalAccountExternalId",
               "description": "ID in the external system of destination or source bank account for an internal bank transfer. Only for internal bank transfers - see otherTxId",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7455,9 +7942,7 @@
             {
               "name": "otherTxExternalAccountId",
               "description": "FRAGMENT ID of destination or source bank account. Only for internal bank transfers - see otherTxId",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7469,9 +7954,7 @@
             {
               "name": "otherTxExternalId",
               "description": "ID in the external system of transaction in the destination or source bank account. Only for internal bank transfers - see otherTxId",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7483,9 +7966,7 @@
             {
               "name": "otherTxId",
               "description": "FRAGMENT ID of the transaction in the destination account (if sending money from this account) or source account (if pulling money into this account). Only applicable if this line is linked to a transaction created through an internal transfer",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7497,9 +7978,7 @@
             {
               "name": "posted",
               "description": "ISO-8601 timestamp this LedgerLine posted to its LedgerAccount",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "DateTime",
@@ -7511,9 +7990,7 @@
             {
               "name": "tx",
               "description": "The transaction linked to this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Tx",
@@ -7525,9 +8002,7 @@
             {
               "name": "txId",
               "description": "Fragment ID of the transaction linked to this LedgerLine",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7539,9 +8014,7 @@
             {
               "name": "type",
               "description": "credit or debit",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7557,9 +8030,7 @@
             {
               "name": "workspaceId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7574,9 +8045,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7632,7 +8101,7 @@
             },
             {
               "name": "key",
-              "description": "Optional identifier for Ledger Line. You can filter lines by key using [LedgerLinesFilterSet](https://fragment.dev/api-reference#types-filter-types-ledgerlinesfilterset).",
+              "description": "Optional identifier for Ledger Line. You can filter lines by key using [LedgerLinesFilterSet](https://fragment.dev/api-reference/api-types#filter-types-ledgerlinesfilterset).",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7688,9 +8157,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7713,10 +8180,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7731,9 +8196,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7839,7 +8302,7 @@
             },
             {
               "name": "ik",
-              "description": "The IK passed into the [createLedger](/api-reference#mutations-createledger) mutation. This is treated as a second unique identifier for this Ledger.",
+              "description": "The IK passed into the [createLedger](/api-reference/api-mutations#createledger) mutation. This is treated as a second unique identifier for this Ledger.",
               "type": {
                 "kind": "SCALAR",
                 "name": "SafeString",
@@ -7860,9 +8323,7 @@
             {
               "name": "ledger",
               "description": "The Ledger that the migration is run on.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7878,9 +8339,7 @@
             {
               "name": "schemaVersion",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7896,9 +8355,7 @@
             {
               "name": "status",
               "description": "The status of the Ledger Migration.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7913,9 +8370,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7927,9 +8382,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7953,9 +8406,7 @@
             {
               "name": "pageInfo",
               "description": "Pagination info for this list.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7970,9 +8421,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -8035,7 +8484,7 @@
             },
             {
               "name": "in",
-              "description": null,
+              "description": "Must match one of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -8081,9 +8530,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8106,10 +8553,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8124,9 +8569,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -8169,9 +8612,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8187,9 +8628,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8205,9 +8644,7 @@
             {
               "name": "externalAccounts",
               "description": "A list of External Accounts associated with this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8223,9 +8660,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of the Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8241,9 +8676,7 @@
             {
               "name": "name",
               "description": "Name of the Link as it appears in the Dashboard.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8258,9 +8691,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": [
             {
@@ -8318,9 +8749,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8343,10 +8772,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8361,23 +8788,19 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "OBJECT",
           "name": "Mutation",
-          "description": "View the API guide [here](https://fragment.dev/api-reference#mutations)",
+          "description": "View the API guide [here](https://fragment.dev/api-reference/api-mutations)",
           "fields": [
             {
               "name": "_empty",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -8388,11 +8811,11 @@
             },
             {
               "name": "addLedgerEntry",
-              "description": "Adds a Ledger Entry to a Ledger. This Ledger Entry cannot be into a Linked Ledger Account. For that, use [reconcileTx](https://fragment.dev/api-reference#mutations-reconciletx)",
+              "description": "Adds a Ledger Entry to a Ledger. This Ledger Entry cannot be into a Linked Ledger Account. For that, use [reconcileTx](https://fragment.dev/api-reference/api-mutations#reconciletx)",
               "args": [
                 {
                   "name": "entry",
-                  "description": "An object containing the [Ledger Lines](https://fragment.dev/api-reference#types-input-types-ledgerlineinput) as well as an optional description and posted timestamp.",
+                  "description": "An object containing the [Ledger Lines](https://fragment.dev/api-reference/api-types#input-types-ledgerlineinput) as well as an optional description and posted timestamp.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8406,7 +8829,7 @@
                 },
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8464,11 +8887,11 @@
             },
             {
               "name": "createCustomLink",
-              "description": "Custom Links let you integrate external systems that don't have native support. See [Custom Links](https://fragment.dev/docs#reconcile-transactions-link-any-system)",
+              "description": "Custom Links let you integrate external systems that don't have native support. See [Custom Links](https://fragment.dev/docs/sync-payments#custom-link)",
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8513,7 +8936,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8568,7 +8991,7 @@
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/api-reference#api-overview-idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -8675,8 +9098,47 @@
               "deprecationReason": null
             },
             {
+              "name": "deleteCustomTxs",
+              "description": "Delete Txs on a Custom Link. Once deleted, a Tx will not show up in listing queries, but can be resolved by if you lookup by its Fragment ID.",
+              "args": [
+                {
+                  "name": "txs",
+                  "description": "The Fragment IDs of the Txs to delete",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "SCALAR",
+                          "name": "ID",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "DeleteCustomTxsResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "deleteLedger",
-              "description": "Delete a Ledger",
+              "description": "Delete a Ledger.\n\nAfter using the deleteLedger mutation you can re-use the ik in a new ledger after a 30 second wait.",
               "args": [
                 {
                   "name": "ledger",
@@ -8738,7 +9200,7 @@
             },
             {
               "name": "reconcileTx",
-              "description": "This mutation is used to [reconcile](https://fragment.dev/docs#reconcile-transactions) transactions from an external system into a Ledger Entry. This mutation does not require an idempotency key since a transaction can only be reconciled once per Linked Ledger Account.  If you are reconciling a transfer between two Link Accounts which are both linked to the same Ledger, use a transit account in between to split the transfer into two `reconcileTx` calls.",
+              "description": "This mutation is used to [reconcile](https://fragment.dev/docs/reconcile-payments#reconcile-a-tx) transactions from an external system into a Ledger Entry. This mutation does not require an idempotency key since a transaction can only be reconciled once per Linked Ledger Account.  If you are reconciling a transfer between two Link Accounts which are both linked to the same Ledger, use a transit account in between to split the transfer into two `reconcileTx` calls.",
               "args": [
                 {
                   "name": "entry",
@@ -8800,7 +9262,7 @@
             },
             {
               "name": "syncCustomAccounts",
-              "description": "Once you've created a [Custom Link](https://fragment.dev/docs#reconcile-transactions-link-any-system), create accounts under it using this mutation. Each Custom Account is an immutable, single-entry view of all the transactions in the external account. You can sync up to 100 Custom Accounts in one API call.",
+              "description": "Once you've created a [Custom Link](https://fragment.dev/docs/sync-payments#custom-link), create accounts under it using this mutation. Each Custom Account is an immutable, single-entry view of all the transactions in the external account. You can sync up to 100 Custom Accounts in one API call.",
               "args": [
                 {
                   "name": "accounts",
@@ -8853,7 +9315,7 @@
             },
             {
               "name": "syncCustomTxs",
-              "description": "You can create transactions under a Custom Account in a [Custom Link](https://fragment.dev/docs#reconcile-transactions-link-any-system) using this mutation. Once you've imported transactions, you can use the reconcileTx mutation to add them to a Ledger via the Linked Ledger Account. You can sync up to 100 Custom Transactions in one API call.",
+              "description": "You can create transactions under a Custom Account in a [Custom Link](https://fragment.dev/docs/sync-payments#custom-link) using this mutation. Once you've imported transactions, you can use the reconcileTx mutation to add them to a Ledger via the Linked Ledger Account. You can sync up to 100 Custom Transactions in one API call.",
               "args": [
                 {
                   "name": "link",
@@ -9041,23 +9503,19 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "OBJECT",
           "name": "PageInfo",
-          "description": "An object containing [pagination](https://fragment.dev/docs#query-data-basics-pagination) details.",
+          "description": "An object containing [pagination](https://fragment.dev/docs/query-data#basics-pagination) details.",
           "fields": [
             {
               "name": "endCursor",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -9069,9 +9527,7 @@
             {
               "name": "hasNextPage",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9087,9 +9543,7 @@
             {
               "name": "hasPreviousPage",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9105,9 +9559,7 @@
             {
               "name": "startCursor",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -9118,9 +9570,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -9157,14 +9607,12 @@
         {
           "kind": "OBJECT",
           "name": "Query",
-          "description": "View the API guide [here](https://fragment.dev/api-reference#queries)",
+          "description": "View the API guide [here](https://fragment.dev/api-reference/api-queries)",
           "fields": [
             {
               "name": "_empty",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -9179,7 +9627,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9189,7 +9637,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9398,7 +9846,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9408,7 +9856,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9418,7 +9866,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledgers returned. Learn more about [querying Ledgers](https://fragment.dev/docs#query-data-ledgers).",
+                  "description": "Filter the Ledgers returned. Learn more about [querying Ledgers](https://fragment.dev/docs/query-data#ledgers).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgersFilterSet",
@@ -9489,9 +9937,7 @@
             {
               "name": "links",
               "description": "Get all links in a workspace",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9537,7 +9983,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9547,7 +9993,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9618,9 +10064,7 @@
             {
               "name": "workspace",
               "description": "Get the current Workspace",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9635,16 +10079,14 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "ENUM",
           "name": "ReadBalanceConsistencyMode",
-          "description": "The consistency configuration of a Ledger Account's balance queries. If not provided as an argument to a balance query, the default behavior is to read eventually consistent balances. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The consistency configuration of a Ledger Account's balance queries. If not provided as an argument to a balance query, the default behavior is to read eventually consistent balances. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -9704,9 +10146,7 @@
             {
               "name": "entry",
               "description": "The ledger entry that was posted",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9722,9 +10162,7 @@
             {
               "name": "isIkReplay",
               "description": "True if this request successfully completed before and the previous response is being returned",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9740,9 +10178,7 @@
             {
               "name": "lines",
               "description": "The ledger lines that were created in that entry",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9765,9 +10201,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -9927,9 +10361,7 @@
             {
               "name": "key",
               "description": "The identifier for a Schema.\n`key` is unique to a Workspace.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9948,7 +10380,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -9958,7 +10390,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -10002,9 +10434,7 @@
             {
               "name": "name",
               "description": "The name of a Schema. It defaults to the `key` if not provided in your SchemaInput.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10050,7 +10480,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -10060,7 +10490,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs#query-data-basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -10103,9 +10533,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -10138,9 +10566,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10164,9 +10590,7 @@
             {
               "name": "pageInfo",
               "description": "Pagination info for this list.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10181,21 +10605,19 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaConsistencyConfigInput",
-          "description": "The consistency configuration for entities created within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The consistency configuration for entities created within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": null,
           "inputFields": [
             {
               "name": "entries",
-              "description": "The consistency mode for the Ledger Entries list query within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "The consistency mode for the Ledger Entries list query within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "SchemaConsistencyMode",
@@ -10211,7 +10633,7 @@
         {
           "kind": "ENUM",
           "name": "SchemaConsistencyMode",
-          "description": "The consistency modes available for entities created within this Schema. \n\nSee [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+          "description": "The consistency modes available for entities created within this Schema. \n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -10234,12 +10656,12 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaCurrencyMatchInput",
-          "description": "Matches a Currency. Can be a built-in [CurrencyCode](https://fragment.dev/api-reference#types-scalars-and-enums-currencycode), custom Currency, or a parameterized string.\nIf you supply a parameterized string, you must pass in a valid CurrencyCode as a parameter when posting a Ledger Entry.",
+          "description": "Matches a Currency. Can be a built-in [CurrencyCode](https://fragment.dev/api-reference/api-types#scalars-and-enums-currencycode), custom Currency, or a parameterized string.\nIf you supply a parameterized string, you must pass in a valid CurrencyCode as a parameter when posting a Ledger Entry.",
           "fields": null,
           "inputFields": [
             {
               "name": "code",
-              "description": "The currency code. This must either be a [CurrencyCode](https://fragment.dev/api-reference#types-scalars-and-enums-currencycode) or a parameterized string that resolves to a CurrencyCode .",
+              "description": "The currency code. This must either be a [CurrencyCode](https://fragment.dev/api-reference/api-types#scalars-and-enums-currencycode) or a parameterized string that resolves to a CurrencyCode .",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10253,7 +10675,7 @@
             },
             {
               "name": "customCurrencyId",
-              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference#mutations-createcustomcurrency) mutation.",
+              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ParameterizedString",
@@ -10438,7 +10860,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaLedgerAccountInput",
-          "description": "Models a Ledger Account in a Schema.\nUpon successfully storing a [Schema](https://fragment.dev/api-reference#types-core-types-schema), a [LedgerAccount](https://fragment.dev/api-reference#types-core-types-ledgeraccount) will be created for\neach corresponding non-templated `SchemaLedgerAccountInput` in your Chart of Accounts.",
+          "description": "Models a Ledger Account in a Schema.\nUpon successfully storing a [Schema](https://fragment.dev/api-reference/api-types#core-types-schema), a [LedgerAccount](https://fragment.dev/api-reference/api-types#core-types-ledgeraccount) will be created for\neach corresponding non-templated `SchemaLedgerAccountInput` in your Chart of Accounts.",
           "fields": null,
           "inputFields": [
             {
@@ -10461,7 +10883,7 @@
             },
             {
               "name": "consistencyConfig",
-              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs#configure-consistency).",
+              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -10754,7 +11176,7 @@
             },
             {
               "name": "lines",
-              "description": "The Ledger Lines in the Ledger Entry.\nIf provided, when posting a Typed Entry, a [LedgerEntry](https://fragment.dev/api-reference#types-core-types-ledgerline) will be posted containing [LedgerLines](https://fragment.dev/api-reference#types-core-types-ledgerline) corresponding\nto the values you provide here. If your lines contain parameters, you must supply values for those parameters that balance out the Ledger Entry. If not provided, lines will be required when posting a Typed Entry.",
+              "description": "The Ledger Lines in the Ledger Entry.\nIf provided, when posting a Typed Entry, a [LedgerEntry](https://fragment.dev/api-reference/api-types#core-types-ledgerline) will be posted containing [LedgerLines](https://fragment.dev/api-reference/api-types#core-types-ledgerline) corresponding\nto the values you provide here. If your lines contain parameters, you must supply values for those parameters that balance out the Ledger Entry. If not provided, lines will be required when posting a Typed Entry.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -10800,7 +11222,7 @@
             },
             {
               "name": "type",
-              "description": "The type of this Ledger Entry. This is a stable, unique identifier for this entry. Uniqueness is enforced at the Schema level.\nYou can filter on this field when querying for Ledger Entries. See the docs on [LedgerEntryFilterSet](https://fragment.dev/api-reference#types-filter-types-ledgerentriesfilterset)",
+              "description": "The type of this Ledger Entry. This is a stable, unique identifier for this entry. Uniqueness is enforced at the Schema level.\nYou can filter on this field when querying for Ledger Entries. See the docs on [LedgerEntryFilterSet](https://fragment.dev/api-reference/api-types#filter-types-ledgerentriesfilterset)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10932,7 +11354,7 @@
             },
             {
               "name": "tx",
-              "description": "The external transaction to reconcile.\nThis field is required if the Ledger Account being posted to is a Linked Ledger Account. Otherwise, this field is disallowed.\nIt supports parameters in its attributes via handlebars syntax.\n\nSee the docs on [reconciliation and Linked Ledger Accounts](https://fragment.dev/docs#reconcile-transactions).",
+              "description": "The external transaction to reconcile.\nThis field is required if the Ledger Account being posted to is a Linked Ledger Account. Otherwise, this field is disallowed.\nIt supports parameters in its attributes via handlebars syntax.\n\nSee the docs on [reconciling payments](https://fragment.dev/docs/reconcile-payments).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaTxMatchInput",
@@ -11019,9 +11441,7 @@
             {
               "name": "created",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11037,9 +11457,7 @@
             {
               "name": "json",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11055,9 +11473,7 @@
             {
               "name": "migrations",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11073,9 +11489,7 @@
             {
               "name": "version",
               "description": "The version of the schema.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11090,9 +11504,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -11104,9 +11516,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11130,9 +11540,7 @@
             {
               "name": "pageInfo",
               "description": "Pagination info for this list.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11147,16 +11555,14 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
         {
           "kind": "UNION",
           "name": "StoreSchemaResponse",
-          "description": "Returned by the [storeSchema](https://fragment.dev/api-reference#mutations-storeschema) mutation.",
+          "description": "Returned by the [storeSchema](https://fragment.dev/api-reference/api-mutations#storeschema) mutation.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -11187,9 +11593,7 @@
             {
               "name": "schema",
               "description": "The Schema that was stored as a result of calling `storeSchema`.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11204,9 +11608,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -11238,7 +11640,7 @@
             },
             {
               "name": "in",
-              "description": null,
+              "description": "Must match one of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -11287,7 +11689,7 @@
             },
             {
               "name": "in",
-              "description": "Must exactly equal one of the provided values",
+              "description": "Must exactly equal one of the provided values. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -11349,9 +11751,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11367,9 +11767,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11385,9 +11783,7 @@
             {
               "name": "externalAccounts",
               "description": "A list of External Accounts associated with this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11403,9 +11799,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of the Custom Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11421,9 +11815,7 @@
             {
               "name": "name",
               "description": "Name of the Link as it appears in the Fragment Dashboard.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11439,9 +11831,7 @@
             {
               "name": "stripeEnv",
               "description": "The environment of the Stripe Link, either testmode or livemode.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11500,9 +11890,7 @@
             {
               "name": "accounts",
               "description": "The external accounts that were synced.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11525,9 +11913,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -11565,9 +11951,7 @@
             {
               "name": "txs",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11590,9 +11974,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -11603,8 +11985,18 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "contains",
+              "description": "Matches tag values based on the existence of the provided string within the tag value. The key is matched exactly.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "TagMatchInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "equalTo",
-              "description": null,
+              "description": "Matches tags based on the exact value provided. The key and value are both matched exactly.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "TagMatchInput",
@@ -11614,7 +12006,7 @@
             },
             {
               "name": "in",
-              "description": null,
+              "description": "Matches tags based on a list of possible tag matches. The key and value are both matched exactly. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -11682,9 +12074,7 @@
             {
               "name": "accountId",
               "description": "FRAGMENT ID of this transaction's external account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11700,9 +12090,7 @@
             {
               "name": "amount",
               "description": "Integer amount in cents. Positive indicates money entering the external account, negative indicates money leaving",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11718,9 +12106,7 @@
             {
               "name": "currency",
               "description": "Currency of this Tx",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Currency",
@@ -11732,9 +12118,7 @@
             {
               "name": "date",
               "description": "Date this Tx posted to the external account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11748,11 +12132,21 @@
               "deprecationReason": null
             },
             {
+              "name": "deletedAt",
+              "description": "ISO-8601 timestamp when this Tx was deleted",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "description",
-              "description": "Description at the external account (can be overridden within the Fragment Dashboard)",
-              "args": [
-
-              ],
+              "description": "Description at the external account",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11768,9 +12162,7 @@
             {
               "name": "externalAccount",
               "description": "The External Account that this transaction belongs to.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11786,9 +12178,7 @@
             {
               "name": "externalAccountId",
               "description": "ID in the external system of this transaction's external account",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11804,9 +12194,7 @@
             {
               "name": "externalId",
               "description": "ID of this transaction in the external system",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11821,10 +12209,8 @@
             },
             {
               "name": "id",
-              "description": null,
-              "args": [
-
-              ],
+              "description": "FRAGMENT ID of this Tx. If you delete a Tx via deleteCustomTxs, it will not show up in listing queries, but can be resolved by if you lookup by its Fragment ID. If you resync a Tx with the same externalId, its Fragment ID will be different than the previous Tx.",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11838,11 +12224,25 @@
               "deprecationReason": null
             },
             {
+              "name": "isDeleted",
+              "description": "Whether this Tx has been deleted via deleteCustomTxs",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerEntries",
-              "description": "Returns ledger entries that are linked to this transaction. You can link the same external account to multiple ledgers, so there could be multipe entries associated with one transaction - one for each linked ledger account this transaction has been reconciled with",
-              "args": [
-
-              ],
+              "description": "Returns ledger entries that are linked to this transaction. You can link the same external account to multiple ledgers, so there could be multiple entries associated with one transaction - one for each linked ledger account this transaction has been reconciled with",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11858,9 +12258,7 @@
             {
               "name": "ledgerEntryIds",
               "description": "Same as ledgerEntries, but returns an array of IDs instead",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -11880,9 +12278,7 @@
             {
               "name": "ledgerLineIds",
               "description": "Same as ledgerLines, but returns an array of IDs instead",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -11902,9 +12298,7 @@
             {
               "name": "ledgerLines",
               "description": "Returns ledger lines that are linked to this transaction. You can link the same external account to multiple ledgers, so there could be multipe lines associated with one transaction - one for each linked ledger account this transaction has been reconciled with",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11920,9 +12314,7 @@
             {
               "name": "link",
               "description": "This transaction's Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11938,9 +12330,7 @@
             {
               "name": "linkId",
               "description": "FRAGMENT ID of this transaction's Link",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11955,10 +12345,8 @@
             },
             {
               "name": "posted",
-              "description": "ISO-8601 timestamp this Tx posted to the external account",
-              "args": [
-
-              ],
+              "description": "ISO-8601 timestamp when this Tx posted to the external account",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11972,11 +12360,25 @@
               "deprecationReason": null
             },
             {
+              "name": "sequence",
+              "description": "When a Tx is deleted and a new Tx is synced with the same externalId, its sequence will be higher than the previous Tx. You can use this to distinguish different instances of Txs that have the same externalId.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "workspaceId",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11991,9 +12393,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12099,7 +12499,7 @@
             },
             {
               "name": "in",
-              "description": null,
+              "description": "Must match one of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -12128,9 +12528,7 @@
             {
               "name": "nodes",
               "description": "The current page of results",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12153,10 +12551,8 @@
             },
             {
               "name": "pageInfo",
-              "description": "The [pagination info](https://fragment.dev/api-reference#types-connection-types-pageinfo) for this list",
-              "args": [
-
-              ],
+              "description": "The [pagination info](https://fragment.dev/api-reference/api-types#connection-types-pageinfo) for this list",
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12171,9 +12567,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12218,9 +12612,7 @@
             {
               "name": "created",
               "description": "ISO-8601 timestamp when the Link was created.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12236,9 +12628,7 @@
             {
               "name": "dashboardUrl",
               "description": "URL to the Fragment Dashboard for this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12254,9 +12644,7 @@
             {
               "name": "externalAccounts",
               "description": "A list of External Accounts associated with this Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12272,9 +12660,7 @@
             {
               "name": "id",
               "description": "FRAGMENT ID of the Unit Link.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12290,9 +12676,7 @@
             {
               "name": "name",
               "description": "Name of the Link as it appears in the Dashboard.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12308,9 +12692,7 @@
             {
               "name": "unitEnv",
               "description": "The environment of the Unit Link, either sandbox or production.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12400,9 +12782,7 @@
             {
               "name": "ledgerAccount",
               "description": "The ledger account that was updated",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12417,9 +12797,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12504,9 +12882,7 @@
             {
               "name": "entry",
               "description": "The Ledger Entry that was updated.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12521,9 +12897,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12582,9 +12956,7 @@
             {
               "name": "ledger",
               "description": "The updated Ledger. ",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12599,9 +12971,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12613,9 +12983,7 @@
             {
               "name": "id",
               "description": "The ID of the Workspace",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12631,9 +12999,7 @@
             {
               "name": "name",
               "description": "The name of the Workspace",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12648,9 +13014,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12697,9 +13061,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -12711,9 +13073,7 @@
             {
               "name": "isRepeatable",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -12725,9 +13085,7 @@
             {
               "name": "locations",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12751,9 +13109,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12769,9 +13125,7 @@
             {
               "name": "onField",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12787,9 +13141,7 @@
             {
               "name": "onFragment",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12805,9 +13157,7 @@
             {
               "name": "onOperation",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12822,9 +13172,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -12961,9 +13309,7 @@
             {
               "name": "deprecationReason",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -12975,9 +13321,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -12989,9 +13333,7 @@
             {
               "name": "isDeprecated",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13007,9 +13349,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13024,9 +13364,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -13073,9 +13411,7 @@
             {
               "name": "deprecationReason",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13087,9 +13423,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13101,9 +13435,7 @@
             {
               "name": "isDeprecated",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13119,9 +13451,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13137,9 +13467,7 @@
             {
               "name": "type",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13154,9 +13482,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -13168,9 +13494,7 @@
             {
               "name": "defaultValue",
               "description": "A GraphQL-formatted string representing the default value for this input value.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13182,9 +13506,7 @@
             {
               "name": "deprecationReason",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13196,9 +13518,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13210,9 +13530,7 @@
             {
               "name": "isDeprecated",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13228,9 +13546,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13246,9 +13562,7 @@
             {
               "name": "type",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13263,9 +13577,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -13277,9 +13589,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13291,9 +13601,7 @@
             {
               "name": "directives",
               "description": "A list of all directives supported by this server.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13317,9 +13625,7 @@
             {
               "name": "mutationType",
               "description": "If this server supports mutation, the type that mutation operations will be rooted at.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "__Type",
@@ -13331,9 +13637,7 @@
             {
               "name": "queryType",
               "description": "The type that query operations will be rooted at.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13349,9 +13653,7 @@
             {
               "name": "subscriptionType",
               "description": "If this server support subscription, the type that subscription operations will be rooted at.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "__Type",
@@ -13363,9 +13665,7 @@
             {
               "name": "types",
               "description": "A list of all types supported by this server.",
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13388,9 +13688,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -13402,9 +13700,7 @@
             {
               "name": "description",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13509,9 +13805,7 @@
             {
               "name": "interfaces",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -13531,9 +13825,7 @@
             {
               "name": "isOneOf",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13549,9 +13841,7 @@
             {
               "name": "kind",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -13567,9 +13857,7 @@
             {
               "name": "name",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13581,9 +13869,7 @@
             {
               "name": "ofType",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "__Type",
@@ -13595,9 +13881,7 @@
             {
               "name": "possibleTypes",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -13617,9 +13901,7 @@
             {
               "name": "specifiedByURL",
               "description": null,
-              "args": [
-
-              ],
+              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -13630,9 +13912,7 @@
             }
           ],
           "inputFields": null,
-          "interfaces": [
-
-          ],
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -13775,9 +14055,7 @@
           "locations": [
             "INPUT_OBJECT"
           ],
-          "args": [
-
-          ]
+          "args": []
         },
         {
           "name": "specifiedBy",
