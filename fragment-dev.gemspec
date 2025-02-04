@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = 'snoble@fragment.dev'
   s.authors = ['fragment']
   s.files = ['lib/fragment_client.rb', 'lib/fragment_client.rbi', 'lib/fragment.schema.json', 'lib/queries.graphql', 'lib/fragment_client/version.rb']
-  s.required_ruby_version = '>= 3.0'
+  s.required_ruby_version = '>= 3.2'
   s.summary = 'the ruby fragment client sdk'
   s.homepage = 'https://fragment.dev'
   s.license = 'Apache-2.0'
