@@ -3,11 +3,12 @@
 source 'https://rubygems.org'
 
 gem 'fragment-dev', path: './'
-gem 'graphql-client'
+gem 'graphql-client', '~> 0.25.0'
 gem 'http'
 gem 'minitest', group: :development
 gem 'pry'
 gem 'rake', group: :development
+gem 'reline'
 gem 'rubocop', group: :development
 gem 'rubocop-graphql', group: :development
 gem 'rubocop-minitest', group: :development

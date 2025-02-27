@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.summary = 'the ruby fragment client sdk'
   s.homepage = 'https://fragment.dev'
   s.license = 'Apache-2.0'
-  s.add_runtime_dependency 'graphql', '~> 2.2.5'
-  s.add_runtime_dependency 'graphql-client', '~> 0.23.0'
+  s.add_runtime_dependency 'graphql', '~> 2.4.8'
+  s.add_runtime_dependency 'graphql-client', '~> 0.25.0'
   s.add_runtime_dependency 'sorbet-runtime', '~> 0.5'
 end

@@ -9,23 +9,23 @@ require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 
-module GraphQL	
-  module StaticValidation	
-    class LiteralValidator	
-      alias recursive_validate_old recursively_validate	
-      def recursively_validate(ast_value, type)	
-        res = catch(:invalid) do	
-          recursive_validate_old(ast_value, type)	
-        end	
-        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)	
-          maybe_raise_if_invalid(ast_value) do	
-            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response	
-          end	
-        else	
-          res 	
-        end	
-      end	
-    end	
+module GraphQL
+  module StaticValidation
+    class LiteralValidator
+      alias recursive_validate_old recursively_validate
+      def recursively_validate(ast_value, type)
+        res = catch(:invalid) do
+          recursive_validate_old(ast_value, type)
+        end
+        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)
+          maybe_raise_if_invalid(ast_value) do
+            %w[JSON JSONObject Any].include?(type.graphql_name) ? @valid_response : @invalid_response
+          end
+        else
+          res
+        end
+      end
+    end
   end
 end
 
@@ -64,9 +64,13 @@ module FragmentGraphQl
   # Use our custom client instead of the base GraphQL::Client
   Client = T.let(CustomClient.new(schema: FragmentSchema, execute: HTTP), CustomClient)
 
-  FragmentQueries = T.let(Client.parse(
-                            File.read("#{__dir__}/queries.graphql")
-                          ), T.untyped)
+  def self.parse_queries(filename)
+    file_text = File.read(filename)
+    puts file_text
+    Client.parse(file_text)
+  end
+
+  FragmentQueries = T.let(parse_queries("#{__dir__}/queries.graphql"), T.untyped)
 end
 
 # A client for Fragment
@@ -76,6 +80,10 @@ class FragmentClient
     const :token, String
     const :expires_at, Time
   end
+
+  # Accessor for queries
+  attr_reader :queries
+  attr_reader :queries_built_in
 
   extend T::Sig
 
@@ -88,6 +96,7 @@ class FragmentClient
                  oauth_url: 'https://auth.fragment.dev/oauth2/token', oauth_scope: 'https://api.fragment.dev/*')
     @oauth_scope = T.let(oauth_scope, String)
     @oauth_url = T.let(URI.parse(oauth_url), URI)
+    @queries = T.let(nil, T.untyped)
     @client_id = T.let(client_id, String)
     @client_secret = T.let(client_secret, String)
 
@@ -96,21 +105,20 @@ class FragmentClient
 
     @client = T.let(
       FragmentGraphQl::CustomClient.new(
-        schema: FragmentGraphQl::FragmentSchema, 
+        schema: FragmentGraphQl::FragmentSchema,
         execute: @execute
-      ), 
+      ),
       FragmentGraphQl::CustomClient
     )
     @token = T.let(create_token, Token)
 
+    @queries_built_in = FragmentGraphQl::FragmentQueries
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
     return if extra_queries_filenames.nil?
 
     extra_queries_filenames.each do |filename|
-      queries = @client.parse(
-        File.read(filename)
-      )
-      define_method_from_queries(queries)
+      @queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
+      define_method_from_queries(@queries)
     end
   end
 
@@ -123,16 +131,22 @@ class FragmentClient
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
     refresh_token_if_needed
+    puts 'querying'
+    puts query
+    puts variables
     @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
   private
 
   def define_method_from_queries(queries)
+    puts 'defining methods'
+    puts queries
     queries.constants.each do |qry|
       name = qry.to_s.gsub(/[a-z]([A-Z])/) do |m|
         format('%<lower>s_%<upper>s', lower: m[0], upper: m[1].downcase)
       end.gsub(/^[A-Z]/, &:downcase)
+      puts "Defining method: #{name} for query #{qry}"
       define_singleton_method(name) do |v|
         query(queries.const_get(qry), v)
       end
@@ -176,6 +190,7 @@ class FragmentClient
 
     sig { returns(Integer) }
     attr_accessor :token_expiry_buffer
+
     sig { returns(Logger) }
     attr_accessor :logger
 
@@ -208,6 +223,7 @@ class FragmentClient
   sig { void }
   def refresh_token_if_needed
     return unless token_expired?
+
     @token = create_token
   end
 
