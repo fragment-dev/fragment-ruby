@@ -8,7 +8,6 @@ require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
 require 'fragment_client/version'
-
 module GraphQL
   module StaticValidation
     class LiteralValidator
@@ -66,7 +65,6 @@ module FragmentGraphQl
 
   def self.parse_queries(filename)
     file_text = File.read(filename)
-    puts file_text
     Client.parse(file_text)
   end
 
@@ -131,24 +129,40 @@ class FragmentClient
   sig { params(query: T.untyped, variables: T.untyped).returns(T.untyped) }
   def query(query, variables)
     refresh_token_if_needed
-    puts 'querying'
-    puts query
-    puts variables
     @client.query(query, variables: variables, context: { access_token: @token.token })
   end
 
   private
 
   def define_method_from_queries(queries)
-    puts 'defining methods'
-    puts queries
     queries.constants.each do |qry|
       name = qry.to_s.gsub(/[a-z]([A-Z])/) do |m|
         format('%<lower>s_%<upper>s', lower: m[0], upper: m[1].downcase)
       end.gsub(/^[A-Z]/, &:downcase)
-      puts "Defining method: #{name} for query #{qry}"
+
+      # Get the original query
+      original_query = queries.const_get(qry)
+
+      # Create a monkey-patched version of the definition_node for this specific instance
+      # This avoids changing the class type while still modifying the behavior
+      if original_query.respond_to?(:definition_node)
+        definition_node = original_query.definition_node
+
+        # Only patch once to avoid infinite recursion
+        unless definition_node.singleton_class.method_defined?(:original_name)
+          # Store the original method
+          definition_node.singleton_class.send(:alias_method, :original_name, :name)
+
+          # Define the new method that uses the stored original method
+          definition_node.singleton_class.send(:define_method, :name) do
+            original_name.gsub(/#<Module.*?>/, 'FragmentGraphQl__Dynamic__Custom')
+          end
+        end
+      end
+
+      # Define the method with the original query (which now has patched behavior)
       define_singleton_method(name) do |v|
-        query(queries.const_get(qry), v)
+        query(original_query, v)
       end
     end
   end

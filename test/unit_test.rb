@@ -166,55 +166,58 @@ class UnitTest < Minitest::Test
     query_file = Tempfile.new(['test_extra_queries', '.graphql'])
     query_file.write(<<~GRAPHQL)
       query Buzz(
-  $ledgerAccount: LedgerAccountMatchInput!
-) {
-  ledgerAccount(ledgerAccount: $ledgerAccount) {
-    path
-    name
-    balances {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
+        $ledgerAccount: LedgerAccountMatchInput!
+        ) {
+        ledgerAccount(ledgerAccount: $ledgerAccount) {
+          path
+          name
+          balances {
+            nodes {
+              amount
+              currency {
+                code
+                customCurrencyId
+              }
+            }
+          }
+          end_of_year_balances: balances(at: "1969") {
+            nodes {
+              amount
+              currency {
+                code
+                customCurrencyId
+              }
+            }
+          }
+          last_year: balanceChanges(period: "1968") {
+            nodes {
+              amount
+              currency {
+                code
+                customCurrencyId
+              }
+            }
+          }
         }
-      }
-    }
-    end_of_year_balances: balances(at: "1969") {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
         }
-      }
-    }
-    last_year: balanceChanges(period: "1968") {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
-        }
-      }
-    }
-  }
-}
     GRAPHQL
     query_file.close
 
-    # Stub GraphQL request
+    # Use a variable to capture the request body
+    captured_body = nil
+    
+    # Stub GraphQL request with callback to capture the body
     stub_request(:post, "https://api.fragment.dev/graphql")
-      .with(
-        headers: {
-          'Authorization' => 'Bearer token1',
-          'Accept' => 'application/json',
-          'Content-Type' => 'application/json',
-          'X-Fragment-Client' => /ruby-client@.+/
-        }
-      )
-      .with { |request| puts "Request body: #{request.body}" }
-      .to_return(status: 200, body: MOCK_SUCCESSFUL_RESPONSE.to_json)
+      .with(headers: {
+        'Authorization' => 'Bearer token1',
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'X-Fragment-Client' => /ruby-client@.+/
+      })
+      .to_return do |request|
+        captured_body = request.body
+        { status: 200, body: MOCK_SUCCESSFUL_RESPONSE.to_json }
+      end
 
     client = FragmentClient.new(
       "client_id", 
@@ -222,11 +225,31 @@ class UnitTest < Minitest::Test
       extra_queries_filenames: [query_file.path]
     )
 
-    # Verify the post_initial_funding method was defined
+    # Verify the buzz method was defined
     assert client.respond_to?(:buzz)
 
     # Make a query
-    client.buzz(ik: "test_ik", ledgerIk: "credit-cards-example", funding_amount: "100")
+    client.buzz(ledgerAccount: { path: "assets", ledger: { ik: "credit-cards-example" } })
+    
+    # Verify we captured the body
+    refute_nil captured_body, "Request body wasn't captured"
+    
+    # Parse the request body
+    body_json = JSON.parse(captured_body)
+
+    # Make specific assertions about the body
+    assert_match(/FragmentGraphQl__Dynamic__Custom__Buzz/, body_json["query"], "Query doesn't contain expected operation name")
+    assert_match(/FragmentGraphQl__Dynamic__Custom__Buzz/, body_json["operationName"], "OperationName doesn't match expected format")
+    assert_equal(
+      {
+        "path" => "assets",
+        "ledger" => {
+          "ik" => "credit-cards-example"
+        }
+      },
+      body_json["variables"]["ledgerAccount"],
+      "Variables don't match expected structure"
+    )
     
     # Clean up
     query_file.unlink

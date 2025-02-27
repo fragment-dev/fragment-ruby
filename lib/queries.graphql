@@ -654,39 +654,3 @@ query ListLedgerEntryGroupBalances(
     }
   }
 }
-
-query FooBar(
-  $ledgerAccount: LedgerAccountMatchInput!
-) {
-  ledgerAccount(ledgerAccount: $ledgerAccount) {
-    path
-    name
-    balances {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
-        }
-      }
-    }
-    end_of_year_balances: balances(at: "1969") {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
-        }
-      }
-    }
-    last_year: balanceChanges(period: "1968") {
-      nodes {
-        amount
-        currency {
-          code
-          customCurrencyId
-        }
-      }
-    }
-  }
-}
