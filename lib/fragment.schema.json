@@ -3566,6 +3566,74 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "GroupFilter",
+          "description": "Filter for finding entries by group membership",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "keyIn",
+              "description": "Find entries that are members of a group with all of these group keys",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SafeString",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "not",
+              "description": "Find entries that do not match this predicate",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GroupNotFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GroupNotFilter",
+          "description": "Filter for finding entries that do not match this predicate",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "keyIn",
+              "description": "Find entries that are not members of all of these groups. This is an AND filter.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SafeString",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "HistoricalBalance",
           "description": "A single amount and the timestamp requested",
@@ -6354,6 +6422,16 @@
               "defaultValue": null
             },
             {
+              "name": "group",
+              "description": "Use this to filter Ledger Entries by groups. The response will include entries that contain or do not contain specific groups.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GroupFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "ledgerEntry",
               "description": "Use to filter Ledger Entries by their IDs or IKs.",
               "type": {
@@ -6544,6 +6622,54 @@
               "deprecationReason": null
             },
             {
+              "name": "isReversal",
+              "description": "Indicates whether this Ledger Entry is a reversal of another Ledger Entry.\nIf so, reverses will point to that Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isReversed",
+              "description": "Indicates whether this Ledger Entry has been reversed by another Ledger Entry.\nIf so, reversedBy will point to that Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isSuppressed",
+              "description": "Indicates whether this Ledger Entry is suppressed when listing Ledger Entries.\nReversed and Reversal Ledger Entries are suppressed by default because taken together they have no impact on a Ledger's balances.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledger",
               "description": "The Ledger that this Ledger Entry is posted to.",
               "args": [],
@@ -6615,6 +6741,62 @@
                   "name": "DateTime",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversalHistory",
+              "description": "The reversal history of this Ledger Entry. Each entry in this connection shares the same IK.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntriesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversalPosition",
+              "description": "The position of this Ledger Entry in its reversalHistory. This is a one-indexed value, so the initial entry will have reversalPosition 1.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedBy",
+              "description": "The Ledger Entry that reversed this Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerEntry",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reverses",
+              "description": "The Ledger Entry that was reversed by this Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerEntry",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -7852,6 +8034,54 @@
               "deprecationReason": null
             },
             {
+              "name": "isReversal",
+              "description": "Indicates whether this Ledger Line is a reversal of another Ledger Line.\nIf so, reverses will point to that Ledger Line.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isReversed",
+              "description": "Indicates whether this Ledger Line has been reversed by another Ledger Line.\nIf so, reversedBy will point to that Ledger Line.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isSuppressed",
+              "description": "Indicates whether this Ledger Line is suppressed when listing Ledger Lines.\nReversed and Reversal Ledger Lines are suppressed by default because taken together they have no impact on a Ledger Account's balance",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "key",
               "description": null,
               "args": [],
@@ -7982,6 +8212,30 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedBy",
+              "description": "The Ledger Line that reverses the balance changes of this Ledger Line.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerLine",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reverses",
+              "description": "The Ledger Line whose balance changes are reversed by this Ledger Line.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerLine",
                 "ofType": null
               },
               "isDeprecated": false,

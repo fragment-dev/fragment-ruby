@@ -8,6 +8,7 @@ gem 'http'
 gem 'minitest', group: :development
 gem 'pry'
 gem 'rake', group: :development
+gem 'reline'
 gem 'rubocop', group: :development
 gem 'rubocop-graphql', group: :development
 gem 'rubocop-minitest', group: :development
