@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'fragment-dev', path: './'
-gem 'graphql-client', '~> 0.25.0'
+gem 'graphql-client'
 gem 'http'
 gem 'minitest', group: :development
 gem 'pry'
