@@ -79,10 +79,6 @@ class FragmentClient
     const :expires_at, Time
   end
 
-  # Accessor for queries
-  attr_reader :queries
-  attr_reader :queries_built_in
-
   extend T::Sig
 
   sig do
@@ -94,7 +90,6 @@ class FragmentClient
                  oauth_url: 'https://auth.fragment.dev/oauth2/token', oauth_scope: 'https://api.fragment.dev/*')
     @oauth_scope = T.let(oauth_scope, String)
     @oauth_url = T.let(URI.parse(oauth_url), URI)
-    @queries = T.let(nil, T.untyped)
     @client_id = T.let(client_id, String)
     @client_secret = T.let(client_secret, String)
 
@@ -110,13 +105,12 @@ class FragmentClient
     )
     @token = T.let(create_token, Token)
 
-    @queries_built_in = FragmentGraphQl::FragmentQueries
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
     return if extra_queries_filenames.nil?
 
     extra_queries_filenames.each do |filename|
-      @queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
-      define_method_from_queries(@queries)
+      queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
+      define_method_from_queries(queries)
     end
   end
 
