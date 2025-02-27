@@ -165,52 +165,41 @@ class UnitTest < Minitest::Test
     # Create temp file with query
     query_file = Tempfile.new(['test_extra_queries', '.graphql'])
     query_file.write(<<~GRAPHQL)
-      mutation PostInitialFunding($ik: SafeString!, $ledgerIk: SafeString!, $funding_amount: String!) {
-        addLedgerEntry(
-          ik: $ik
-          entry: {ledger: {ik: $ledgerIk}, type: "initial_funding", parameters: {funding_amount: $funding_amount}}
-        ) {
-          __typename
-          ... on AddLedgerEntryResult {
-            entry {
-              ik
-              id
-              created
-              type
-              posted
-              description
-              ledger {
-                ik
-              }
-              tags {
-                key
-                value
-              }
-              groups {
-                key
-                value
-              }
-            }
-            lines {
-              account {
-                path
-              }
-              amount
-              currency {
-                code
-                customCurrencyId
-              }
-              key
-            }
-            isIkReplay
-          }
-          ... on Error {
-            code
-            message
-            retryable
-          }
+      query Buzz(
+  $ledgerAccount: LedgerAccountMatchInput!
+) {
+  ledgerAccount(ledgerAccount: $ledgerAccount) {
+    path
+    name
+    balances {
+      nodes {
+        amount
+        currency {
+          code
+          customCurrencyId
         }
       }
+    }
+    end_of_year_balances: balances(at: "1969") {
+      nodes {
+        amount
+        currency {
+          code
+          customCurrencyId
+        }
+      }
+    }
+    last_year: balanceChanges(period: "1968") {
+      nodes {
+        amount
+        currency {
+          code
+          customCurrencyId
+        }
+      }
+    }
+  }
+}
     GRAPHQL
     query_file.close
 
@@ -224,6 +213,7 @@ class UnitTest < Minitest::Test
           'X-Fragment-Client' => /ruby-client@.+/
         }
       )
+      .with { |request| puts "Request body: #{request.body}" }
       .to_return(status: 200, body: MOCK_SUCCESSFUL_RESPONSE.to_json)
 
     client = FragmentClient.new(
@@ -233,8 +223,11 @@ class UnitTest < Minitest::Test
     )
 
     # Verify the post_initial_funding method was defined
-    assert client.respond_to?(:post_initial_funding)
+    assert client.respond_to?(:buzz)
 
+    # Make a query
+    client.buzz(ik: "test_ik", ledgerIk: "credit-cards-example", funding_amount: "100")
+    
     # Clean up
     query_file.unlink
   end
