@@ -8,24 +8,23 @@ require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
 require 'fragment_client/version'
-
-module GraphQL	
-  module StaticValidation	
-    class LiteralValidator	
-      alias recursive_validate_old recursively_validate	
-      def recursively_validate(ast_value, type)	
-        res = catch(:invalid) do	
-          recursive_validate_old(ast_value, type)	
-        end	
-        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)	
-          maybe_raise_if_invalid(ast_value) do	
-            ['JSON', 'JSONObject', 'Any'].include?(type.graphql_name) ? @valid_response : @invalid_response	
-          end	
-        else	
-          res 	
-        end	
-      end	
-    end	
+module GraphQL
+  module StaticValidation
+    class LiteralValidator
+      alias recursive_validate_old recursively_validate
+      def recursively_validate(ast_value, type)
+        res = catch(:invalid) do
+          recursive_validate_old(ast_value, type)
+        end
+        if !res.valid? && type.kind.scalar? && ast_value.is_a?(GraphQL::Language::Nodes::InputObject)
+          maybe_raise_if_invalid(ast_value) do
+            %w[JSON JSONObject Any].include?(type.graphql_name) ? @valid_response : @invalid_response
+          end
+        else
+          res
+        end
+      end
+    end
   end
 end
 
@@ -64,9 +63,12 @@ module FragmentGraphQl
   # Use our custom client instead of the base GraphQL::Client
   Client = T.let(CustomClient.new(schema: FragmentSchema, execute: HTTP), CustomClient)
 
-  FragmentQueries = T.let(Client.parse(
-                            File.read("#{__dir__}/queries.graphql")
-                          ), T.untyped)
+  def self.parse_queries(filename)
+    file_text = File.read(filename)
+    Client.parse(file_text)
+  end
+
+  FragmentQueries = T.let(parse_queries("#{__dir__}/queries.graphql"), T.untyped)
 end
 
 # A client for Fragment
@@ -96,9 +98,9 @@ class FragmentClient
 
     @client = T.let(
       FragmentGraphQl::CustomClient.new(
-        schema: FragmentGraphQl::FragmentSchema, 
+        schema: FragmentGraphQl::FragmentSchema,
         execute: @execute
-      ), 
+      ),
       FragmentGraphQl::CustomClient
     )
     @token = T.let(create_token, Token)
@@ -107,9 +109,7 @@ class FragmentClient
     return if extra_queries_filenames.nil?
 
     extra_queries_filenames.each do |filename|
-      queries = @client.parse(
-        File.read(filename)
-      )
+      queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
       define_method_from_queries(queries)
     end
   end
@@ -133,8 +133,30 @@ class FragmentClient
       name = qry.to_s.gsub(/[a-z]([A-Z])/) do |m|
         format('%<lower>s_%<upper>s', lower: m[0], upper: m[1].downcase)
       end.gsub(/^[A-Z]/, &:downcase)
+
+      # Get the original query
+      original_query = queries.const_get(qry)
+
+      # Create a monkey-patched version of the definition_node for this specific instance
+      # This avoids changing the class type while still modifying the behavior
+      if original_query.respond_to?(:definition_node)
+        definition_node = original_query.definition_node
+
+        # Only patch once to avoid infinite recursion
+        unless definition_node.singleton_class.method_defined?(:original_name)
+          # Store the original method
+          definition_node.singleton_class.send(:alias_method, :original_name, :name)
+
+          # Define the new method that uses the stored original method
+          definition_node.singleton_class.send(:define_method, :name) do
+            original_name.gsub(/#<Module.*?>/, 'FragmentGraphQl__Dynamic__Custom')
+          end
+        end
+      end
+
+      # Define the method with the original query (which now has patched behavior)
       define_singleton_method(name) do |v|
-        query(queries.const_get(qry), v)
+        query(original_query, v)
       end
     end
   end
@@ -176,6 +198,7 @@ class FragmentClient
 
     sig { returns(Integer) }
     attr_accessor :token_expiry_buffer
+
     sig { returns(Logger) }
     attr_accessor :logger
 
@@ -208,6 +231,7 @@ class FragmentClient
   sig { void }
   def refresh_token_if_needed
     return unless token_expired?
+
     @token = create_token
   end
 
