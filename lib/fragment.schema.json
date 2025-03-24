@@ -9569,11 +9569,11 @@
             },
             {
               "name": "reverseLedgerEntry",
-              "description": "*EXPERIMENTAL* Reverses a ledger entry",
+              "description": "Reverses a Ledger Entry",
               "args": [
                 {
                   "name": "id",
-                  "description": "The ID of the Ledger Entry to reverse",
+                  "description": "The Fragment ID of the Ledger Entry to reverse",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
