@@ -6432,6 +6432,26 @@
               "defaultValue": null
             },
             {
+              "name": "isReversal",
+              "description": "Use this to filter Ledger Entries that were posted using `reverseLedgerEntry`.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "isReversed",
+              "description": "Use this to filter Ledger Entries that have been reversed.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "ledgerEntry",
               "description": "Use to filter Ledger Entries by their IDs or IKs.",
               "type": {
@@ -6447,6 +6467,16 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "showHidden",
+              "description": "Use this filter to show hidden Ledger Entries.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null
@@ -6590,6 +6620,22 @@
               "deprecationReason": null
             },
             {
+              "name": "hidden",
+              "description": "Indicates whether this Ledger Entry is hidden when listing Ledger Entries.\nReversed and Reversal Ledger Entries are hidden by default because taken together they have no impact on a Ledger's balances.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": "The ID of this LedgerEntry.",
               "args": [],
@@ -6640,22 +6686,6 @@
             {
               "name": "isReversed",
               "description": "Indicates whether this Ledger Entry has been reversed by another Ledger Entry.\nIf so, reversedBy will point to that Ledger Entry.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "isSuppressed",
-              "description": "Indicates whether this Ledger Entry is suppressed when listing Ledger Entries.\nReversed and Reversal Ledger Entries are suppressed by default because taken together they have no impact on a Ledger's balances.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -6773,6 +6803,18 @@
                   "name": "Int",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedAt",
+              "description": "ISO-8601 timestamp of when this Ledger Entry was reversed.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -8018,6 +8060,22 @@
               "deprecationReason": null
             },
             {
+              "name": "hidden",
+              "description": "Indicates whether this Ledger Line is hidden when listing Ledger Lines.\nReversed and Reversal Ledger Lines are hidden by default because taken together they have no impact on a Ledger Account's balance",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": null,
               "args": [],
@@ -8052,22 +8110,6 @@
             {
               "name": "isReversed",
               "description": "Indicates whether this Ledger Line has been reversed by another Ledger Line.\nIf so, reversedBy will point to that Ledger Line.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "isSuppressed",
-              "description": "Indicates whether this Ledger Line is suppressed when listing Ledger Lines.\nReversed and Reversal Ledger Lines are suppressed by default because taken together they have no impact on a Ledger Account's balance",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -8208,6 +8250,18 @@
             {
               "name": "posted",
               "description": "ISO-8601 timestamp this LedgerLine posted to its LedgerAccount",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedAt",
+              "description": "ISO-8601 timestamp of when this Ledger Line was reversed.",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -8504,6 +8558,26 @@
               "defaultValue": null
             },
             {
+              "name": "isReversal",
+              "description": "Use this to filter Ledger Lines that were posted to this Ledger Account, using `reverseLedgerEntry`.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "isReversed",
+              "description": "Use this to filter Ledger Lines that have been reversed.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "key",
               "description": "Use this to filter Ledger Lines by key. Ledger Line keys are defined in Schemas.",
               "type": {
@@ -8519,6 +8593,16 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "showHidden",
+              "description": "Use this filter to find hidden Ledger Lines.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null
@@ -9484,6 +9568,37 @@
               "deprecationReason": null
             },
             {
+              "name": "reverseLedgerEntry",
+              "description": "Reverses a Ledger Entry",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The Fragment ID of the Ledger Entry to reverse",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "ReverseLedgerEntryResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "storeSchema",
               "description": "Stores a Schema in your workspace. If no Schema with the same key exists in your worksapce, a new Schema is created.\nElse, the Schema is updated, and every Ledger associated with it is migrated to the latest version.",
               "args": [
@@ -10068,6 +10183,37 @@
               "deprecationReason": null
             },
             {
+              "name": "ledgerEntryHistory",
+              "description": "Get the reversal history of a Ledger Entry.",
+              "args": [
+                {
+                  "name": "ledgerEntry",
+                  "description": "An object specifying the ID or IK of the Ledger Entry's reversal history to query.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerEntryMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntriesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerLine",
               "description": "Get LedgerLine by ID",
               "args": [
@@ -10448,6 +10594,91 @@
                       "ofType": null
                     }
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "ReverseLedgerEntryResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "ReverseLedgerEntryResult",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "ReverseLedgerEntryResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "isIkReplay",
+              "description": "Whether the reversal was an IK replay",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedLedgerEntry",
+              "description": "The Ledger Entry that was reversed",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversingLedgerEntry",
+              "description": "The reversal Ledger Entry that was created",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -11895,6 +12126,34 @@
             {
               "name": "in",
               "description": "Must match one of the values provided. Limited to 100 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEqualTo",
+              "description": "Must not equal this string value",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Must not match any of the values provided. Limited to 100 items maximum.",
               "type": {
                 "kind": "LIST",
                 "name": null,
