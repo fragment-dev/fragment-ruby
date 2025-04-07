@@ -4528,48 +4528,7 @@
             {
               "name": "migrations",
               "description": "Schema migrations affecting this Ledger.",
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "The number of Ledger Migrations to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "The number of Ledger Migrations to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6921,18 +6880,6 @@
               "deprecationReason": null
             },
             {
-              "name": "typeVersion",
-              "description": "Experimental: The version of the Ledger Entry type used when it was posted.",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "workspaceId",
               "description": null,
               "args": [],
@@ -7827,7 +7774,7 @@
               "defaultValue": null
             },
             {
-              "name": "typeVersion",
+              "name": "version",
               "description": "Experimental: This field is reserved for an upcoming feature and is not yet supported.",
               "type": {
                 "kind": "SCALAR",
@@ -11773,7 +11720,7 @@
               "defaultValue": null
             },
             {
-              "name": "typeVersion",
+              "name": "version",
               "description": "Experimental: This field is not yet supported.",
               "type": {
                 "kind": "SCALAR",
