@@ -62,7 +62,12 @@ class UnitTest < Minitest::Test
       }\
       isIkReplay\
     }\
-    ... on Error {\
+    ... on InternalError {\
+      code\
+      message\
+      retryable\
+    }\
+    ... on BadRequestError {\
       code\
       message\
       retryable\
