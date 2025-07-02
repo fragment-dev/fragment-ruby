@@ -34,6 +34,8 @@ jobs:
         run: gem build fragment-dev
 
       - name: Publish gem
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
         run: |
           echo "Listing *.gem files and picking the first one cuz there should be only one anyway"
           ls *.gem | head -n 1 | xargs -I{} gem push {};
