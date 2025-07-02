@@ -21,7 +21,7 @@ jobs:
         name: Checkout repository
 
       - name: Use Ruby 3.3.6
-        uses: actions/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
+        uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
         with:
           ruby-version: '3.3.6'
 

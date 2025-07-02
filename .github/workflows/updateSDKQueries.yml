@@ -6,25 +6,25 @@ jobs:
   updateQueries:
     runs-on: ubuntu-latest
     steps:
-      - uses: tibdex/github-app-token@v1
+      - uses: tibdex/github-app-token@32691ba7c9e7063bd457bd8f2a5703138591fa58 # v1
         id: generate-token
         with:
           app_id: ${{ secrets.PR_APP_ID }}
           private_key: ${{ secrets.PR_APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           path: graphql-queries
           repository: fragment-dev/graphql-queries
           token: ${{ steps.generate-token.outputs.token }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         name: Checkout fragment-ruby
         with:
           path: fragment-ruby
 
       - name: Use Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
         with:
           ruby-version: '3.3.6'
 
