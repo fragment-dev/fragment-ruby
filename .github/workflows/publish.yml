@@ -1,0 +1,37 @@
+name: Publish gem to rubygems.org
+on:
+  workflow_dispatch:
+
+jobs:
+  publishGem:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: tibdex/github-app-token@32691ba7c9e7063bd457bd8f2a5703138591fa58 # v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PR_APP_ID }}
+          private_key: ${{ secrets.PR_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        name: Checkout repository
+
+      - name: Use Ruby 3.3.6
+        uses: actions/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
+        with:
+          ruby-version: '3.3.6'
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Build gem
+        run: gem build fragment-dev
+
+      - name: Publish gem
+        run: |
+          echo "Listing *.gem files and picking the first one cuz there should be only one anyway"
+          ls *.gem | head -n 1 | xargs -I{} gem push {};
