@@ -3572,8 +3572,46 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "equalTo",
+              "description": "Find groups that exactly match this group",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GroupMatchInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Find groups that match any of these groups",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GroupMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "keyEqualTo",
+              "description": "Find groups with a specific key",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "keyIn",
-              "description": "Find entries that are members of a group with all of these group keys",
+              "description": "Find groups with any of these keys",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -3590,12 +3628,97 @@
               "defaultValue": null
             },
             {
-              "name": "not",
-              "description": "Find entries that do not match this predicate",
+              "name": "notEqualTo",
+              "description": "Find groups that do not exactly match this group",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "GroupNotFilter",
+                "name": "GroupMatchInput",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Find groups that do not match any of these groups",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GroupMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notKeyEqualTo",
+              "description": "Find groups that do not have a specific key",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notKeyIn",
+              "description": "Find groups that do not have any of these keys",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SafeString",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GroupMatchInput",
+          "description": "Input type for matching a specific group by key and value",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "key",
+              "description": "The key of the group to match",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "value",
+              "description": "The value of the group to match",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             }
@@ -3607,12 +3730,12 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "GroupNotFilter",
-          "description": "Filter for finding entries that do not match this predicate",
+          "description": "DEPRECATED: Use GroupFilter and notKeyIn or notKeyEqualTo instead. Filter for finding entries that do not match this predicate",
           "fields": null,
           "inputFields": [
             {
               "name": "keyIn",
-              "description": "Find entries that are not members of all of these groups. This is an AND filter.",
+              "description": "DEPRECATED: Find entries that are not members of all of these groups. This is an AND filter.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -4255,6 +4378,63 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "entryStats",
+              "description": "Entry statistics for this Ledger.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Ledger Entry Stats to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Ledger Entry Stats to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntryStatsConnection",
                   "ofType": null
                 }
               },
@@ -6541,6 +6721,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "Use this to filter Ledger Entries by their type version.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "StringFilter",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -6922,7 +7112,7 @@
             },
             {
               "name": "typeVersion",
-              "description": "Experimental: The version of the Ledger Entry type used when it was posted.",
+              "description": "The version of the Ledger Entry type used when it was posted.",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -7475,6 +7665,51 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "LedgerEntryGroupBalanceFilter",
+          "description": "Filter Ledger Entry Groups by their balance impact on a Ledger Account. If a group has a matching balance for the specified account, the group will be included in the results.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "account",
+              "description": "A Ledger Entry Group will be included in the result if it has a balance for the specified account. If 'account' is the only filter specified, then any non-null balance in any currency will match.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "GroupBalanceAccountFilter",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "currency",
+              "description": "A Ledger Entry Group will be included in the result if it has a balance for the specified account in the specified currency. If the 'ownBalance' filter is omitted then any non-null balance will match.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CurrencyFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ownBalance",
+              "description": "A Ledger Entry Group will be included in the result if it has a balance for the specified account that passes the specified value predicate. If the 'currency' filter is omitted then any balance in any currency that passes the predicate will match. If the 'currency' filter is included, the value predicate will only be evaluated against the specified currency. ",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "Int96Filter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "LedgerEntryGroupBalanceFilterSet",
           "description": "Optional filters for querying balances on a Ledger Entry Group.",
           "fields": null,
@@ -7663,6 +7898,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "balance",
+              "description": "Filter Ledger Entry Groups by their balance impact on a Ledger Account. If a group has a matching balance for the specified account, the group will be included in the results.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerEntryGroupBalanceFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "created",
               "description": "Use to filter Ledger Entry Groups by their created timestamp",
@@ -7879,6 +8124,180 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerEntryStats",
+          "description": "Posting count statistics for a specific type and typeVersion of entry in a Ledger.",
+          "fields": [
+            {
+              "name": "count",
+              "description": "The total number of entries of this type.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerId",
+              "description": "The ledger ID these stats are for.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "netCount",
+              "description": "The net number of entries (count - reversalsCount).",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversalsCount",
+              "description": "The number of entries that are reversals.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "schemaKey",
+              "description": "The schema key associated with these stats.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "The type of entry these stats are for.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the entry type these stats are for.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerEntryStatsConnection",
+          "description": "A paginated list of Ledger Entry Stats",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerEntryStats",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -9133,6 +9552,41 @@
           "possibleTypes": null
         },
         {
+          "kind": "ENUM",
+          "name": "LinkType",
+          "description": "The type of Link an external account belongs to.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "CustomLink",
+              "description": "A Custom Link",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "IncreaseLink",
+              "description": "An Increase Link",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "StripeLink",
+              "description": "A Stripe Link",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "UnitLink",
+              "description": "A Unit Link",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "LinksConnection",
           "description": "A paginated list of Links",
@@ -9171,6 +9625,146 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "MigrateLedgerEntryInput",
+          "description": "An object defining the input for migrating a Ledger Entry.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": "The Ledger Entry to migrate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "newLedgerEntry",
+              "description": "The Ledger Entry you want to migrate it to",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerEntryInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "MigrateLedgerEntryResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "MigrateLedgerEntryResult",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "MigrateLedgerEntryResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "isIkReplay",
+              "description": "Whether this migration was an IK replay or not",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "newLedgerEntry",
+              "description": "The new Ledger Entry posted as a result of the migration",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversedLedgerEntry",
+              "description": "The Ledger Entry that was migrated",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reversingLedgerEntry",
+              "description": "The reversal Ledger Entry that was posted to reverse the Ledger Entry being migrated",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
                   "ofType": null
                 }
               },
@@ -9583,6 +10177,37 @@
                 "ofType": {
                   "kind": "UNION",
                   "name": "DeleteSchemaResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "migrateLedgerEntry",
+              "description": "Migrate an existing Ledger Entry to a new type and typeVersion.\n\nMigrating a Ledger Entry will do the following:\n  1. Reverse the existing Ledger Entry\n  2. Post a new Ledger Entry with the new type, typeVersion, and parameters provided",
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "MigrateLedgerEntryInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "MigrateLedgerEntryResponse",
                   "ofType": null
                 }
               },
@@ -10782,6 +11407,16 @@
                 }
               },
               "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the Ledger Entry type.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -11258,6 +11893,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "linkType",
+              "description": "The type of Link this external account belongs to. Must be one of: IncreaseLink, UnitLink, CustomLink, or StripeLink.",
+              "type": {
+                "kind": "ENUM",
+                "name": "LinkType",
                 "ofType": null
               },
               "defaultValue": null
@@ -11741,6 +12386,16 @@
               "defaultValue": null
             },
             {
+              "name": "status",
+              "description": "The status of this Ledger Entry. Defaults to active.",
+              "type": {
+                "kind": "ENUM",
+                "name": "SchemaLedgerEntryStatus",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tags",
               "description": "Ledger Entries posted with this type will be associated with these tags.",
               "type": {
@@ -11785,6 +12440,35 @@
           ],
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SchemaLedgerEntryStatus",
+          "description": "The status of a Ledger Entry.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "active",
+              "description": "The Ledger Entry is active.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "archived",
+              "description": "The Ledger Entry is archived.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "disabled",
+              "description": "The Ledger Entry is disabled.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {
@@ -12582,6 +13266,90 @@
                   "ofType": {
                     "kind": "INPUT_OBJECT",
                     "name": "TagMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "keyEqualTo",
+              "description": "Matches tags where the key exactly equals the provided value.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "keyIn",
+              "description": "Matches tags where the key matches any of the provided values. Limited to 100 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SafeString",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEqualTo",
+              "description": "Matches tags that do not equal the provided value. The key and value are both matched exactly.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "TagMatchInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Matches tags that do not match any of the provided values. The key and value are both matched exactly. Limited to 100 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TagMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notKeyEqualTo",
+              "description": "Matches tags where the key does not equal the provided value.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notKeyIn",
+              "description": "Matches tags where the key does not match any of the provided values. Limited to 100 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SafeString",
                     "ofType": null
                   }
                 }
@@ -13394,6 +14162,24 @@
             {
               "name": "tags",
               "description": "The list of Tags to add and/or update on this Ledger Entry.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryTagInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "tagsToRemove",
+              "description": "The list of Tags to remove from this Ledger Entry.",
               "type": {
                 "kind": "LIST",
                 "name": null,
