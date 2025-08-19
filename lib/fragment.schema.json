@@ -109,7 +109,7 @@
           "fields": [
             {
               "name": "code",
-              "description": "The HTTP status code corresponding to the error",
+              "description": "The status code of error. For example, 'ledger_not_found'.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -3027,7 +3027,7 @@
           "fields": [
             {
               "name": "code",
-              "description": "The HTTP status code corresponding to the error",
+              "description": "The status code of error. For example, 'ledger_not_found'.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -4253,7 +4253,7 @@
           "fields": [
             {
               "name": "code",
-              "description": "The HTTP status code corresponding to the error",
+              "description": "The status code of error. For example, 'ledger_not_found'.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -4474,6 +4474,73 @@
               "deprecationReason": null
             },
             {
+              "name": "ledgerAccountDataMigrations",
+              "description": "**EXPERIMENTAL**: Ledger Account data migrations affecting this Ledger.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "Filter the list of Ledger Account data migrations returned.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerAccountDataMigrationsFilterSet",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Ledger Account Data Migrations to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Ledger Account Data Migrations to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerAccountDataMigrationConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerAccounts",
               "description": "Query LedgerAccounts in Ledger. Ledger Accounts are paginated and returned in reverse-chronological order by their created date.",
               "args": [
@@ -4541,73 +4608,6 @@
               "deprecationReason": null
             },
             {
-              "name": "ledgerDataMigrations",
-              "description": "**EXPERIMENTAL**: Data migrations affecting this Ledger.",
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "filter",
-                  "description": "Filter ledger data migrations by type and status.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "LedgerDataMigrationsFilterSet",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "The number of Ledger Data Migrations to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "The number of Ledger Data Migrations to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "LedgerDataMigrationConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "ledgerEntries",
               "description": "Query Ledger Entries in a Ledger. Ledger Entries are paginated and sorted in reverse-chronological order by posted date.",
               "args": [
@@ -4668,6 +4668,73 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "LedgerEntriesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerEntryDataMigrations",
+              "description": "**EXPERIMENTAL**: Ledger Entry data migrations affecting this Ledger.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "Filter the list of Ledger Entry data migrations returned.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryDataMigrationsFilterSet",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Ledger Entry Data Migrations to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Ledger Entry Data Migrations to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntryDataMigrationConnection",
                   "ofType": null
                 }
               },
@@ -6339,6 +6406,75 @@
               "deprecationReason": null
             },
             {
+              "name": "currentMigration",
+              "description": "Current active migration info (null if migration is inactive).",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerDataMigrationHistoryEntry",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "history",
+              "description": "The historical transitions of this migration.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Migration History to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Migration History to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerDataMigrationHistoryConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerEntries",
               "description": "The ledger entries to be migrated.",
               "args": [
@@ -6396,61 +6532,17 @@
               "deprecationReason": null
             },
             {
-              "name": "ledgerId",
-              "description": "The ledger ID this migration is for.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "migrationType",
-              "description": "The migration type being performed (e.g., 'archive').",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "schemaVersion",
-              "description": "The schema version when this migration was created.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "status",
-              "description": "The status of this data migration.",
+              "description": "The status of the data migration.",
               "args": [],
               "type": {
-                "kind": "ENUM",
-                "name": "LedgerDataMigrationStatus",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "LedgerDataMigrationStatus",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -6464,6 +6556,88 @@
               "ofType": null
             }
           ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerAccountDataMigrationConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerAccountDataMigration",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerAccountDataMigrationsFilterSet",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accountPath",
+              "description": "Filter by Ledger Account path.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "status",
+              "description": "Filter by the status of the data migration.",
+              "type": {
+                "kind": "ENUM",
+                "name": "LedgerDataMigrationStatus",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6798,6 +6972,75 @@
           "description": "Represents a data migration for a Ledger.",
           "fields": [
             {
+              "name": "currentMigration",
+              "description": "Current active migration info (null if migration is inactive).",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerDataMigrationHistoryEntry",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "history",
+              "description": "The historical transitions of this migration.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Migration History to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Migration History to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerDataMigrationHistoryConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerEntries",
               "description": "The ledger entries to be migrated.",
               "args": [
@@ -6855,47 +7098,15 @@
               "deprecationReason": null
             },
             {
-              "name": "ledgerId",
-              "description": "The ledger ID this migration is for.",
+              "name": "status",
+              "description": "The status of the data migration.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "migrationType",
-              "description": "The migration type being performed (e.g., 'archive').",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "schemaVersion",
-              "description": "The schema version when this migration was created.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
+                  "kind": "ENUM",
+                  "name": "LedgerDataMigrationStatus",
                   "ofType": null
                 }
               },
@@ -6921,8 +7132,8 @@
         },
         {
           "kind": "OBJECT",
-          "name": "LedgerDataMigrationConnection",
-          "description": "A paginated list of Ledger Entry Data Migrations",
+          "name": "LedgerDataMigrationHistoryConnection",
+          "description": "A paginated list of migration history entries.",
           "fields": [
             {
               "name": "nodes",
@@ -6938,8 +7149,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "INTERFACE",
-                      "name": "LedgerDataMigration",
+                      "kind": "OBJECT",
+                      "name": "LedgerDataMigrationHistoryEntry",
                       "ofType": null
                     }
                   }
@@ -6971,26 +7182,46 @@
           "possibleTypes": null
         },
         {
-          "kind": "ENUM",
-          "name": "LedgerDataMigrationEntity",
-          "description": "The type of data migration entity.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
+          "kind": "OBJECT",
+          "name": "LedgerDataMigrationHistoryEntry",
+          "description": "A single schema version in the migration history.",
+          "fields": [
             {
-              "name": "LedgerAccountDataMigration",
-              "description": "Migration for a specific ledger account.",
+              "name": "schemaVersion",
+              "description": "The schema version.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "LedgerEntryDataMigration",
-              "description": "Migration for a specific ledger entry type.",
+              "name": "status",
+              "description": "The current status of this schema version (active if it's the latest and migration is active, otherwise inactive).",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "LedgerDataMigrationStatus",
+                  "ofType": null
+                }
+              },
               "isDeprecated": false,
               "deprecationReason": null
             }
           ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -7014,37 +7245,6 @@
               "deprecationReason": null
             }
           ],
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "LedgerDataMigrationsFilterSet",
-          "description": "Filter options for ledger data migrations.",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "entity",
-              "description": "Filter by migration entity.",
-              "type": {
-                "kind": "ENUM",
-                "name": "LedgerDataMigrationEntity",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "status",
-              "description": "Filter by migration status.",
-              "type": {
-                "kind": "ENUM",
-                "name": "LedgerDataMigrationStatus",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -7744,6 +7944,18 @@
           "description": "Represents a data migration for a specific entry type in a Ledger.",
           "fields": [
             {
+              "name": "currentMigration",
+              "description": "Current active migration info (null if migration is inactive).",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerDataMigrationHistoryEntry",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "entryType",
               "description": "The entry type being migrated.",
               "args": [],
@@ -7753,6 +7965,63 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "history",
+              "description": "The historical transitions of this migration.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Migration History to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Migration History to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerDataMigrationHistoryConnection",
                   "ofType": null
                 }
               },
@@ -7817,61 +8086,17 @@
               "deprecationReason": null
             },
             {
-              "name": "ledgerId",
-              "description": "The ledger ID this migration is for.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "migrationType",
-              "description": "The migration type being performed (e.g., 'archive').",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "schemaVersion",
-              "description": "The schema version when this migration was created.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "status",
-              "description": "The status of this data migration.",
+              "description": "The status of the data migration.",
               "args": [],
               "type": {
-                "kind": "ENUM",
-                "name": "LedgerDataMigrationStatus",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "LedgerDataMigrationStatus",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -7901,6 +8126,98 @@
               "ofType": null
             }
           ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerEntryDataMigrationConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerEntryDataMigration",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerEntryDataMigrationsFilterSet",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "entryType",
+              "description": "Filter by Ledger Entry type.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "status",
+              "description": "Filter by the status of the data migration.",
+              "type": {
+                "kind": "ENUM",
+                "name": "LedgerDataMigrationStatus",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "Filter by Ledger Entry type version.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
