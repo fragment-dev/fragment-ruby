@@ -4475,7 +4475,7 @@
             },
             {
               "name": "ledgerAccountDataMigrations",
-              "description": "**EXPERIMENTAL**: Ledger Account data migrations affecting this Ledger.",
+              "description": "Ledger Account data migrations affecting this Ledger.",
               "args": [
                 {
                   "name": "after",
@@ -4676,7 +4676,7 @@
             },
             {
               "name": "ledgerEntryDataMigrations",
-              "description": "**EXPERIMENTAL**: Ledger Entry data migrations affecting this Ledger.",
+              "description": "Ledger Entry data migrations affecting this Ledger.",
               "args": [
                 {
                   "name": "after",
@@ -6620,8 +6620,8 @@
               "name": "accountPath",
               "description": "Filter by Ledger Account path.",
               "type": {
-                "kind": "SCALAR",
-                "name": "SafeString",
+                "kind": "INPUT_OBJECT",
+                "name": "StringFilter",
                 "ofType": null
               },
               "defaultValue": null
@@ -8190,8 +8190,8 @@
               "name": "entryType",
               "description": "Filter by Ledger Entry type.",
               "type": {
-                "kind": "SCALAR",
-                "name": "SafeString",
+                "kind": "INPUT_OBJECT",
+                "name": "StringFilter",
                 "ofType": null
               },
               "defaultValue": null
@@ -8210,8 +8210,8 @@
               "name": "typeVersion",
               "description": "Filter by Ledger Entry type version.",
               "type": {
-                "kind": "SCALAR",
-                "name": "Int",
+                "kind": "INPUT_OBJECT",
+                "name": "StringFilter",
                 "ofType": null
               },
               "defaultValue": null
