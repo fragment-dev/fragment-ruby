@@ -413,7 +413,7 @@
           "inputFields": [
             {
               "name": "customCode",
-              "description": "The currency code for custom currencies. It can be up to 5 characters long. This is used for display purposes.",
+              "description": "The currency code for custom currencies. It can be up to 36 characters long. This is used for display purposes.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -427,7 +427,7 @@
             },
             {
               "name": "customCurrencyId",
-              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation.",
+              "description": "The ID for a custom currency. This is specified when creating the custom currency using the [createCustomCurrency](https://fragment.dev/api-reference/api-mutations#createcustomcurrency) mutation. It can be up to 36 characters long.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1087,7 +1087,7 @@
             },
             {
               "name": "customCode",
-              "description": "The currency code for custom currencies. This is only set if 'currency' is set to CUSTOM. It can be up to 32 characters long.",
+              "description": "The currency code for custom currencies. This is only set if 'currency' is set to CUSTOM. It can be up to 36 characters long.",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3021,6 +3021,45 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "EntryKeyInput",
+          "description": "A key used to identify Entries in an group",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "type",
+              "description": "The type of the Entry",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the Entry",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "INTERFACE",
           "name": "Error",
           "description": "Base error interface",
@@ -3690,6 +3729,87 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "GroupInput",
+          "description": "A Group in a Schema. Group define sequences of Ledger Entries and can help with reconciliation tasks.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "description",
+              "description": "Human-readable description of the Group.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "entries",
+              "description": "The entries that make up this group.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "EntryKeyInput",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "key",
+              "description": "The key of this Group. This combined with its value is a stable, unique identifier for this group.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reconciliation",
+              "description": "The parameters that are used to enable reconciliation abilities in a group.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GroupReconciliationParametersInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "value",
+              "description": "The value of this Group, can be a parameterized string to allow for dynamic values.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ParameterizedString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "GroupMatchInput",
           "description": "Input type for matching a specific group by key and value",
           "fields": null,
@@ -3747,6 +3867,31 @@
                     "name": "SafeString",
                     "ofType": null
                   }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "GroupReconciliationParametersInput",
+          "description": "A set of parameters that are used to enable reconciliation abilities in a group",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clearingAccountPath",
+              "description": "The path to the clearing account for this group. A clearing account is an account that is used to indicate funds that are in transit. Also called a suspense account, pending account, or zero balance account.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SchemaLedgerAccountMatchInput",
+                  "ofType": null
                 }
               },
               "defaultValue": null
@@ -5150,11 +5295,51 @@
               "description": "Total of all lines in this ledger account and child ledger accounts in all currencies",
               "args": [
                 {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "at",
                   "description": "Provide a timestamp to get this balance at a specific logical time. If not specified, the latest value will be returned e.g. 1969 or 1969-07 or 1969-07-21 or 1969-07-21T02",
                   "type": {
                     "kind": "SCALAR",
                     "name": "LastMoment",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of currency amounts to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of currency amounts to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -5424,11 +5609,51 @@
               "description": "Total of all lines in child ledger accounts of this ledger in all currencies",
               "args": [
                 {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "at",
                   "description": "Provide a timestamp to get this balance at a specific logical time. If not specified, the latest value will be returned e.g. 1969 or 1969-07 or 1969-07-21 or 1969-07-21T02",
                   "type": {
                     "kind": "SCALAR",
                     "name": "LastMoment",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of currency amounts to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of currency amounts to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -6008,6 +6233,16 @@
               "description": "Total of all lines across all currencies in this ledger account, excluding all child ledger accounts",
               "args": [
                 {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "at",
                   "description": "Provide a timestamp to get this balance at a specific logical time. If not specified, the latest value will be returned e.g. 1969 or 1969-07 or 1969-07-21 or 1969-07-21T02",
                   "type": {
@@ -6018,11 +6253,41 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "consistencyMode",
                   "description": "- eventual: Returns an eventually consistent balance, even if the Ledger Account's `ownBalanceUpdates` in its `consistencyConfig` is `strong` (default).\n- strong: Returns a strongly consistent balance or an error if the Ledger Account's `ownBalanceUpdates` in its `consistencyConfig` is `eventual`.\n- use_account: Returns a strongly consistent balance if the Ledger Account's `ownBalanceUpdates` in its `consistencyConfig` is `strong` and an eventually consistent balance otherwise.",
                   "type": {
                     "kind": "ENUM",
                     "name": "ReadBalanceConsistencyMode",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of currency amounts to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of currency amounts to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -12908,6 +13173,24 @@
               "defaultValue": null
             },
             {
+              "name": "groups",
+              "description": "Any groups associated with this Schema.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GroupInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "key",
               "description": "The key of the Schema. This is a stable, unique identifier for the Schema. Uniqueness is enforced at the Workspace level.",
               "type": {
@@ -13433,7 +13716,7 @@
             },
             {
               "name": "typeVersion",
-              "description": "Experimental: This field is not yet supported.",
+              "description": "The version of the Ledger Entry type.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
