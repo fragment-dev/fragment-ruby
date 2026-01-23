@@ -147,7 +147,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uri (1.0.3)
+    uri (1.1.1)
     webmock (3.24.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -185,6 +185,7 @@ DEPENDENCIES
   sorbet-runtime
   tapioca
   thor (>= 1.4.0)
+  uri (>= 1.0.4)
   webmock
 
 BUNDLED WITH
