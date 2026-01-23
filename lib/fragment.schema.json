@@ -3021,45 +3021,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "EntryKeyInput",
-          "description": "A key used to identify Entries in an group",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "type",
-              "description": "The type of the Entry",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "typeVersion",
-              "description": "The version of the Entry",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "INTERFACE",
           "name": "Error",
           "description": "Base error interface",
@@ -3611,6 +3572,24 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "all",
+              "description": "Find entries that have ALL of the specified groups. Limited to 10 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GroupMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "equalTo",
               "description": "Find groups that exactly match this group",
               "type": {
@@ -3744,28 +3723,6 @@
               "defaultValue": null
             },
             {
-              "name": "entries",
-              "description": "The entries that make up this group.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "EntryKeyInput",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
               "name": "key",
               "description": "The key of this Group. This combined with its value is a stable, unique identifier for this group.",
               "type": {
@@ -3786,20 +3743,6 @@
                 "kind": "INPUT_OBJECT",
                 "name": "GroupReconciliationParametersInput",
                 "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "value",
-              "description": "The value of this Group, can be a parameterized string to allow for dynamic values.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ParameterizedString",
-                  "ofType": null
-                }
               },
               "defaultValue": null
             }
@@ -4245,7 +4188,7 @@
         {
           "kind": "SCALAR",
           "name": "Int96",
-          "description": "A string representing integers as big as 2^96-1. The number is signed so the range is from -79,228,162,514,264,337,593,543,950,336 to 79,228,162,514,264,337,593,543,950,336.",
+          "description": "A string representing integers as big as 2^120-1. The number is signed so the range is from -1,329,227,995,784,915,872,903,807,060,280,344,575 to 1,329,227,995,784,915,872,903,807,060,280,344,575.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -5798,6 +5741,18 @@
               "deprecationReason": null
             },
             {
+              "name": "clearingStatus",
+              "description": "The clearing status of the Ledger Account.\n\nThis field is null when the Ledger Account is not configured to be a Clearing account.",
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "LedgerAccountClearingStatus",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "consistencyConfig",
               "description": "The consistency configuration for this Ledger Account. This defines how updates to this Ledger Account's ownBalance are handled.",
               "args": [],
@@ -5915,6 +5870,63 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "Ledger",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerEntries",
+              "description": "All Ledger Entries that have posted to this Ledger Account. Ledger Entries are paginated and sorted in reverse-chronological order by posted date.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Ledger Entries to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Ledger Entries to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntriesConnection",
                   "ofType": null
                 }
               },
@@ -6415,6 +6427,18 @@
               "deprecationReason": null
             },
             {
+              "name": "postedWindow",
+              "description": "The posted timestamp window for this clearing account, representing the earliest and latest\nposted timestamps across all currencies.\n\nThis field is null when the Ledger Account is not configured to be a Clearing account\nor when no entries have been posted to this account.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "PostedWindow",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "type",
               "description": null,
               "args": [],
@@ -6510,6 +6534,50 @@
           "possibleTypes": null
         },
         {
+          "kind": "ENUM",
+          "name": "LedgerAccountClearingStatus",
+          "description": "The clearing status of a Ledger Account.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "cleared",
+              "description": "The account has no outstanding balances.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pending",
+              "description": "The account has outstanding balances that have not been cleared.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerAccountClearingStatusFilter",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "equalTo",
+              "description": "Results must match the specified clearing account status",
+              "type": {
+                "kind": "ENUM",
+                "name": "LedgerAccountClearingStatus",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "LedgerAccountCondition",
           "description": "A set of conditions that a Ledger Account must meet for an operation to succeed.",
@@ -6517,6 +6585,18 @@
             {
               "name": "ownBalance",
               "description": "A condition that the `ownBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs/read-balances) for more on the different types of Ledger Account balances.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Int96Condition",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "totalBalance",
+              "description": "A condition that the `totalBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs/read-balances) for more on the different types of Ledger Account balances.",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -6542,13 +6622,19 @@
               "name": "ownBalance",
               "description": "A condition that the ownBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/read-balances) for more on the different types of Ledger Account balances.",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "Int96ConditionInput",
-                  "ofType": null
-                }
+                "kind": "INPUT_OBJECT",
+                "name": "Int96ConditionInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "totalBalance",
+              "description": "A condition that the totalBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/read-balances) for more on the different types of Ledger Account balances.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "Int96ConditionInput",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -6637,6 +6723,16 @@
             {
               "name": "ownBalanceUpdates",
               "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "type": {
+                "kind": "ENUM",
+                "name": "BalanceUpdateConsistencyMode",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "totalBalanceUpdates",
+              "description": "EXPERIMENTAL: If set to `strong`, then a Ledger Account's `totalBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `totalBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "BalanceUpdateConsistencyMode",
@@ -6959,7 +7055,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "SafeString",
                   "ofType": null
                 }
               },
@@ -7157,6 +7253,26 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "clearingStatus",
+              "description": "Use this to filter Ledger Accounts by their clearing account status",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerAccountClearingStatusFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "earliestPosted",
+              "description": "Filter by the earliest posted timestamp across all currencies for clearing accounts. This must be used alongside the clearingStatus filter.\nOnly clearing accounts where the minimum posted timestamp (across all currencies) matches this filter will be included.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "hasParentLedgerAccount",
               "description": "Use this to filter Ledger Accounts by their parent status",
               "type": {
@@ -7172,6 +7288,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "latestPosted",
+              "description": "Filter by the latest posted timestamp across all currencies for clearing accounts. This must be used alongside the clearingStatus filter.\nOnly clearing accounts where the maximum posted timestamp (across all currencies) matches this filter will be included.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
                 "ofType": null
               },
               "defaultValue": null
@@ -11883,6 +12009,49 @@
         },
         {
           "kind": "OBJECT",
+          "name": "PostedWindow",
+          "description": "The posted timestamp window for a clearing account, representing the earliest and latest\nposted timestamps across all currencies.",
+          "fields": [
+            {
+              "name": "earliest",
+              "description": "The earliest posted timestamp across all currencies for this clearing account.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "latest",
+              "description": "The latest posted timestamp across all currencies for this clearing account.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "Query",
           "description": "View the API guide [here](https://fragment.dev/api-reference/api-queries)",
           "fields": [
@@ -12955,6 +13124,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "totalBalance",
+              "description": "A condition on the `totalBalance` of the Ledger Account.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaInt96ConditionInput",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -13309,6 +13488,16 @@
                     "ofType": null
                   }
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clearing",
+              "description": "EXPERIMENTAL: Whether or not this Ledger Account is a Clearing Account.\nClearing Accounts have balances that should tend to zero. They are used to track in-progress workflows and payments.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -14521,6 +14710,24 @@
           "description": "Filters a result set based on the tags it contains.",
           "fields": null,
           "inputFields": [
+            {
+              "name": "all",
+              "description": "Matches entries that have ALL of the specified tags. The key and value are both matched exactly. Limited to 10 items maximum.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TagMatchInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
             {
               "name": "contains",
               "description": "Matches tag values based on the existence of the provided string within the tag value. The key is matched exactly.",
