@@ -20,3 +20,4 @@ gem 'tapioca', group: :development
 gem 'thor', '>= 1.4.0'
 gem 'webmock', group: :development
 gem 'rexml', '>= 3.4.2'
+gem 'uri', '>= 1.0.4'
