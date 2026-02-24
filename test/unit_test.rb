@@ -3,6 +3,7 @@
 
 require 'minitest/autorun'
 require 'webmock/minitest'
+require 'base64'
 require 'fragment_client'
 
 class UnitTest < Minitest::Test
@@ -258,5 +259,85 @@ class UnitTest < Minitest::Test
 
     # Clean up
     query_file.unlink
+  end
+
+  def test_token_request_conforms_to_oauth2_and_http_specs
+    # Intercept Net::HTTP::Post to capture the raw request-target path.
+    # WebMock normalizes URLs before matching, so it cannot detect
+    # absolute-form vs origin-form request-targets.
+    captured_request_paths = []
+    Net::HTTP::Post.define_method(:initialize) do |path, initheader = nil|
+      captured_request_paths << path
+      super(path, initheader)
+    end
+
+    captured_auth_request = nil
+    stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
+      .to_return do |request|
+        captured_auth_request = request
+        { status: 200, body: { access_token: 'test_token', expires_in: 3600 }.to_json }
+      end
+
+    begin
+      FragmentClient.new('test_client_id', 'test_client_secret')
+
+      # RFC 7230 §5.3.1: "When making a request directly to an origin server,
+      # [...] a client MUST send only the absolute-path and query components
+      # of the target URI as the request-target."
+      token_request_path = captured_request_paths.first
+      assert_equal '/oauth2/token', token_request_path,
+        "Token request must use origin-form request-target (RFC 7230 §5.3.1), got: #{token_request_path}"
+
+      # RFC 6749 §4.4.2: "The client makes a request to the token endpoint by
+      # adding the following parameters using the 'application/x-www-form-urlencoded'
+      # format [...] grant_type: REQUIRED. Value MUST be set to 'client_credentials'."
+      body_params = URI.decode_www_form(captured_auth_request.body).to_h
+      assert_equal 'client_credentials', body_params['grant_type'],
+        'grant_type must be client_credentials (RFC 6749 §4.4.2)'
+
+      # RFC 6749 §4.4.2: "scope: OPTIONAL."
+      refute_nil body_params['scope'],
+        'scope parameter should be present when configured (RFC 6749 §4.4.2)'
+
+      # RFC 6749 §2.3.1: "Clients in possession of a client password MAY use
+      # the HTTP Basic authentication scheme [...] The client identifier is [...]
+      # used as the username; the client password [...] used as the password."
+      auth_header = captured_auth_request.headers['Authorization']
+      assert_match(/\ABasic /, auth_header,
+        'Must use HTTP Basic authentication (RFC 6749 §2.3.1)')
+      decoded_credentials = Base64.decode64(auth_header.sub('Basic ', ''))
+      client_id, client_secret = decoded_credentials.split(':', 2)
+      assert_equal 'test_client_id', client_id,
+        'Basic auth username must be client_id (RFC 6749 §2.3.1)'
+      assert_equal 'test_client_secret', client_secret,
+        'Basic auth password must be client_secret (RFC 6749 §2.3.1)'
+    ensure
+      verbose, $VERBOSE = $VERBOSE, nil
+      Net::HTTP::Post.remove_method(:initialize)
+      $VERBOSE = verbose
+    end
+  end
+
+  def test_token_request_uses_origin_form_with_custom_oauth_url
+    captured_request_paths = []
+    Net::HTTP::Post.define_method(:initialize) do |path, initheader = nil|
+      captured_request_paths << path
+      super(path, initheader)
+    end
+
+    stub_request(:post, 'https://auth.us-east-1.fragment.dev/oauth2/token')
+      .to_return(status: 200, body: { access_token: 'test_token', expires_in: 3600 }.to_json)
+
+    begin
+      FragmentClient.new('client_id', 'client_secret',
+                         oauth_url: 'https://auth.us-east-1.fragment.dev/oauth2/token')
+
+      assert_equal '/oauth2/token', captured_request_paths.first,
+        'Custom oauth_url must also use origin-form request-target (RFC 7230 §5.3.1)'
+    ensure
+      verbose, $VERBOSE = $VERBOSE, nil
+      Net::HTTP::Post.remove_method(:initialize)
+      $VERBOSE = verbose
+    end
   end
 end
