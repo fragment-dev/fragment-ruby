@@ -1430,6 +1430,18 @@
               "deprecationReason": null
             },
             {
+              "name": "CADC",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "CADT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "CDF",
               "description": null,
               "isDeprecated": false,
@@ -1551,6 +1563,12 @@
             },
             {
               "name": "EUR",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EURC",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -2205,6 +2223,12 @@
             },
             {
               "name": "USDC",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "USDG",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -5070,6 +5094,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "consistencyMode",
+                  "description": "- eventual: Returns an eventually consistent balance, even if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` (default).\n- strong: Returns a strongly consistent balance or an error if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `eventual`.\n- use_account: Returns a strongly consistent balance if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` and an eventually consistent balance otherwise.",
+                  "type": {
+                    "kind": "ENUM",
+                    "name": "ReadBalanceConsistencyMode",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "currency",
                   "description": "The currency of the balance to query. Required if the account is a multi-currency Ledger Account or if the the Ledger Account has child Ledger Accounts with different currencies.",
                   "type": {
@@ -5268,6 +5302,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "consistencyMode",
+                  "description": "- eventual: Returns an eventually consistent balance, even if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` (default).\n- strong: Returns a strongly consistent balance or an error if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `eventual`.\n- use_account: Returns a strongly consistent balance if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` and an eventually consistent balance otherwise.",
+                  "type": {
+                    "kind": "ENUM",
+                    "name": "ReadBalanceConsistencyMode",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "first",
                   "description": "The number of currency amounts to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
                   "type": {
@@ -5379,6 +5423,16 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "LastMoment",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "consistencyMode",
+                  "description": "- eventual: Returns an eventually consistent balance, even if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` (default).\n- strong: Returns a strongly consistent balance or an error if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `eventual`.\n- use_account: Returns a strongly consistent balance if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` and an eventually consistent balance otherwise.",
+                  "type": {
+                    "kind": "ENUM",
+                    "name": "ReadBalanceConsistencyMode",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -5577,6 +5631,16 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "consistencyMode",
+                  "description": "- eventual: Returns an eventually consistent balance, even if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` (default).\n- strong: Returns a strongly consistent balance or an error if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `eventual`.\n- use_account: Returns a strongly consistent balance if the Ledger Account's `totalBalanceUpdates` in its `consistencyConfig` is `strong` and an eventually consistent balance otherwise.",
+                  "type": {
+                    "kind": "ENUM",
+                    "name": "ReadBalanceConsistencyMode",
                     "ofType": null
                   },
                   "defaultValue": null
