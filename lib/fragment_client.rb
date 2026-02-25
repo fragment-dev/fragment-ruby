@@ -166,6 +166,7 @@ class FragmentClient
     uri = URI.parse(@oauth_url.to_s)
     post = Net::HTTP::Post.new(uri.request_uri)
     post.basic_auth(@client_id, @client_secret)
+    post.content_type = "application/x-www-form-urlencoded"
     post.body = format('grant_type=client_credentials&scope=%<scope>s&client_id=%<id>s', scope: @oauth_scope,
                                                                                          id: @client_id)
 
