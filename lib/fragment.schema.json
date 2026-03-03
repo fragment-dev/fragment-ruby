@@ -13800,6 +13800,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "repeated",
+              "description": "Repeated expansion configuration. When set, this condition is expanded at runtime for each element\nin the array parameter named by the key.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaRepeatedConfigInput",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -14115,6 +14125,16 @@
               "defaultValue": null
             },
             {
+              "name": "repeated",
+              "description": "Repeated expansion configuration. When set, this line is expanded at runtime for each element\nin the array parameter named by the key.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaRepeatedConfigInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tx",
               "description": "The external transaction to reconcile.\nThis field is required if the Ledger Account being posted to is a Linked Ledger Account. Otherwise, this field is disallowed.\nIt supports parameters in its attributes via handlebars syntax.\n\nSee the docs on [reconciling payments](https://fragment.dev/docs/reconcile-payments).",
               "type": {
@@ -14156,6 +14176,31 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaRepeatedConfigInput",
+          "description": "Configuration for repeated expansion of a line or condition. The key names a client-supplied\narray parameter whose elements each generate one copy of the line or condition at runtime.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "key",
+              "description": "The key of the array parameter whose elements expand this line or condition.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             }
