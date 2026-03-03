@@ -299,6 +299,13 @@ class UnitTest < Minitest::Test
       refute_nil body_params['scope'],
         'scope parameter should be present when configured (RFC 6749 §4.4.2)'
 
+      # RFC 6749 §4.4.2 requires the token request entity-body to use the
+      # application/x-www-form-urlencoded format per Appendix B, and the
+      # section's example request explicitly sets this Content-Type.
+      content_type = captured_auth_request.headers['Content-Type']
+      assert_match(/\Aapplication\/x-www-form-urlencoded\b/, content_type,
+        'Token request Content-Type should be application/x-www-form-urlencoded (RFC 6749 §4.4.2)')
+
       # RFC 6749 §2.3.1: "Clients in possession of a client password MAY use
       # the HTTP Basic authentication scheme [...] The client identifier is [...]
       # used as the username; the client password [...] used as the password."
@@ -339,5 +346,27 @@ class UnitTest < Minitest::Test
       Net::HTTP::Post.remove_method(:initialize)
       $VERBOSE = verbose
     end
+  end
+
+  def test_token_request_uses_appendix_b_form_encoding_utf8
+    captured_auth_request = nil
+    stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
+      .to_return do |request|
+        captured_auth_request = request
+        { status: 200, body: { access_token: 'test_token', expires_in: 3600 }.to_json }
+      end
+
+    client_id = 'client id+special&utf8-umlaut-umlauts-äöü'
+    oauth_scope = 'https://api.fragment.dev/read write?x=1&y=2'
+
+    FragmentClient.new(client_id, 'secret', oauth_scope: oauth_scope)
+
+    # RFC 6749 §4.4.2 requires x-www-form-urlencoded per Appendix B (UTF-8).
+    body_params = URI.decode_www_form(captured_auth_request.body).to_h
+    assert_equal 'client_credentials', body_params['grant_type']
+    assert_equal oauth_scope, body_params['scope'],
+      'scope should round-trip via x-www-form-urlencoded UTF-8 encoding'
+    assert_equal client_id, body_params['client_id'],
+      'client_id should round-trip via x-www-form-urlencoded UTF-8 encoding'
   end
 end
