@@ -299,6 +299,13 @@ class UnitTest < Minitest::Test
       refute_nil body_params['scope'],
         'scope parameter should be present when configured (RFC 6749 §4.4.2)'
 
+      # RFC 6749 §4.4.2 requires the token request entity-body to use the
+      # application/x-www-form-urlencoded format per Appendix B, and the
+      # section's example request explicitly sets this Content-Type.
+      content_type = captured_auth_request.headers['Content-Type']
+      assert_match(/\Aapplication\/x-www-form-urlencoded\b/, content_type,
+        'Token request Content-Type should be application/x-www-form-urlencoded (RFC 6749 §4.4.2)')
+
       # RFC 6749 §2.3.1: "Clients in possession of a client password MAY use
       # the HTTP Basic authentication scheme [...] The client identifier is [...]
       # used as the username; the client password [...] used as the password."
