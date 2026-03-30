@@ -4952,6 +4952,77 @@
               "deprecationReason": null
             },
             {
+              "name": "lines",
+              "description": "List Ledger Lines across accounts in this Ledger, sorted by `posted` in reverse chronological order.\nSpecify a single Ledger Account via the `ledgerAccount` field, or query across multiple accounts using the `path` filter or `ledgerAccount.in`.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "Filter the Ledger Lines returned. Either the `ledgerAccount` or `path` field is required. Learn more about [querying Ledger Lines](https://fragment.dev/docs/query-data#ledger-lines).",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerLinesFilterSet",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Ledger Lines to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Ledger Lines to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerLinesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "migrations",
               "description": "Schema migrations affecting this Ledger.",
               "args": [
@@ -6743,6 +6814,18 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "totalBalanceUpdates",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "BalanceUpdateConsistencyMode",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -7328,7 +7411,7 @@
             },
             {
               "name": "earliestPosted",
-              "description": "Filter by the earliest posted timestamp across all currencies for clearing accounts. This must be used alongside the clearingStatus filter.\nOnly clearing accounts where the minimum posted timestamp (across all currencies) matches this filter will be included.",
+              "description": "Filter by the earliest posted timestamp across all currencies for clearing accounts. You must also provide clearingStatus in the same filter.\nOnly clearing accounts where the minimum posted timestamp (across all currencies) matches this filter will be included.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -7358,7 +7441,7 @@
             },
             {
               "name": "latestPosted",
-              "description": "Filter by the latest posted timestamp across all currencies for clearing accounts. This must be used alongside the clearingStatus filter.\nOnly clearing accounts where the maximum posted timestamp (across all currencies) matches this filter will be included.",
+              "description": "Filter by the latest posted timestamp across all currencies for clearing accounts. You must also provide clearingStatus in the same filter.\nOnly clearing accounts where the maximum posted timestamp (across all currencies) matches this filter will be included.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -10178,6 +10261,30 @@
               "deprecationReason": null
             },
             {
+              "name": "tags",
+              "description": "Tags attached to this Ledger Line.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerLineTag",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "tx",
               "description": "The transaction linked to this LedgerLine",
               "args": [],
@@ -10300,6 +10407,24 @@
               "defaultValue": null
             },
             {
+              "name": "tags",
+              "description": "A set of tags attached to this Ledger Line.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerEntryTagInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tx",
               "description": "Required for reconcileTx to specify the transaction being reconciled, you can specify either the FRAGMENT ID or external ID of the transaction",
               "type": {
@@ -10336,6 +10461,49 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerLineTag",
+          "description": "A tag attached to a Ledger Line.",
+          "fields": [
+            {
+              "name": "key",
+              "description": "The key of this tag.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "value",
+              "description": "The value associated with this tag's key.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -10480,6 +10648,26 @@
               "defaultValue": null
             },
             {
+              "name": "ledgerAccount",
+              "description": "Specify which Ledger Account to read lines from. Required when querying lines via `Ledger.lines` without a `path` filter. Not allowed when querying via `LedgerAccount.lines`.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerAccountFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "path",
+              "description": "A filter that string matches the account path. Wildcards ('*') can be used to return lines across multiple accounts.\nTo search for all instances of a a Ledger Account template, use the `matches` filter  with an wildcard character in place of the template value e.g. `assets/user:*`. This returns lines from all instances of this template, interleaved by `posted` timestamp.\nTo search for all descendant Ledger Accounts under a given path, use a trailing `/*` in the `matches` filter e.g. `assets/user:user-1>/*`. This returns lines from all descendants at any depth, but not lines from the parent account at `assets/user:user-1>`.\nCannot be combined with `ledgerAccount` filter. Not allowed when querying via `LedgerAccount.lines`. You cannot use wildcards for both descendant and template instance matching in the same query.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "StringMatchFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "posted",
               "description": "Filter by the posted timestamp of the Ledger Line.",
               "type": {
@@ -10495,6 +10683,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "tag",
+              "description": "Filter Ledger Lines by tag. Only matches lines that have the specified tags attached directly to them.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "TagFilter",
                 "ofType": null
               },
               "defaultValue": null
@@ -12069,6 +12267,35 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PostLinesAs",
+          "description": "Controls how lines are posted for a Ledger Entry.\nNew entries created via the dashboard default to `net_amounts`.\nExisting entries without this field set are treated as `raw_lines`.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "net_amounts",
+              "description": "Lines targeting the same account, currency, and tx are aggregated into a single line with the net amount. Lines that sum to zero are skipped. If all lines sum to zero, no lines are skipped.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "raw_lines",
+              "description": "Lines are posted as-is without aggregation.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "skip_zero_lines",
+              "description": "Lines with a zero amount are skipped, but lines are not aggregated. If all lines have a zero amount, no lines are skipped.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {
@@ -13936,6 +14163,16 @@
               "defaultValue": null
             },
             {
+              "name": "postLinesAs",
+              "description": "Controls how lines are posted. When set to `net_amounts`, all lines targeting the same account, currency, and tx are aggregated into a single line with the net amount, and lines that sum to zero are skipped. When set to `skip_zero_lines`, lines with a zero amount are skipped but not aggregated. In both modes, if all lines are zero, no lines are skipped. When set to `raw_lines`, lines are posted as-is without aggregation. New entries created via the dashboard default to `net_amounts`. Existing entries without this field set are treated as `raw_lines`.",
+              "type": {
+                "kind": "ENUM",
+                "name": "PostLinesAs",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "status",
               "description": "The status of this Ledger Entry. Defaults to active.",
               "type": {
@@ -14131,6 +14368,24 @@
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaRepeatedConfigInput",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "tags",
+              "description": "Tags to attach to this Ledger Line. Supports parameterized values via handlebars syntax.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SchemaLedgerEntryTagInput",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
