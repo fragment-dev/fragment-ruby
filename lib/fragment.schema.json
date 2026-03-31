@@ -6817,7 +6817,7 @@
             },
             {
               "name": "totalBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance`, `childBalance`, and `balance` fields' updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
               "args": [],
               "type": {
                 "kind": "ENUM",
