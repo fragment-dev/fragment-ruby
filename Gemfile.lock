@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fragment-dev (1.4.6)
+    fragment-dev (2.0.0)
       graphql (>= 2.2.5, < 3.0)
       graphql-client (~> 0.23.0)
       sorbet-runtime (~> 0.5)
