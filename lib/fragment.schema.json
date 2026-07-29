@@ -11,6 +11,106 @@
       "types": [
         {
           "kind": "UNION",
+          "name": "AddLedgerEntriesResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "AddLedgerEntriesResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "AddLedgerEntriesResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "results",
+              "description": "The committed entries, in the same order as the input entries",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "AddLedgerEntryResult",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "AddLedgerEntryInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "entry",
+              "description": "The [Ledger Entry](https://fragment.dev/api-reference/api-types#input-types-ledgerentryinput) to commit",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerEntryInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ik",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for this entry",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
           "name": "AddLedgerEntryResponse",
           "description": null,
           "fields": null,
@@ -312,7 +412,7 @@
         {
           "kind": "ENUM",
           "name": "BalanceUpdateConsistencyMode",
-          "description": "Used to configure the write-consistency of a Ledger Account's balance. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "Used to configure the write-consistency of a Ledger Account's balance. See [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -372,7 +472,7 @@
             },
             {
               "name": "defaultConsistencyConfig",
-              "description": "The default consistency configuration for all Ledger Accounts in this Schema. \nIf a Ledger Account does not specify its own consistency configuration, it will use the default values provided here. \n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "The default consistency configuration for all Ledger Accounts in this Schema. \nIf a Ledger Account does not specify its own consistency configuration, it will use the default values provided here. \n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -774,7 +874,7 @@
             },
             {
               "name": "consistencyConfig",
-              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -818,7 +918,7 @@
             },
             {
               "name": "linkedAccount",
-              "description": "The External Account to link to this Ledger Account. This can only be specified on leaf Ledger Accounts. See [Reconcile payments](https://fragment.dev/docs/reconcile-payments).",
+              "description": "The External Account to link to this Ledger Account. This can only be specified on leaf Ledger Accounts. See [Reconcile payments](https://fragment.dev/guides/reconcile-payments).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "ExternalAccountMatchInput",
@@ -2764,6 +2864,26 @@
                 }
               },
               "defaultValue": null
+            },
+            {
+              "name": "within",
+              "description": "Must fall within the given period. Supports a year (e.g. \"2026\") or a month (e.g. \"2026-05\"). To match a specific day, use `equalTo`. Cannot be combined with `withinBalanceUTCOffset`.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "PeriodFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "withinBalanceUTCOffset",
+              "description": "Must fall within the given period, taking into account the Ledger's `balanceUTCOffset`. Supports a year (e.g. \"2026\") or a month (e.g. \"2026-05\"). Cannot be combined with `within`.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "PeriodFilter",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -3185,7 +3305,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3195,7 +3315,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3290,7 +3410,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -3300,7 +3420,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4502,7 +4622,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4512,7 +4632,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4591,7 +4711,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4601,7 +4721,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4658,7 +4778,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4668,7 +4788,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4678,7 +4798,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](https://fragment.dev/docs/query-data/ledger-accounts).",
+                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](https://fragment.dev/guides/query-data/ledger-accounts).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerAccountsFilterSet",
@@ -4725,7 +4845,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4735,7 +4855,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4745,7 +4865,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Entries returned. Learn more about [querying Ledger Entries](https://fragment.dev/docs/query-data#ledger-entries).",
+                  "description": "Filter the Ledger Entries returned. Learn more about [querying Ledger Entries](https://fragment.dev/guides/query-data#ledger-entries).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerEntriesFilterSet",
@@ -4792,7 +4912,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4802,7 +4922,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4890,7 +5010,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4900,7 +5020,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4957,7 +5077,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4967,7 +5087,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -4977,7 +5097,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Lines returned. Either the `ledgerAccount` or `path` field is required. Learn more about [querying Ledger Lines](https://fragment.dev/docs/query-data#ledger-lines).",
+                  "description": "Filter the Ledger Lines returned. Either the `ledgerAccount` or `path` field is required. Learn more about [querying Ledger Lines](https://fragment.dev/guides/query-data#ledger-lines).",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -5028,7 +5148,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5038,7 +5158,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5344,7 +5464,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5364,7 +5484,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5678,7 +5798,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5698,7 +5818,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5824,7 +5944,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -5834,7 +5954,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6017,7 +6137,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6027,7 +6147,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6090,7 +6210,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6100,7 +6220,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6110,7 +6230,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Lines returned. Learn more about [querying Ledger Lines](https://fragment.dev/docs/query-data#ledger-lines).",
+                  "description": "Filter the Ledger Lines returned. Learn more about [querying Ledger Lines](https://fragment.dev/guides/query-data#ledger-lines).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerLinesFilterSet",
@@ -6381,7 +6501,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6401,7 +6521,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6562,6 +6682,18 @@
               "deprecationReason": null
             },
             {
+              "name": "payment",
+              "description": "Payment configuration of this Ledger Account, if it is a payment account.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerAccountPayment",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "postedWindow",
               "description": "The posted timestamp window for this clearing account, representing the earliest and latest\nposted timestamps across all currencies.\n\nThis field is null when the Ledger Account is not configured to be a Clearing account\nor when no entries have been posted to this account.",
               "args": [],
@@ -6595,7 +6727,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6605,7 +6737,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6719,7 +6851,7 @@
           "fields": [
             {
               "name": "ownBalance",
-              "description": "A condition that the `ownBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs/read-balances) for more on the different types of Ledger Account balances.",
+              "description": "A condition that the `ownBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/guides/read-balances) for more on the different types of Ledger Account balances.",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -6731,7 +6863,7 @@
             },
             {
               "name": "totalBalance",
-              "description": "A condition that the `totalBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/docs/read-balances) for more on the different types of Ledger Account balances.",
+              "description": "A condition that the `totalBalance` field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/guides/read-balances) for more on the different types of Ledger Account balances.",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -6781,7 +6913,7 @@
         {
           "kind": "OBJECT",
           "name": "LedgerAccountConsistencyConfig",
-          "description": "The consistency configuration of a Ledger Account's balance updates.\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "The consistency configuration of a Ledger Account's balance updates.\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": [
             {
               "name": "lines",
@@ -6801,7 +6933,7 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, `ownBalance` updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -6817,7 +6949,7 @@
             },
             {
               "name": "totalBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance`, `childBalance`, and `balance` fields' updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance`, `childBalance`, and `balance` fields' updates will be strongly consistent with\nthe API response. This Ledger Account's balance will be updated and\navailable for strongly consistent reads once you receive an API response.\n\nOtherwise if not set or set to `eventual`, updates are applied\nasynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "args": [],
               "type": {
                 "kind": "ENUM",
@@ -6836,12 +6968,12 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "LedgerAccountConsistencyConfigInput",
-          "description": "The payload configuring the consistency for this Ledger Account.\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "The payload configuring the consistency for this Ledger Account.\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": null,
           "inputFields": [
             {
               "name": "groups",
-              "description": "The consistency configuration for Ledger Entry Groups affecting this account.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "The consistency configuration for Ledger Entry Groups affecting this account.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -6859,7 +6991,7 @@
             },
             {
               "name": "lines",
-              "description": "If set to `strong`, then a Ledger Account's `lines` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `lines` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `lines` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `lines` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "LedgerLinesConsistencyMode",
@@ -6869,7 +7001,7 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then a Ledger Account's `ownBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "BalanceUpdateConsistencyMode",
@@ -6879,7 +7011,7 @@
             },
             {
               "name": "totalBalanceUpdates",
-              "description": "EXPERIMENTAL: If set to `strong`, then a Ledger Account's `totalBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `totalBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "EXPERIMENTAL: If set to `strong`, then a Ledger Account's `totalBalance` updates will be strongly consistent with the API response.\nThis Ledger Account's balance will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, `totalBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "BalanceUpdateConsistencyMode",
@@ -6931,7 +7063,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6941,7 +7073,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6988,7 +7120,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -6998,7 +7130,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -7210,7 +7342,7 @@
             },
             {
               "name": "ownBalanceUpdates",
-              "description": "If set to `strong`, then Ledger Entry Group `ownBalance`s updates for this account will be strongly consistent with the API response.\nThis Ledger Account's Ledger Entry Group balances will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, Ledger Entry Group `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "If set to `strong`, then Ledger Entry Group `ownBalance`s updates for this account will be strongly consistent with the API response.\nThis Ledger Account's Ledger Entry Group balances will be updated and available for strongly consistent reads before you receive an API response.\n\nOtherwise if unset or set to `eventual`, Ledger Entry Group `ownBalance` updates are applied asynchronously and may not be immediately reflected in queries.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7265,6 +7397,33 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerAccountPayment",
+          "description": "Payment configuration of a Ledger Account.",
+          "fields": [
+            {
+              "name": "penguin",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7527,7 +7686,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -7537,7 +7696,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -7584,7 +7743,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -7594,7 +7753,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -7844,7 +8003,7 @@
           "inputFields": [
             {
               "name": "date",
-              "description": null,
+              "description": "Use this filter to filter Ledger Entries by their `posted` date.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateFilter",
@@ -7894,7 +8053,7 @@
             },
             {
               "name": "posted",
-              "description": null,
+              "description": "Use this filter to filter Ledger Entries by their `posted` timestamp.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -8515,7 +8674,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8525,7 +8684,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8572,7 +8731,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8582,7 +8741,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8809,7 +8968,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8819,7 +8978,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8936,7 +9095,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -8946,7 +9105,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -10609,7 +10768,7 @@
             },
             {
               "name": "date",
-              "description": "Filter by the posted date of the Ledger Line. This is identical to using `posted`, but only supports day-level granularity.",
+              "description": "Use this filter to filter Ledger Lines by their `posted` date.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateFilter",
@@ -10659,7 +10818,7 @@
             },
             {
               "name": "path",
-              "description": "A filter that string matches the account path. Wildcards ('*') can be used to return lines across multiple accounts.\nTo search for all instances of a a Ledger Account template, use the `matches` filter  with an wildcard character in place of the template value e.g. `assets/user:*`. This returns lines from all instances of this template, interleaved by `posted` timestamp.\nTo search for all descendant Ledger Accounts under a given path, use a trailing `/*` in the `matches` filter e.g. `assets/user:user-1>/*`. This returns lines from all descendants at any depth, but not lines from the parent account at `assets/user:user-1>`.\nCannot be combined with `ledgerAccount` filter. Not allowed when querying via `LedgerAccount.lines`. You cannot use wildcards for both descendant and template instance matching in the same query.",
+              "description": "A filter that string matches the account path. Wildcards ('*') can be used to return lines across multiple accounts.\nTo search for all instances of a a Ledger Account template, use the `matches` filter  with an wildcard character in place of the template value e.g. `assets/user:*`. This returns lines from all instances of this template, interleaved by `posted` timestamp.\nTo search for all descendant Ledger Accounts under a given path, use a trailing `/*` in the `matches` filter e.g. `assets/user:user-1>/*`. This returns lines from all descendants at any depth, but not lines from the parent account at `assets/user:user-1>`.\nTo OR multiple `matches` patterns and get a single paginated list, use `matchesAny` — e.g. `matchesAny: [\"assets/user:user-1/*\", \"assets/user:user-2/*\"]` returns descendants of both prefixes interleaved by `posted` timestamp.\nCannot be combined with `ledgerAccount` filter. Not allowed when querying via `LedgerAccount.lines`. You cannot use wildcards for both descendant and template instance matching in the same query.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "StringMatchFilter",
@@ -10669,7 +10828,7 @@
             },
             {
               "name": "posted",
-              "description": "Filter by the posted timestamp of the Ledger Line.",
+              "description": "Use this filter to filter Ledger Lines by their `posted` timestamp.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "DateTimeFilter",
@@ -11413,6 +11572,45 @@
               "deprecationReason": null
             },
             {
+              "name": "addLedgerEntries",
+              "description": "Batch version of addLedgerEntry: commits every entry in one atomic,\nstrongly-consistent transaction. Either every entry is committed or none\nare.",
+              "args": [
+                {
+                  "name": "entries",
+                  "description": "The entries to commit, each with its own [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency).",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "AddLedgerEntryInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "AddLedgerEntriesResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "addLedgerEntry",
               "description": "Adds a Ledger Entry to a Ledger. This Ledger Entry cannot be into a Linked Ledger Account. For that, use [reconcileTx](https://fragment.dev/api-reference/api-mutations#reconciletx)",
               "args": [
@@ -11490,7 +11688,7 @@
             },
             {
               "name": "createCustomLink",
-              "description": "Custom Links let you integrate external systems that don't have native support. See [Custom Links](https://fragment.dev/docs/sync-payments#custom-link)",
+              "description": "Custom Links let you integrate external systems that don't have native support. See [Custom Links](https://fragment.dev/guides/sync-payments#custom-link)",
               "args": [
                 {
                   "name": "ik",
@@ -11834,7 +12032,7 @@
             },
             {
               "name": "reconcileTx",
-              "description": "This mutation is used to [reconcile](https://fragment.dev/docs/reconcile-payments#reconcile-a-tx) transactions from an external system into a Ledger Entry. This mutation does not require an idempotency key since a transaction can only be reconciled once per Linked Ledger Account.  If you are reconciling a transfer between two Link Accounts which are both linked to the same Ledger, use a transit account in between to split the transfer into two `reconcileTx` calls.",
+              "description": "This mutation is used to [reconcile](https://fragment.dev/guides/reconcile-payments#reconcile-a-tx) transactions from an external system into a Ledger Entry. This mutation does not require an idempotency key since a transaction can only be reconciled once per Linked Ledger Account.  If you are reconciling a transfer between two Link Accounts which are both linked to the same Ledger, use a transit account in between to split the transfer into two `reconcileTx` calls.",
               "args": [
                 {
                   "name": "entry",
@@ -11927,7 +12125,7 @@
             },
             {
               "name": "syncCustomAccounts",
-              "description": "Once you've created a [Custom Link](https://fragment.dev/docs/sync-payments#custom-link), create accounts under it using this mutation. Each Custom Account is an immutable, single-entry view of all the transactions in the external account. You can sync up to 100 Custom Accounts in one API call.",
+              "description": "Once you've created a [Custom Link](https://fragment.dev/guides/sync-payments#custom-link), create accounts under it using this mutation. Each Custom Account is an immutable, single-entry view of all the transactions in the external account. You can sync up to 100 Custom Accounts in one API call.",
               "args": [
                 {
                   "name": "accounts",
@@ -11980,7 +12178,7 @@
             },
             {
               "name": "syncCustomTxs",
-              "description": "You can create transactions under a Custom Account in a [Custom Link](https://fragment.dev/docs/sync-payments#custom-link) using this mutation. Once you've imported transactions, you can use the reconcileTx mutation to add them to a Ledger via the Linked Ledger Account. You can sync up to 100 Custom Transactions in one API call.",
+              "description": "You can create transactions under a Custom Account in a [Custom Link](https://fragment.dev/guides/sync-payments#custom-link) using this mutation. Once you've imported transactions, you can use the reconcileTx mutation to add them to a Ledger via the Linked Ledger Account. You can sync up to 100 Custom Transactions in one API call.",
               "args": [
                 {
                   "name": "link",
@@ -12175,7 +12373,7 @@
         {
           "kind": "OBJECT",
           "name": "PageInfo",
-          "description": "An object containing [pagination](https://fragment.dev/docs/query-data#basics-pagination) details.",
+          "description": "An object containing [pagination](https://fragment.dev/guides/query-data#basics-pagination) details.",
           "fields": [
             {
               "name": "endCursor",
@@ -12263,6 +12461,16 @@
           "kind": "SCALAR",
           "name": "Period",
           "description": "A specific year (\"2021\"), quarter (\"2021-Q1\"), month (\"2021-02\"), day (\"2021-02-03\") or hour (\"2021-02-03T04\")",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "PeriodFilter",
+          "description": "A specific year (\"2026\") or month (\"2026-05\") used to match dates that fall within it.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -12364,7 +12572,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12374,7 +12582,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12614,7 +12822,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12624,7 +12832,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12634,7 +12842,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledgers returned. Learn more about [querying Ledgers](https://fragment.dev/docs/query-data#ledgers).",
+                  "description": "Filter the Ledgers returned. Learn more about [querying Ledgers](https://fragment.dev/guides/query-data#ledgers).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgersFilterSet",
@@ -12751,7 +12959,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12761,7 +12969,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -12854,7 +13062,7 @@
         {
           "kind": "ENUM",
           "name": "ReadBalanceConsistencyMode",
-          "description": "The consistency configuration of a Ledger Account's balance queries. If not provided as an argument to a balance query, the default behavior is to read eventually consistent balances. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "The consistency configuration of a Ledger Account's balance queries. If not provided as an argument to a balance query, the default behavior is to read eventually consistent balances. See [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -13243,7 +13451,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -13253,7 +13461,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -13343,7 +13551,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -13353,7 +13561,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/docs/query-data#basics-pagination).",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -13485,12 +13693,12 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaConsistencyConfigInput",
-          "description": "The consistency configuration for entities created within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "The consistency configuration for entities created within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": null,
           "inputFields": [
             {
               "name": "entries",
-              "description": "The consistency mode for the Ledger Entries list query within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "The consistency mode for the Ledger Entries list query within Ledgers created by this Schema.\n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "ENUM",
                 "name": "SchemaConsistencyMode",
@@ -13506,7 +13714,7 @@
         {
           "kind": "ENUM",
           "name": "SchemaConsistencyMode",
-          "description": "The consistency modes available for entities created within this Schema. \n\nSee [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+          "description": "The consistency modes available for entities created within this Schema. \n\nSee [Configure consistency](https://fragment.dev/guides/configure-consistency).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -13794,7 +14002,7 @@
             },
             {
               "name": "consistencyConfig",
-              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/docs/configure-consistency).",
+              "description": "The consistency configuration for this ledger account. See [Configure consistency](https://fragment.dev/guides/configure-consistency).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "LedgerAccountConsistencyConfigInput",
@@ -13852,6 +14060,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payment",
+              "description": "EXPERIMENTAL: Marks this as a Payment Account.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaPaymentInput",
                 "ofType": null
               },
               "defaultValue": null
@@ -14391,7 +14609,7 @@
             },
             {
               "name": "tx",
-              "description": "The external transaction to reconcile.\nThis field is required if the Ledger Account being posted to is a Linked Ledger Account. Otherwise, this field is disallowed.\nIt supports parameters in its attributes via handlebars syntax.\n\nSee the docs on [reconciling payments](https://fragment.dev/docs/reconcile-payments).",
+              "description": "The external transaction to reconcile.\nThis field is required if the Ledger Account being posted to is a Linked Ledger Account. Otherwise, this field is disallowed.\nIt supports parameters in its attributes via handlebars syntax.\n\nSee the docs on [reconciling payments](https://fragment.dev/guides/reconcile-payments).",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaTxMatchInput",
@@ -14431,6 +14649,31 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentInput",
+          "description": "EXPERIMENTAL: Marks a Ledger Account as a Payment Account.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "penguin",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             }
@@ -14802,6 +15045,24 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "matchesAny",
+              "description": "Must match any one of the provided `matches` patterns, OR-ed together — results are returned as a single paginated list. Each entry uses the same wildcard grammar as `matches`. Cannot be combined with `matches`. Limited to 100 entries.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             }
@@ -16437,6 +16698,12 @@
               "deprecationReason": null
             },
             {
+              "name": "VARIABLE_DEFINITION",
+              "description": "Location adjacent to a variable definition.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "SCHEMA",
               "description": "Location adjacent to a schema definition.",
               "isDeprecated": false,
@@ -16499,12 +16766,6 @@
             {
               "name": "INPUT_FIELD_DEFINITION",
               "description": "Location adjacent to an input object field definition.",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "VARIABLE_DEFINITION",
-              "description": "Location adjacent to a variable definition.",
               "isDeprecated": false,
               "deprecationReason": null
             }
