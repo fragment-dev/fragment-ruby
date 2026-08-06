@@ -9,6 +9,7 @@ require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
 require 'fragment_client/version'
+require 'fragment_client/typed_entries'
 module GraphQL
   module StaticValidation
     # Fragment's `parameters` is a `JSON` scalar, and graphql-ruby rejects an
@@ -76,6 +77,17 @@ module FragmentGraphQl
   end
 
   FragmentQueries = T.let(parse_queries("#{__dir__}/queries.graphql"), T.untyped)
+
+  # Look up one parsed operation by name.
+  #
+  # `FragmentQueries::AddLedgerEntries` would read better, but those constants are
+  # created by `GraphQL::Client.parse` at runtime, so Sorbet cannot resolve the
+  # path and reports an error even at `typed: false`. `const_get` says what is
+  # actually happening.
+  sig { params(name: Symbol).returns(T.untyped) }
+  def self.operation(name)
+    FragmentQueries.const_get(name)
+  end
 end
 
 # A client for Fragment
@@ -123,7 +135,46 @@ class FragmentClient
     extra_queries_filenames.each do |filename|
       queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
       define_method_from_queries(queries)
+
+      # The per-entry-type `addLedgerEntry` operations a Schema generates are
+      # what typed batch payloads are derived from, and they arrive in exactly
+      # these files. Loading them here means `add_ledger_entries` accepts typed
+      # payloads without a second registration step.
+      #
+      # `TypedEntries.load` is also callable on its own, and needs no
+      # credentials -- which is what lets `tapioca dsl` see the payload classes
+      # without constructing a client.
+      TypedEntries.load(filename)
     end
+  end
+
+  # Operations that have a hand-written wrapper below.
+  #
+  # `define_method_from_queries` defines a *singleton* method per operation, and
+  # a singleton method shadows an instance method of the same name. Without this
+  # list the wrapper would be silently bypassed and typed payloads would reach
+  # the encoder unconverted. An explicit list rather than a `method_defined?`
+  # check, so an operation named `Clone` or `Freeze` is not skipped by accident.
+  WRAPPED_OPERATIONS = T.let(%w[add_ledger_entries].freeze, T::Array[String])
+
+  # Commit a batch of Ledger Entries atomically.
+  #
+  # `entries` may mix typed payloads built by {FragmentClient::TypedEntries} with
+  # raw `AddLedgerEntryInput` hashes, in any order (spec 3.5). Order is preserved
+  # end to end: the API returns results in the order the entries were sent.
+  #
+  # The batch is atomic -- either every entry commits or none do, so there is no
+  # partial-batch state to reconcile. Idempotency keys are per entry, not per
+  # batch, so a retried partially-replayed batch reports `isIkReplay` per result.
+  # The response is a union; narrow on `__typename` before reading `results`, and
+  # read `errors` on `AddLedgerEntriesError` for the per-entry failures, each
+  # carrying the `ik` that identifies which entry to fix (spec 4).
+  sig { params(entries: T::Array[T.untyped]).returns(T.untyped) }
+  def add_ledger_entries(entries:)
+    query(
+      FragmentGraphQl.operation(:AddLedgerEntries),
+      { entries: TypedEntries.to_entry_inputs(entries) }
+    )
   end
 
   # Move these error class definitions up, before the query method
@@ -145,6 +196,9 @@ class FragmentClient
       name = qry.to_s.gsub(/[a-z]([A-Z])/) do |m|
         format('%<lower>s_%<upper>s', lower: m[0], upper: m[1].downcase)
       end.gsub(/^[A-Z]/, &:downcase)
+
+      # Leave the hand-written wrapper in place; see WRAPPED_OPERATIONS.
+      next if WRAPPED_OPERATIONS.include?(name)
 
       # Get the original query
       original_query = queries.const_get(qry)

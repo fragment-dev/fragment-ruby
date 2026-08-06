@@ -39,6 +39,21 @@ jobs:
           cp ../graphql-queries/queries.graphql lib/queries.graphql
           sed -i -e 's/^query \([a-z]\)/query \U\1/g;s/^mutation \([a-z]\)/mutation \U\1/g' lib/queries.graphql
 
+      # The conformance fixtures are shared by all four SDKs and are only
+      # meaningful if every SDK is running the same ones. They live upstream, so
+      # they get synced here rather than edited in this repository; the runner
+      # over them (test/conformance_test.rb) is Ruby's own.
+      - name: Copy shared spec fixtures
+        working-directory: ./fragment-ruby
+        run: |
+          if [ -d ../graphql-queries/shared-spec/conformance ]; then
+            rm -rf test/spec/conformance
+            cp -R ../graphql-queries/shared-spec/conformance test/spec/conformance
+            cp ../graphql-queries/shared-spec/VERSION test/spec/VERSION
+          else
+            echo "No shared-spec/ upstream yet; leaving the vendored fixtures alone."
+          fi
+
       - name: Generate SDK
         working-directory: ./fragment-ruby
         run: |
