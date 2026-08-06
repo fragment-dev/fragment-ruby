@@ -54,6 +54,14 @@ class TypeCheckTest < Minitest::Test
       'isExternal: true, tagKeys: [], mode: :m).feeAmount.length',
       'Method `length` does not exist on `NilClass` component of `T.nilable(String)`'
     ],
+    'an operation the Schema does not declare' => [
+      "FragmentClient.new('id', 'secret').no_such_query({ ik: 'x' })",
+      'Method `no_such_query` does not exist on `FragmentClient`'
+    ],
+    'a query method given something other than a variables hash' => [
+      "FragmentClient.new('id', 'secret').create_ledger('not a hash')",
+      'for argument `variables`'
+    ],
     'a batch method given something other than an array' => [
       "FragmentClient.new('id', 'secret').add_ledger_entries(entries: 'not an array')",
       'for argument `entries`'

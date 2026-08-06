@@ -84,6 +84,40 @@ module FragmentGraphQl
     FragmentQueries.const_get(name)
   end
 
+  # The instance method `FragmentClient` defines for an operation:
+  # `ListLedgerAccounts` -> `list_ledger_accounts`.
+  sig { params(operation_name: String).returns(String) }
+  def self.method_name_for(operation_name)
+    operation_name.gsub(/[a-z]([A-Z])/) do |m|
+      format('%<lower>s_%<upper>s', lower: m[0], upper: T.must(m[1]).downcase)
+    end.gsub(/^[A-Z]/, &:downcase)
+  end
+
+  # Method names for every operation parsed so far, in the order first seen.
+  #
+  # Read by the Tapioca compiler, which cannot otherwise see methods that
+  # `define_method_from_queries` creates per instance.
+  sig { returns(T::Array[String]) }
+  def self.operation_method_names
+    @operation_method_names ||= T.let([], T.nilable(T::Array[String]))
+  end
+
+  sig { params(queries: T.untyped).void }
+  def self.record_operations(queries)
+    queries.constants.each do |constant|
+      name = method_name_for(constant.to_s)
+      operation_method_names << name unless operation_method_names.include?(name)
+    end
+  end
+
+  # Forget operations recorded from anything but `queries.graphql`. For tests.
+  sig { void }
+  def self.reset_operations!
+    operation_method_names.clear
+    record_operations(FragmentQueries)
+  end
+
+  record_operations(FragmentQueries)
 end
 
 # A client for Fragment
@@ -127,12 +161,25 @@ class FragmentClient
     define_method_from_queries(FragmentGraphQl::FragmentQueries)
     return if extra_queries_filenames.nil?
 
-    extra_queries_filenames.each do |filename|
-      define_method_from_queries(T.let(FragmentGraphQl.parse_queries(filename), T.untyped))
-      # The per-entry-type `addLedgerEntry` operations a Schema generates arrive in
-      # exactly these files, so passing them is all a caller has to do.
-      TypedEntries.load(filename)
+    extra_queries_filenames.each { |filename| define_method_from_queries(self.class.load_queries(filename)) }
+  end
+
+  # Parse a `.graphql` document and register what can be derived from it: the
+  # operation names {FragmentClient} will answer to, and a typed payload class per
+  # Ledger Entry type it declares.
+  #
+  # Needs neither credentials nor network, so `bundle exec tapioca dsl` can see
+  # both if this runs in an initializer. {#initialize} calls it for every
+  # `extra_queries_filenames` entry, so passing the files is usually enough.
+  sig { params(paths: String).returns(T.untyped) }
+  def self.load_queries(*paths)
+    queries = paths.map do |path|
+      parsed = T.let(FragmentGraphQl.parse_queries(path), T.untyped)
+      FragmentGraphQl.record_operations(parsed)
+      TypedEntries.load(path)
+      parsed
     end
+    queries.length == 1 ? queries.first : queries
   end
 
   # Operations with a hand-written wrapper below, which the dynamic definer must
@@ -176,9 +223,7 @@ class FragmentClient
 
   def define_method_from_queries(queries)
     queries.constants.each do |qry|
-      name = qry.to_s.gsub(/[a-z]([A-Z])/) do |m|
-        format('%<lower>s_%<upper>s', lower: m[0], upper: m[1].downcase)
-      end.gsub(/^[A-Z]/, &:downcase)
+      name = FragmentGraphQl.method_name_for(qry.to_s)
 
       # Leave the hand-written wrapper in place; see WRAPPED_OPERATIONS.
       next if WRAPPED_OPERATIONS.include?(name)

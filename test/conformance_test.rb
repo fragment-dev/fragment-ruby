@@ -29,10 +29,12 @@ class ConformanceTest < Minitest::Test
     # somewhere quiet; `TypedEntriesTest` asserts on the warnings themselves.
     FragmentClient.configure { |config| config.logger = Logger.new(File::NULL) }
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
   end
 
   def teardown
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     FragmentClient.instance_variable_set(:@configuration, nil)
     super
   end
@@ -115,10 +117,12 @@ class CanonicalKeyOrderTest < Minitest::Test
   def setup
     FragmentClient.configure { |config| config.logger = Logger.new(File::NULL) }
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
   end
 
   def teardown
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     FragmentClient.instance_variable_set(:@configuration, nil)
     super
   end
@@ -140,6 +144,7 @@ class CanonicalKeyOrderTest < Minitest::Test
       end
 
       FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     end
   end
 

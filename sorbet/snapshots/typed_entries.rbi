@@ -12,6 +12,104 @@
 
 # typed: true
 
+class FragmentClient
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def add_ledger_entry(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def add_ledger_entry_runtime(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def create_custom_currency(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def create_custom_link(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def create_ledger(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def delete_custom_txs(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def delete_ledger(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def delete_schema(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_account_data_migrations(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_entries_to_migrate_for_ledger_account_data_migration(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_entries_to_migrate_for_ledger_entry_data_migration(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_entry_data_migrations(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_ledger(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_ledger_account_balance(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_ledger_account_lines(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_ledger_entry(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_schema(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def get_workspace(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def list_ledger_account_balances(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def list_ledger_accounts(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def list_ledger_entries(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def list_ledger_entry_group_balances(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def list_multi_currency_ledger_account_balances(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def migrate_ledger_entry(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def reconcile_tx(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def reconcile_tx_runtime(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def reverse_ledger_entry(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def store_schema(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def sync_custom_accounts(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def sync_custom_txs(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def update_ledger(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(T.untyped) }
+  def update_ledger_entry(variables); end
+end
+
 class FragmentClient::Entries::AuthCaptureV1 < ::FragmentClient::TypedLedgerEntry
   sig { params(ik: ::String, ledger_ik: ::String, user_id: ::String, capture_amount: ::String, posted: T.nilable(::String), description: T.nilable(::String), tags: T.nilable(T::Array[T.untyped]), groups: T.nilable(T::Array[T.untyped]), conditions: T.nilable(T::Array[T.untyped])).void }
   def initialize(ik:, ledger_ik:, user_id:, capture_amount:, posted: T.unsafe(nil), description: T.unsafe(nil), tags: T.unsafe(nil), groups: T.unsafe(nil), conditions: T.unsafe(nil)); end

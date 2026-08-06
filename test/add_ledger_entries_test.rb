@@ -30,6 +30,7 @@ class AddLedgerEntriesTest < Minitest::Test
     FragmentClient.instance_variable_set(:@configuration, nil)
     FragmentClient.configure { |config| config.logger = Logger.new(File::NULL) }
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
 
     stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
       .to_return(status: 200, body: { access_token: 'test_token', expires_in: 3600 }.to_json)
@@ -42,6 +43,7 @@ class AddLedgerEntriesTest < Minitest::Test
   def teardown
     @queries_file.unlink
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     FragmentClient.instance_variable_set(:@configuration, nil)
     super
   end
