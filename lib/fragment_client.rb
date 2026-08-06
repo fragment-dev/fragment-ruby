@@ -214,6 +214,7 @@ class FragmentClient
   # Commit a batch of Ledger Entries atomically: every entry commits or none do,
   # so there is no partial-batch state to reconcile.
   #
+  #
   # `entries` may mix typed payloads from {FragmentClient::TypedEntries} with raw
   # `AddLedgerEntryInput` hashes, in any order; the API returns results in the
   # order sent (spec 3.5). Idempotency keys are per entry, so `isIkReplay` is

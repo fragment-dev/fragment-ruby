@@ -171,9 +171,16 @@ Recorded rather than quietly absent.
 - **`tags`, `groups` and `conditions` are typed as `T::Array[T.untyped]`.** Their
   element types are `LedgerEntryTagInput` and friends, which this SDK has no
   generated classes for — everywhere else it passes input objects as plain hashes.
-- **Nothing here is verified against a live API.** Shared with all four SDKs
-  (spec §6); in particular, server tolerance for an entry with `lines` absent and
-  `type` present is untested.
+- **Spec §6 is answered for this SDK.** `test/live_test.rb` runs against the real
+  API when `FRAGMENT_CREDENTIALS` is set: an entry with `lines` absent and `type`
+  present is accepted and expanded into lines server-side, and a repeated `ik`
+  reports `isIkReplay` per entry. The other three SDKs still record it as open.
+- **The batch endpoint is gated, for now.** The API requires an
+  `x-fragment-experimental` header until its per-entry error contract is settled.
+  That requirement is being removed, so the SDK does not send the header and
+  `test/live_test.rb` injects it for its own run instead; delete that patch once the
+  gate is gone. Every offline test passed while the endpoint was unreachable, which
+  is why the live tests exist at all.
 - **The upstream fixture gaps remain upstream.** Five of the six that
   `shared-spec/CONTRIBUTING.md` records as cheap are covered here by
   `test/typed_entries_test.rb` instead. That is a weaker guarantee than a shared
