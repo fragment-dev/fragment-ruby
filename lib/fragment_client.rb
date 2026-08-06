@@ -12,10 +12,8 @@ require 'fragment_client/version'
 require 'fragment_client/typed_entries'
 module GraphQL
   module StaticValidation
-    # Fragment's `parameters` is a `JSON` scalar, and graphql-ruby rejects an
-    # inline object literal for a scalar. This accepts one for the JSON-shaped
-    # scalars so that the per-entry-type operations a Schema generates parse at
-    # all.
+    # Accepts an inline object literal for the JSON-shaped scalars, which
+    # graphql-ruby otherwise rejects -- and which every `parameters: {...}` is.
     class LiteralValidator
       alias recursive_validate_old recursively_validate
       def recursively_validate(ast_value, type)
@@ -54,8 +52,7 @@ module FragmentGraphQl
 
   # Create a custom client class for Fragment-specific behavior
   class CustomClient < GraphQL::Client
-    # Names anonymous-module operation definitions predictably, so the operation
-    # name sent to the API does not embed a memory address.
+    # Keeps a memory address out of the operation name sent to the API.
     class Definition < GraphQL::Client::Definition
       def definition_name
         super.gsub(/#<Module.*>/, 'FragmentGraphQl__Dynamic')
@@ -80,14 +77,13 @@ module FragmentGraphQl
 
   # Look up one parsed operation by name.
   #
-  # `FragmentQueries::AddLedgerEntries` would read better, but those constants are
-  # created by `GraphQL::Client.parse` at runtime, so Sorbet cannot resolve the
-  # path and reports an error even at `typed: false`. `const_get` says what is
-  # actually happening.
+  # `FragmentQueries::AddLedgerEntries` reads better but does not resolve: the
+  # constants are created by `GraphQL::Client.parse` at runtime.
   sig { params(name: Symbol).returns(T.untyped) }
   def self.operation(name)
     FragmentQueries.const_get(name)
   end
+
 end
 
 # A client for Fragment
@@ -110,8 +106,7 @@ class FragmentClient
 
   def initialize(client_id, client_secret, extra_queries_filenames: nil, api_url: nil,
                  oauth_url: DEFAULT_OAUTH_URL, oauth_scope: DEFAULT_OAUTH_SCOPE)
-    # These accept nil, so nil has to mean the default rather than being asserted
-    # away -- passing `oauth_scope: nil` used to raise a TypeError from `T.let`.
+    # Both are nilable, so nil means the default rather than an assertion failure.
     @oauth_scope = T.let(oauth_scope || DEFAULT_OAUTH_SCOPE, String)
     @oauth_url = T.let(parse_oauth_url(oauth_url || DEFAULT_OAUTH_URL), URI::HTTP)
     @client_id = T.let(client_id, String)
@@ -133,42 +128,30 @@ class FragmentClient
     return if extra_queries_filenames.nil?
 
     extra_queries_filenames.each do |filename|
-      queries = T.let(FragmentGraphQl.parse_queries(filename), T.untyped)
-      define_method_from_queries(queries)
-
-      # The per-entry-type `addLedgerEntry` operations a Schema generates are
-      # what typed batch payloads are derived from, and they arrive in exactly
-      # these files. Loading them here means `add_ledger_entries` accepts typed
-      # payloads without a second registration step.
-      #
-      # `TypedEntries.load` is also callable on its own, and needs no
-      # credentials -- which is what lets `tapioca dsl` see the payload classes
-      # without constructing a client.
+      define_method_from_queries(T.let(FragmentGraphQl.parse_queries(filename), T.untyped))
+      # The per-entry-type `addLedgerEntry` operations a Schema generates arrive in
+      # exactly these files, so passing them is all a caller has to do.
       TypedEntries.load(filename)
     end
   end
 
-  # Operations that have a hand-written wrapper below.
-  #
-  # `define_method_from_queries` defines a *singleton* method per operation, and
-  # a singleton method shadows an instance method of the same name. Without this
-  # list the wrapper would be silently bypassed and typed payloads would reach
-  # the encoder unconverted. An explicit list rather than a `method_defined?`
-  # check, so an operation named `Clone` or `Freeze` is not skipped by accident.
+  # Operations with a hand-written wrapper below, which the dynamic definer must
+  # not shadow -- a singleton method beats an instance method. Listed explicitly
+  # rather than tested with `method_defined?`, which would also match `clone`,
+  # `freeze` and everything else on Object.
   WRAPPED_OPERATIONS = T.let(%w[add_ledger_entries].freeze, T::Array[String])
 
-  # Commit a batch of Ledger Entries atomically.
+  # Commit a batch of Ledger Entries atomically: every entry commits or none do,
+  # so there is no partial-batch state to reconcile.
   #
-  # `entries` may mix typed payloads built by {FragmentClient::TypedEntries} with
-  # raw `AddLedgerEntryInput` hashes, in any order (spec 3.5). Order is preserved
-  # end to end: the API returns results in the order the entries were sent.
+  # `entries` may mix typed payloads from {FragmentClient::TypedEntries} with raw
+  # `AddLedgerEntryInput` hashes, in any order; the API returns results in the
+  # order sent (spec 3.5). Idempotency keys are per entry, so `isIkReplay` is
+  # reported per result.
   #
-  # The batch is atomic -- either every entry commits or none do, so there is no
-  # partial-batch state to reconcile. Idempotency keys are per entry, not per
-  # batch, so a retried partially-replayed batch reports `isIkReplay` per result.
-  # The response is a union; narrow on `__typename` before reading `results`, and
+  # The response is a union. Narrow on `__typename` before reading `results`, and
   # read `errors` on `AddLedgerEntriesError` for the per-entry failures, each
-  # carrying the `ik` that identifies which entry to fix (spec 4).
+  # carrying the `ik` of the entry that failed (spec 4).
   sig { params(entries: T::Array[T.untyped]).returns(T.untyped) }
   def add_ledger_entries(entries:)
     query(
@@ -215,8 +198,6 @@ class FragmentClient
 
           # Define the new method that uses the stored original method
           definition_node.singleton_class.send(:define_method, :name) do
-            # The block runs on the definition node, not on the client; Sorbet
-            # reads its `self` from the enclosing scope.
             T.bind(self, T.untyped)
             original_name.gsub(/#<Module.*?>/, 'FragmentGraphQl__Dynamic__Custom')
           end
@@ -230,12 +211,8 @@ class FragmentClient
     end
   end
 
-  # Reject an unusable `oauth_url` where it is passed.
-  #
-  # Two failures used to surface far from their cause: a non-HTTP URL reached
-  # {create_token} and died there as a NoMethodError on `request_uri`, and a
-  # malformed one raised `URI::InvalidURIError` from inside `uri`, neither
-  # mentioning the argument responsible. Both are one ArgumentError now.
+  # Reject an unusable `oauth_url` here rather than in {create_token}, which fails
+  # on `request_uri` for a non-HTTP URL and says nothing about the argument.
   sig { params(oauth_url: String).returns(URI::HTTP) }
   def parse_oauth_url(oauth_url)
     parsed = begin

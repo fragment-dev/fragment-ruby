@@ -8,46 +8,29 @@ require 'fragment_client'
 module Tapioca
   module Dsl
     module Compilers
-      # Teaches Sorbet about the typed `addLedgerEntries` payload classes that
-      # {FragmentClient::TypedEntries.load} builds at load time.
+      # Declares the typed payload classes {FragmentClient::TypedEntries.load}
+      # builds at load time, giving each a real `initialize` signature and typed
+      # readers.
       #
-      # The payloads are derived from a Schema's `.graphql` operations rather than
-      # generated to disk, because that is how Ruby libraries normally do this --
-      # but it also means Sorbet cannot see them. This compiler closes that gap
-      # the same way Tapioca's ActiveRecord compilers do for dynamically defined
-      # attributes: run `bundle exec tapioca dsl` and each payload gets a real
-      # `initialize` signature and typed readers.
-      #
-      #     # sorbet/rbi/dsl/fragment_client/entries/auth_capture_v1.rbi
-      #     class FragmentClient::Entries::AuthCaptureV1
-      #       sig do
-      #         params(ik: ::String, ledger_ik: ::String, user_id: ::String,
-      #                capture_amount: ::String, ...).void
-      #       end
-      #       def initialize(ik:, ledger_ik:, user_id:, capture_amount:, ...); end
-      #     end
-      #
-      # For the classes to be visible, whatever calls `TypedEntries.load` has to
-      # run when Tapioca loads the application. `load` needs no credentials and
-      # makes no network calls precisely so it can sit in an initializer.
+      # `bundle exec tapioca dsl` writes them to
+      # `sorbet/rbi/dsl/fragment_client/entries/`. The classes are only visible if
+      # whatever calls `TypedEntries.load` runs when Tapioca loads the application;
+      # it needs no credentials, so an initializer works.
       class FragmentTypedEntries < Compiler
         extend T::Sig
 
         ConstantType = type_member { { fixed: T.class_of(FragmentClient::TypedLedgerEntry) } }
 
         # Sorbet types for the scalars a Fragment Schema binds parameters to.
-        #
-        # Anything absent falls through to `T.untyped`: enums, input objects and
-        # scalars added to the Schema after this table was written. Guessing wrong
-        # would reject a call that the API accepts, which is worse than not
-        # checking it.
+        # Anything absent -- enums, input objects, newer scalars -- falls through to
+        # `T.untyped` rather than a guess that could reject a valid call.
         GRAPHQL_SCALARS = T.let(
           {
             'String' => '::String',
             'ID' => '::String',
             'SafeString' => '::String',
             'ParameterizedString' => '::String',
-            # Serialized as ISO 8601 strings, not as Ruby date objects.
+            # ISO 8601 strings, not Ruby date objects.
             'Date' => '::String',
             'DateTime' => '::String',
             'FirstMoment' => '::String',
@@ -55,8 +38,7 @@ module Tapioca
             'Period' => '::String',
             'PeriodFilter' => '::String',
             'UTCOffset' => '::String',
-            # Fragment binds its big integers to strings, which is also why the
-            # spec's strict profile can forbid float-typed parameters outright.
+            # Fragment's big integers are strings on the wire.
             'Int96' => '::String',
             'Int' => '::Integer',
             'Float' => '::Float',
@@ -67,8 +49,7 @@ module Tapioca
           T::Hash[String, String]
         )
 
-        # The optional common fields every payload carries, and their types.
-        # Ordered as they are declared on the base class.
+        # The optional common fields, in the order the base class declares them.
         COMMON_OPTIONAL_FIELDS = T.let(
           {
             posted: '::String',
@@ -85,10 +66,8 @@ module Tapioca
 
           sig { override.returns(T::Enumerable[Module]) }
           def gather_constants
-            # A payload loaded into an anonymous namespace has a name Sorbet
-            # cannot resolve (`#<Module:0x...>::AuthCaptureV1`), so there is
-            # nothing to attach an RBI to. `name_of` is Tapioca's own test for
-            # that, and returns nil for exactly those.
+            # `name_of` is nil for a payload in an anonymous namespace, whose name
+            # (`#<Module:0x...>::AuthCaptureV1`) Sorbet cannot resolve anyway.
             descendants_of(FragmentClient::TypedLedgerEntry).select { |klass| name_of(klass) }
           end
         end
@@ -97,9 +76,8 @@ module Tapioca
         def decorate
           spec = constant.spec
 
-          # `create_path` would declare the class with no superclass, and Sorbet
-          # would then not know a payload inherits `to_entry_input`, `set?` or the
-          # common-field readers.
+          # `create_path` would omit the superclass, leaving Sorbet unaware that a
+          # payload inherits `to_entry_input`, `set?` and the common-field readers.
           root.create_class(constant.to_s,
                             superclass_name: '::FragmentClient::TypedLedgerEntry') do |payload|
             payload.create_method('initialize', parameters: initialize_parameters(spec),
@@ -126,16 +104,9 @@ module Tapioca
         def initialize_parameters(spec)
           required, optional = spec.parameters.partition(&:required)
 
-          # Required parameters before optional ones, because Sorbet rejects a
-          # `sig` that interleaves them ("Malformed `sig`. Required parameter ...
-          # must be declared before all the optional ones"), even for keyword
-          # arguments where Ruby itself permits any order.
-          #
-          # Reordering a signature is accepted as long as parameters are supplied
-          # by name, which is what spec 2.6 depends on -- and these are keyword
-          # arguments, so declaration order is invisible to a caller. Source order
-          # is preserved within each group, and on the wire, which is where spec
-          # 2.4 is observable.
+          # Required before optional: Sorbet rejects a `sig` that interleaves them,
+          # though Ruby permits it for keyword arguments. Source order survives
+          # within each group and on the wire, which is where spec 2.4 applies.
           parameters = [
             create_kw_param('ik', type: '::String'),
             create_kw_param('ledger_ik', type: '::String')
@@ -165,21 +136,15 @@ module Tapioca
           nilable(sorbet_type(parameter))
         end
 
-        # An optional field is nilable and nothing more exotic. The unset sentinel
-        # never reaches a caller -- it is the constructor's private marker for an
-        # omitted keyword -- so putting it in the signature would only make every
-        # optional field harder to read and to narrow.
+        # Optional fields are plainly nilable: the unset sentinel is private to the
+        # constructor and never reaches a caller.
         sig { params(type: String).returns(String) }
         def nilable(type)
           type == 'T.untyped' ? 'T.untyped' : "T.nilable(#{type})"
         end
 
-        # Translate the GraphQL type of the bound variable, as written in the
-        # operation, into a Sorbet type.
-        #
-        # Top-level nullability is the caller's business, since it also has to
-        # fold in the unset sentinel. Nullability *inside* a list is folded in
-        # here, because nothing else can express it.
+        # The bound variable's GraphQL type as a Sorbet type. Top-level nullability
+        # is the caller's to apply; nullability inside a list is applied here.
         sig { params(parameter: FragmentClient::TypedEntries::Parameter).returns(String) }
         def sorbet_type(parameter)
           graphql_type_to_sorbet(parameter.graphql_type)
@@ -204,8 +169,6 @@ module Tapioca
         sig { params(parameter: FragmentClient::TypedEntries::Parameter).returns(T::Array[RBI::Comment]) }
         def parameter_comments(parameter)
           text = "Schema parameter `#{parameter.wire_name}` (`#{parameter.graphql_type}`)."
-          # Worth naming: the caller is using an identifier they did not choose,
-          # and it is not the one the API sees.
           if parameter.escaped?
             text += " Exposed as `#{parameter.name}` because `#{parameter.wire_name}` is " \
                     'already taken; the wire name is unchanged.'
