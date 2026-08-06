@@ -81,15 +81,20 @@ class FragmentClient
 
   extend T::Sig
 
+  DEFAULT_OAUTH_URL = 'https://auth.fragment.dev/oauth2/token'
+  DEFAULT_OAUTH_SCOPE = 'https://api.fragment.dev/*'
+
   sig do
     params(client_id: String, client_secret: String, extra_queries_filenames: T.nilable(T::Array[String]),
            api_url: T.nilable(String), oauth_url: T.nilable(String), oauth_scope: T.nilable(String)).void
   end
 
   def initialize(client_id, client_secret, extra_queries_filenames: nil, api_url: nil,
-                 oauth_url: 'https://auth.fragment.dev/oauth2/token', oauth_scope: 'https://api.fragment.dev/*')
-    @oauth_scope = T.let(oauth_scope, String)
-    @oauth_url = T.let(URI.parse(oauth_url), URI)
+                 oauth_url: DEFAULT_OAUTH_URL, oauth_scope: DEFAULT_OAUTH_SCOPE)
+    # These accept nil, so nil has to mean the default rather than being asserted
+    # away -- passing `oauth_scope: nil` used to raise a TypeError from `T.let`.
+    @oauth_scope = T.let(oauth_scope || DEFAULT_OAUTH_SCOPE, String)
+    @oauth_url = T.let(parse_oauth_url(oauth_url || DEFAULT_OAUTH_URL), URI::HTTP)
     @client_id = T.let(client_id, String)
     @client_secret = T.let(client_secret, String)
 
@@ -161,12 +166,31 @@ class FragmentClient
     end
   end
 
+  # Reject an unusable `oauth_url` where it is passed.
+  #
+  # Two failures used to surface far from their cause: a non-HTTP URL reached
+  # {create_token} and died there as a NoMethodError on `request_uri`, and a
+  # malformed one raised `URI::InvalidURIError` from inside `uri`, neither
+  # mentioning the argument responsible. Both are one ArgumentError now.
+  sig { params(oauth_url: String).returns(URI::HTTP) }
+  def parse_oauth_url(oauth_url)
+    parsed = begin
+      URI.parse(oauth_url)
+    rescue URI::InvalidURIError => e
+      raise ArgumentError, "oauth_url is not a valid URL (#{e.message}), got #{oauth_url.inspect}"
+    end
+    # URI::HTTPS subclasses URI::HTTP, so this accepts both.
+    return parsed if parsed.is_a?(URI::HTTP)
+
+    raise ArgumentError, "oauth_url must be an http or https URL, got #{oauth_url.inspect}"
+  end
+
   sig { returns(Token) }
   def create_token
-    uri = URI.parse(@oauth_url.to_s)
+    uri = @oauth_url
     post = Net::HTTP::Post.new(uri.request_uri)
     post.basic_auth(@client_id, @client_secret)
-    post.content_type = "application/x-www-form-urlencoded"
+    post.content_type = 'application/x-www-form-urlencoded'
     post.body = URI.encode_www_form(
       grant_type: 'client_credentials',
       scope: @oauth_scope,
