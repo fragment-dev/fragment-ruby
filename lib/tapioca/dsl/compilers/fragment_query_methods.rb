@@ -22,7 +22,7 @@ module Tapioca
       #
       # `variables` is the operation's variables hash and stays untyped. Its keys
       # are the GraphQL variable names verbatim, as the rest of this SDK passes
-      # them.
+      # them. The return type comes from `FragmentResponseTypes`.
       class FragmentQueryMethods < Compiler
         extend T::Sig
 
@@ -39,15 +39,18 @@ module Tapioca
 
         sig { override.void }
         def decorate
-          names = FragmentGraphQl.operation_method_names - FragmentClient::WRAPPED_OPERATIONS
-          return if names.empty?
+          methods = FragmentGraphQl.operations.keys.to_h do |operation|
+            [FragmentGraphQl.method_name_for(operation), operation]
+          end
+          methods.reject! { |name, _| FragmentClient::WRAPPED_OPERATIONS.include?(name) }
+          return if methods.empty?
 
           root.create_path(constant) do |klass|
-            names.sort.each do |name|
+            methods.keys.sort.each do |name|
               klass.create_method(
                 name,
                 parameters: [create_param('variables', type: 'T::Hash[Symbol, T.untyped]')],
-                return_type: 'T.untyped'
+                return_type: "::FragmentClient::Responses::#{methods.fetch(name)}"
               )
             end
           end

@@ -23,7 +23,8 @@ Gem::Specification.new do |s|
     'lib/tapioca/dsl/helpers/graphql_sorbet_types.rb',
     # Discovered by `tapioca dsl` via `Gem.find_files`, so the paths matter.
     'lib/tapioca/dsl/compilers/fragment_typed_entries.rb',
-    'lib/tapioca/dsl/compilers/fragment_query_methods.rb'
+    'lib/tapioca/dsl/compilers/fragment_query_methods.rb',
+    'lib/tapioca/dsl/compilers/fragment_response_types.rb'
   ]
   s.required_ruby_version = '>= 3.2'
   s.summary = 'the ruby fragment client sdk'

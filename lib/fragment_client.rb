@@ -110,14 +110,35 @@ module FragmentGraphQl
     end
   end
 
+  # Operation ASTs by operation name, for the compilers that need a selection set
+  # rather than just a method name.
+  sig { returns(T::Hash[String, GraphQL::Language::Nodes::OperationDefinition]) }
+  def self.operations
+    @operations ||= T.let({}, T.nilable(T::Hash[String,
+                                                GraphQL::Language::Nodes::OperationDefinition]))
+  end
+
+  sig { params(source: String).void }
+  def self.record_document(source)
+    GraphQL.parse(source).definitions.each do |definition|
+      next unless definition.is_a?(GraphQL::Language::Nodes::OperationDefinition)
+
+      name = definition.name
+      operations[name] ||= definition if name
+    end
+  end
+
   # Forget operations recorded from anything but `queries.graphql`. For tests.
   sig { void }
   def self.reset_operations!
     operation_method_names.clear
+    operations.clear
     record_operations(FragmentQueries)
+    record_document(File.read("#{__dir__}/queries.graphql"))
   end
 
   record_operations(FragmentQueries)
+  record_document(File.read("#{__dir__}/queries.graphql"))
 end
 
 # A client for Fragment
@@ -174,8 +195,10 @@ class FragmentClient
   sig { params(paths: String).returns(T.untyped) }
   def self.load_queries(*paths)
     queries = paths.map do |path|
+      source = File.read(path)
       parsed = T.let(FragmentGraphQl.parse_queries(path), T.untyped)
       FragmentGraphQl.record_operations(parsed)
+      FragmentGraphQl.record_document(source)
       TypedEntries.load(path)
       parsed
     end

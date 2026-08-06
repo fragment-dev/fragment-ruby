@@ -62,6 +62,16 @@ class TypeCheckTest < Minitest::Test
       "FragmentClient.new('id', 'secret').create_ledger('not a hash')",
       'for argument `variables`'
     ],
+    # The field is in the Schema but not in `GetLedger`'s selection set, so
+    # graphql-client refuses it at runtime; now Sorbet refuses it first.
+    'a response field the operation did not select' => [
+      "FragmentClient.new('id', 'secret').get_ledger({ ik: 'k' }).data&.ledger&.schema",
+      'Method `schema` does not exist on `FragmentClient::Responses::GetLedger::Data::Ledger`'
+    ],
+    'a response field read at the wrong type' => [
+      "FragmentClient.new('id', 'secret').get_ledger({ ik: 'k' }).data&.ledger&.name&.no_such",
+      'Method `no_such` does not exist on `String`'
+    ],
     'a batch method given something other than an array' => [
       "FragmentClient.new('id', 'secret').add_ledger_entries(entries: 'not an array')",
       'for argument `entries`'

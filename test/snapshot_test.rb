@@ -7,6 +7,7 @@ require 'minitest/autorun'
 require 'tapioca/internal'
 require 'tapioca/dsl/compilers/fragment_typed_entries'
 require 'tapioca/dsl/compilers/fragment_query_methods'
+require 'tapioca/dsl/compilers/fragment_response_types'
 
 # Snapshot of the RBI the Tapioca DSL compiler generates.
 #
@@ -31,7 +32,8 @@ require 'tapioca/dsl/compilers/fragment_query_methods'
 # Regenerate with `bundle exec rake snapshot` and read the diff.
 class SnapshotTest < Minitest::Test
   COMPILERS = [Tapioca::Dsl::Compilers::FragmentTypedEntries,
-               Tapioca::Dsl::Compilers::FragmentQueryMethods].freeze
+               Tapioca::Dsl::Compilers::FragmentQueryMethods,
+               Tapioca::Dsl::Compilers::FragmentResponseTypes].freeze
 
   FIXTURE = File.expand_path('fixtures/snapshot_entries.graphql', __dir__)
   SNAPSHOT = File.expand_path('../sorbet/snapshots/typed_entries.rbi', __dir__)
