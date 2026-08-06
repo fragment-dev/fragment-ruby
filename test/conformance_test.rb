@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'json'
 require 'logger'
 require 'minitest/autorun'
-require 'fragment_client'
 
 # Runner over the shared conformance fixtures in `test/spec/conformance`.
 #

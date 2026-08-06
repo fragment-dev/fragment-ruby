@@ -114,6 +114,7 @@ GEM
       rubocop (~> 1.0)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
+    simplecov (1.0.3)
     sorbet (0.5.11798)
       sorbet-static (= 0.5.11798)
     sorbet-runtime (0.5.11798)
@@ -179,6 +180,7 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-performance
   rubocop-rake
+  simplecov
   sorbet
   sorbet-runtime
   tapioca

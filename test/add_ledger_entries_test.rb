@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'json'
 require 'logger'
 require 'minitest/autorun'
 require 'tempfile'
 require 'webmock/minitest'
-require 'fragment_client'
 
 # `FragmentClient#add_ledger_entries` end to end, through the real
 # `graphql-client` transport.

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'logger'
 require 'minitest/autorun'
 require 'tapioca/internal'
 require 'tapioca/dsl/compilers/fragment_typed_entries'
-require 'fragment_client'
 
 # Snapshot of the RBI the Tapioca DSL compiler generates.
 #
