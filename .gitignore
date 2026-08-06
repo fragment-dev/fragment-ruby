@@ -3,3 +3,19 @@
 
 # rbenv
 .ruby-version
+
+# Local dev shell. Toolchains are a personal choice, and the gemspec and CI
+# matrix are what actually define the supported Ruby versions.
+/shell.nix
+
+# bundler, when BUNDLE_PATH points inside the worktree (sorbet/config already
+# ignores vendor/, which is why that is the useful place to put it)
+/vendor/
+/.bundle/
+
+# simplecov output
+/coverage/
+
+# Local API credentials, as `fragment <cmd> --creds` and the live tests read them.
+# Named rather than a glob, so a fixture called something.json is still committable.
+fragment.json

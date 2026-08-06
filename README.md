@@ -184,3 +184,17 @@ fragment = FragmentClient.new(
 ```
 
 This setup allows you to enhance your SDK usage with tailored queries, ensuring you can handle all your business-specific cases effectively.
+
+## Development
+
+Requires Ruby >= 3.2, as the gemspec says; CI covers 3.2, 3.3 and 3.4.
+
+```bash
+bundle install
+bundle exec rake       # the default task
+bundle exec rake -T    # everything else
+```
+
+If your locale is not UTF-8, set one. `GraphQL::Client.load_schema` reads
+`lib/fragment.schema.json`, which carries non-ASCII currency names, and raises
+`invalid byte sequence in US-ASCII` under a US-ASCII default external encoding.

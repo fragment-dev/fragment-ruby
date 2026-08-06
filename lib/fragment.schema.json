@@ -10,6 +10,95 @@
       "subscriptionType": null,
       "types": [
         {
+          "kind": "OBJECT",
+          "name": "AddLedgerEntriesError",
+          "description": "Error returned when one or more Ledger Entries in the batch could not be added.",
+          "fields": [
+            {
+              "name": "code",
+              "description": "The status code of error. For example, 'ledger_entry_batch_operation_failed'.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "errors",
+              "description": "The list of errors for each Ledger Entry that was responsible for the batch's failure.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "AddLedgerEntryError",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "message",
+              "description": "The error message",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "retryable",
+              "description": "Whether or not the operation is retryable",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Error",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "UNION",
           "name": "AddLedgerEntriesResponse",
           "description": null,
@@ -18,6 +107,11 @@
           "interfaces": null,
           "enumValues": null,
           "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "AddLedgerEntriesError",
+              "ofType": null
+            },
             {
               "kind": "OBJECT",
               "name": "AddLedgerEntriesResult",
@@ -42,7 +136,7 @@
           "fields": [
             {
               "name": "results",
-              "description": "The committed entries, in the same order as the input entries",
+              "description": "The added Ledger Entries, in the same order as the input",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -71,6 +165,87 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "AddLedgerEntryError",
+          "description": "Error details for a single Ledger Entry that was responsible for the batch's failure.",
+          "fields": [
+            {
+              "name": "code",
+              "description": "The status code of error. For example, 'ledger_entry_too_many_lines'.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ik",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) of the Ledger Entry",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "message",
+              "description": "The error message",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "retryable",
+              "description": "Whether or not the operation is retryable",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Error",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "AddLedgerEntryInput",
           "description": null,
@@ -78,7 +253,7 @@
           "inputFields": [
             {
               "name": "entry",
-              "description": "The [Ledger Entry](https://fragment.dev/api-reference/api-types#input-types-ledgerentryinput) to commit",
+              "description": "The [Ledger Entry](https://fragment.dev/api-reference/api-types#input-types-ledgerentryinput) to add",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -92,7 +267,7 @@
             },
             {
               "name": "ik",
-              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for this entry",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for this Ledger Entry",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1163,6 +1338,32 @@
           "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "CreatePaymentResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Payment",
+              "ofType": null
+            }
+          ]
         },
         {
           "kind": "OBJECT",
@@ -3222,6 +3423,16 @@
           "interfaces": [],
           "enumValues": null,
           "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "AddLedgerEntriesError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "AddLedgerEntryError",
+              "ofType": null
+            },
             {
               "kind": "OBJECT",
               "name": "BadRequestError",
@@ -11573,11 +11784,11 @@
             },
             {
               "name": "addLedgerEntries",
-              "description": "Batch version of addLedgerEntry: commits every entry in one atomic,\nstrongly-consistent transaction. Either every entry is committed or none\nare.",
+              "description": "Batch version of [addLedgerEntry](http://localhost:3001/api-reference/ledger-mutations#addledgerentry).\n\nAdds a batch of Ledger Entries in one synchronous and atomic transaction. Either every entry is added or none are.",
               "args": [
                 {
                   "name": "entries",
-                  "description": "The entries to commit, each with its own [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency).",
+                  "description": "The Ledger Entries to post, each with its own [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency).",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -11892,6 +12103,65 @@
                 "ofType": {
                   "kind": "UNION",
                   "name": "CreateLedgerAccountsResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createPayment",
+              "description": "EXPERIMENTAL — subject to change.\n\nCreate a Payment.",
+              "args": [
+                {
+                  "name": "amount",
+                  "description": "The amount in cents, between 100 and 10000000 inclusive.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int96",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "ik",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "SafeString",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "ledger",
+                  "description": "The Ledger this Payment belongs to.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "CreatePaymentResponse",
                   "ofType": null
                 }
               },
@@ -12455,6 +12725,78 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Payment",
+          "description": null,
+          "fields": [
+            {
+              "name": "clientSecret",
+              "description": "The secret handed to the payments SDK to render the payment method capture.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentStatus",
+          "description": "EXPERIMENTAL — subject to change.\n\nStatus of a Payment.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "processing",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "requires_confirmation",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "settled",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {
