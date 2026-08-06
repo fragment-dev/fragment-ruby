@@ -184,6 +184,8 @@ class FragmentClient
       { 'entry' => entry_input, 'ik' => @ik }
     end
 
+    alias to_h to_entry_input
+
     # The `parameters` payload, keyed by verbatim Schema parameter name -- so an
     # escaped parameter still travels under its own key (spec 2.5, 3.3).
     sig { returns(T::Hash[String, T.untyped]) }

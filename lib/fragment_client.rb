@@ -222,11 +222,21 @@ class FragmentClient
   # The response is a union. Narrow on `__typename` before reading `results`, and
   # read `errors` on `AddLedgerEntriesError` for the per-entry failures, each
   # carrying the `ik` of the entry that failed (spec 4).
-  sig { params(entries: T::Array[T.untyped]).returns(T.untyped) }
-  def add_ledger_entries(entries:)
+  # Takes the operation's variables, like every other operation method, so
+  # `add_ledger_entries(entries: [...])` and `add_ledger_entries({ entries: [...] })`
+  # both work. Typed payloads in `entries` are converted; anything else passes
+  # through.
+  #
+  # The return type stays untyped here, unlike the generated methods: a signature in
+  # shipped source cannot name `FragmentClient::Responses::AddLedgerEntries`, which
+  # does not exist until a consumer runs `tapioca dsl`.
+  sig { params(variables: T::Hash[T.untyped, T.untyped]).returns(T.untyped) }
+  def add_ledger_entries(variables)
     query(
       FragmentGraphQl.operation(:AddLedgerEntries),
-      { entries: TypedEntries.to_entry_inputs(entries) }
+      variables.to_h do |name, value|
+        [name, name.to_s == 'entries' ? TypedEntries.to_entry_inputs(value) : value]
+      end
     )
   end
 
