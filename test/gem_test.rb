@@ -22,4 +22,11 @@ class GemTest < Minitest::Test
     assert_equal on_disk, (spec.files & on_disk).sort,
                  "not listed in fragment-dev.gemspec: #{(on_disk - spec.files).inspect}"
   end
+
+  def test_the_tapioca_compiler_is_where_tapioca_looks_for_it
+    # `tapioca dsl` finds compilers shipped by gems with
+    # `Gem.find_files("tapioca/dsl/compilers/*.rb")`, which resolves against the
+    # load path. Anywhere else in `lib/` and it is never loaded.
+    assert_path_exists File.join(ROOT, 'lib/tapioca/dsl/compilers/fragment_typed_entries.rb')
+  end
 end
