@@ -1,5 +1,60 @@
 # Changelog
 
+## [2.1.0]
+
+### Added
+
+- `add_ledger_entries` commits a batch of Ledger Entries atomically. It accepts
+  raw `AddLedgerEntryInput` hashes, typed payloads, or both in one batch, and
+  preserves their order.
+- Typed batch payloads. `FragmentClient::TypedEntries.load` derives one payload
+  class per `(Ledger Entry type, typeVersion)` from the per-entry-type
+  `addLedgerEntry` operations the Fragment CLI generates for your Schema, so a
+  batch can be built with real parameter names instead of untyped hashes:
+
+  ```ruby
+  fragment.add_ledger_entries(entries: [
+    FragmentClient::Entries::UserFundsAccountV1.new(
+      ik: 'some-ik', ledger_ik: 'your-ledger-ik', user_id: 'user-1', funding_amount: '200'
+    )
+  ])
+  ```
+
+  Payloads are registered automatically from `extra_queries_filenames`. A field
+  you did not set is omitted from the request rather than sent as `null`.
+- Sorbet support, via three Tapioca DSL compilers. Run `bundle exec tapioca dsl`
+  after loading your operations and Sorbet checks both the typed payloads and every
+  query method -- `client.create_ledger(...)` previously reported `Method
+  'create_ledger' does not exist`, because those methods are defined per instance.
+  Response fields are typed too, from each operation's selection set and the
+  Schema, so `client.get_ledger(...).data&.ledger&.name` is checked and reading a
+  field the operation did not select is a type error rather than a runtime one.
+  See the README's Sorbet section.
+- `FragmentClient.load_queries`, which registers a `.graphql` document's operations
+  and typed payloads without credentials, for use in an initializer.
+- `bundle exec rake coverage`, writing `coverage/index.html`.
+- `docs/spec-conformance.md`, mapping this SDK onto the shared
+  `typed-batch-entries` specification section by section, with its deviations.
+
+### Changed
+
+- `lib/fragment.schema.json` refreshed. Adds `AddLedgerEntriesError` and
+  `AddLedgerEntryError`, without which `addLedgerEntries` could not be parsed at
+  all, plus `createPayment` and `Payment` from upstream.
+- `oauth_url` and `oauth_scope` now treat an explicit `nil` as "use the default",
+  where before it raised a `TypeError` from the type assertion in the constructor.
+- An unusable `oauth_url` now raises `ArgumentError` from `FragmentClient.new`,
+  naming the argument and its value. **This changes the exception class in two
+  cases.** A non-HTTP URL previously failed later, inside the token request, as
+  `NoMethodError: undefined method 'request_uri'`; a malformed one escaped as
+  `URI::InvalidURIError`. Both were constructor-time failures on a misconfigured
+  URL rather than handled paths, which is why this is a minor rather than a major
+  release — but if you rescue `URI::InvalidURIError` around client construction,
+  rescue `ArgumentError` instead.
+- `lib/fragment_client.rb` typechecks under Sorbet (`# typed: true`), and `srb tc`
+  runs in CI. The checked-in gem RBIs were several major versions stale and have
+  been regenerated.
+
 ## [2.0.0]
 
 ### Changed
