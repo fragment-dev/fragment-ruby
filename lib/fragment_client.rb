@@ -305,10 +305,11 @@ class FragmentClient
     raise ArgumentError, "oauth_url must be an http or https URL, got #{oauth_url.inspect}"
   end
 
-  sig { returns(Token) }
-  def create_token
-    uri = @oauth_url
-    post = Net::HTTP::Post.new(uri.request_uri)
+  # RFC 6749 §4.4.2 and §2.3.1: client_credentials over
+  # application/x-www-form-urlencoded, with the client id and secret as HTTP Basic.
+  sig { returns(Net::HTTP::Post) }
+  def token_request
+    post = Net::HTTP::Post.new(@oauth_url.request_uri)
     post.basic_auth(@client_id, @client_secret)
     post.content_type = 'application/x-www-form-urlencoded'
     post.body = URI.encode_www_form(
@@ -316,6 +317,13 @@ class FragmentClient
       scope: @oauth_scope,
       client_id: @client_id
     )
+    post
+  end
+
+  sig { returns(Token) }
+  def create_token
+    uri = @oauth_url
+    post = token_request
 
     begin
       http = Net::HTTP.new(uri.host, uri.port)

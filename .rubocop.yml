@@ -26,6 +26,8 @@ Metrics/ParameterLists:
 
 Metrics/AbcSize:
   Max: 30
+  Exclude:
+    - 'test/**/*'
 
 # A Sorbet `sig` is a line of its own, so a fully annotated class runs roughly
 # half again as long as the same code untyped. These limits are set for annotated
