@@ -4,6 +4,7 @@
 return unless defined?(Tapioca::Dsl::Compilers)
 
 require 'fragment_client'
+require 'tapioca/dsl/helpers/graphql_sorbet_types'
 
 module Tapioca
   module Dsl
@@ -143,27 +144,9 @@ module Tapioca
           type == 'T.untyped' ? 'T.untyped' : "T.nilable(#{type})"
         end
 
-        # The bound variable's GraphQL type as a Sorbet type. Top-level nullability
-        # is the caller's to apply; nullability inside a list is applied here.
         sig { params(parameter: FragmentClient::TypedEntries::Parameter).returns(String) }
         def sorbet_type(parameter)
-          graphql_type_to_sorbet(parameter.graphql_type)
-        end
-
-        sig { params(graphql_type: String).returns(String) }
-        def graphql_type_to_sorbet(graphql_type)
-          type = graphql_type.delete_suffix('!')
-          return GRAPHQL_SCALARS.fetch(type, 'T.untyped') unless type.start_with?('[')
-
-          "T::Array[#{list_element_type(type.delete_prefix('[').delete_suffix(']'))}]"
-        end
-
-        sig { params(element: String).returns(String) }
-        def list_element_type(element)
-          type = graphql_type_to_sorbet(element)
-          return type if element.end_with?('!') || type == 'T.untyped'
-
-          "T.nilable(#{type})"
+          Helpers::GraphqlSorbetTypes.translate(parameter.graphql_type, scalars: GRAPHQL_SCALARS)
         end
 
         sig { params(parameter: FragmentClient::TypedEntries::Parameter).returns(T::Array[RBI::Comment]) }

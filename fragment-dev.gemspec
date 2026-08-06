@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
     'lib/fragment_client/version.rb',
     'lib/fragment_client/typed_entries.rb',
     'lib/fragment_client/typed_ledger_entry.rb',
+    'lib/fragment_client/graphql_ast.rb',
+    # Generic; separated so it can become its own gem later.
+    'lib/tapioca/dsl/helpers/graphql_sorbet_types.rb',
     # Discovered by `tapioca dsl` via `Gem.find_files`, so the path matters.
     'lib/tapioca/dsl/compilers/fragment_typed_entries.rb'
   ]
