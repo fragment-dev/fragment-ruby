@@ -12,7 +12,26 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/*_test.rb']
 end
 
-task default: :test
+desc 'Typecheck with Sorbet'
+task :typecheck do
+  sh 'bundle exec srb tc'
+end
+
+desc 'Lint with RuboCop'
+task :lint do
+  sh 'bundle exec rubocop'
+end
+
+namespace :sorbet do
+  desc 'Regenerate gem RBIs, annotations, and the unresolved-constant list'
+  task :update do
+    sh 'bundle exec tapioca gem --all'
+    sh 'bundle exec tapioca annotations'
+    sh 'bundle exec bin/tapioca todo'
+  end
+end
+
+task default: %i[test typecheck]
 
 namespace :graphql do
   desc 'Download and convert GraphQL schema to JSON'

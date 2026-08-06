@@ -14,17 +14,17 @@ jobs:
 
     steps:
         - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-    
+
         - name: Setup Ruby
           uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
           with:
             ruby-version: ${{ matrix.ruby }}
-    
+
         - name: Bundle install
           run: |
             gem install bundler
             bundle install --jobs 4 --retry 3
-    
+
         - name: Run tests
           run: bundle exec rake test
 
@@ -42,3 +42,29 @@ jobs:
               echo "Ensure that GraphQL named queries are in TitleCase"
               exit 1
             fi
+
+  # Checks that only need running once: Sorbet reads the same files whatever Ruby
+  # is running, the checked-in gem RBIs were generated against one resolution of
+  # the lockfile, and a coverage threshold is not per-version.
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+        - name: Setup Ruby
+          uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
+          with:
+            ruby-version: '3.3'
+
+        - name: Bundle install
+          run: |
+            gem install bundler
+            bundle install --jobs 4 --retry 3
+
+        # The typed Ledger Entry payloads are built at load time, so their RBI is
+        # the only thing Sorbet can see them through. `sorbet/type_checks/`
+        # exercises it, and this is what turns that into a check.
+        - name: Typecheck
+          run: bundle exec srb tc

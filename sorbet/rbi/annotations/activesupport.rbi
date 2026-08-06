@@ -21,7 +21,38 @@ class ActiveSupport::EnvironmentInquirer
 
   # @method_missing: delegated to String through ActiveSupport::StringInquirer
   sig { returns(T::Boolean) }
-  def staging?; end
+  def local?; end
+end
+
+class ActiveSupport::HashWithIndifferentAccess < Hash
+  K = type_member { {fixed: T.any(String, Symbol)} }
+  V = type_member { {fixed: T.untyped} }
+  Elem = type_member { {fixed: T.untyped} }
+
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
+  def with_indifferent_access; end
+
+  sig { type_parameters(:V2, :ConflictRes).params(other_hash: T::Hash[T.untyped, T.type_parameter(:V2)], block: T.nilable(
+        T.proc.params(
+          key: String,
+          old_val: T.untyped,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      )).returns(ActiveSupport::HashWithIndifferentAccess) }
+  def deep_merge(other_hash, &block); end
+
+  sig { type_parameters(:V2, :ConflictRes).params(other_hash: T::Hash[T.untyped, T.type_parameter(:V2)], block: T.nilable(
+        T.proc.params(
+          key: String,
+          old_val: T.untyped,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      )).returns(ActiveSupport::HashWithIndifferentAccess) }
+  def deep_merge!(other_hash, &block); end
+
+  # @version >= 7.2
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def deep_merge?(other); end
 end
 
 module ActiveSupport::Testing::SetupAndTeardown::ClassMethods
@@ -81,10 +112,51 @@ end
 
 class Hash
   sig { returns(T::Boolean) }
+  def blank?; end
+
+  sig { returns(T::Boolean) }
+  def present?; end
+
+  sig { returns(T::Boolean) }
   def extractable_options?; end
+
+  # @version >= 6.1.0
+  sig { returns(T.self_type) }
+  def compact_blank; end
+
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
+  def with_indifferent_access; end
+
+  sig { type_parameters(:K2, :V2, :ConflictRes).params(other_hash: T::Hash[T.type_parameter(:K2), T.type_parameter(:V2)], block: T.nilable(
+        T.proc.params(
+          key: T.any(K, T.type_parameter(:K2)),
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      )).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:V2), T.type_parameter(:ConflictRes))]) }
+  def deep_merge(other_hash, &block); end
+
+  sig { type_parameters(:K2, :V2, :ConflictRes).params(other_hash: T::Hash[T.type_parameter(:K2), T.type_parameter(:V2)], block: T.nilable(
+        T.proc.params(
+          key: T.any(K, T.type_parameter(:K2)),
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      )).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:V2), T.type_parameter(:ConflictRes))]) }
+  def deep_merge!(other_hash, &block); end
+
+  # @version >= 7.2
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def deep_merge?(other); end
 end
 
 class Array
+  sig { returns(T::Boolean) }
+  def blank?; end
+
+  sig { returns(T::Boolean) }
+  def present?; end
+
   sig { params(position: Integer).returns(T.self_type) }
   def from(position); end
 
@@ -181,6 +253,32 @@ class DateTime
   def present?; end
 end
 
+module Enumerable
+  sig { type_parameters(:Block).params(block: T.proc.params(arg0: Elem).returns(T.type_parameter(:Block))).returns(T::Hash[T.type_parameter(:Block), Elem]) }
+  sig { returns(T::Enumerable[T.untyped]) }
+  def index_by(&block); end
+
+  sig { type_parameters(:Block).params(block: T.proc.params(arg0: Elem).returns(T.type_parameter(:Block))).returns(T::Hash[Elem, T.type_parameter(:Block)]) }
+  sig { returns(T::Enumerable[T.untyped]) }
+  sig { type_parameters(:Default).params(default: T.type_parameter(:Default)).returns(T::Hash[Elem, T.type_parameter(:Default)]) }
+  def index_with(default = nil, &block); end
+
+  sig { params(block: T.proc.params(arg0: Elem).returns(BasicObject)).returns(T::Boolean) }
+  sig { returns(T::Boolean) }
+  def many?(&block); end
+
+  sig { params(object: BasicObject).returns(T::Boolean) }
+  def exclude?(object); end
+
+  # @version >= 6.1.0
+  sig { returns(T::Array[Elem]) }
+  def compact_blank; end
+
+  # @version >= 7.0.0
+  sig { returns(Elem) }
+  def sole; end
+end
+
 class NilClass
   sig { returns(TrueClass) }
   def blank?; end
@@ -247,9 +345,21 @@ class Time
   # @shim: since `blank?` is always false, `present?` always returns `true`
   sig { returns(TrueClass) }
   def present?; end
+
+  sig { returns(ActiveSupport::TimeZone) }
+  def self.zone; end
+
+  sig { returns(T.any(ActiveSupport::TimeWithZone, ::Time)) }
+  def self.current; end
 end
 
 class Symbol
+  sig { returns(T::Boolean) }
+  def blank?; end
+
+  sig { returns(T::Boolean) }
+  def present?; end
+
   # alias for `#start_with?`
   sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
   def starts_with?(*string_or_regexp); end
@@ -263,6 +373,8 @@ class String
   sig { returns(TrueClass) }
   def acts_like_string?; end
 
+  # This is the subset of `#[]` sigs that have just 1 parameter.
+  # https://github.com/sorbet/sorbet/blob/40ad87b4dc7be23fa00c1369ac9f927053c68907/rbi/core/string.rbi#L270-L303
   sig { params(position: Integer).returns(T.nilable(String)) }
   sig { params(position: T.any(T::Range[Integer], Regexp)).returns(T.nilable(String)) }
   sig { params(position: String).returns(T.nilable(String)) }
@@ -347,6 +459,9 @@ class String
   sig { params(count: T.nilable(T.any(Integer, Symbol)), locale: T.nilable(Symbol)).returns(String) }
   def pluralize(count = nil, locale = :en); end
 
+  sig { returns(T::Boolean) }
+  def present?; end
+
   sig { params(patterns: T.any(String, Regexp)).returns(String) }
   def remove(*patterns); end
 
@@ -410,12 +525,37 @@ class String
 end
 
 class ActiveSupport::ErrorReporter
+  # @version >= 7.1.0.beta1
   sig { type_parameters(:Block, :Fallback).params(error_classes: T.class_of(Exception), severity: T.nilable(Symbol), context: T.nilable(T::Hash[Symbol, T.untyped]), fallback: T.nilable(T.proc.returns(T.type_parameter(:Fallback))), source: T.nilable(String), blk: T.proc.returns(T.type_parameter(:Block))).returns(T.any(T.type_parameter(:Block), T.type_parameter(:Fallback))) }
   def handle(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
+  # @version >= 7.1.0.beta1
   sig { type_parameters(:Block).params(error_classes: T.class_of(Exception), severity: T.nilable(Symbol), context: T.nilable(T::Hash[Symbol, T.untyped]), source: T.nilable(String), blk: T.proc.returns(T.type_parameter(:Block))).returns(T.type_parameter(:Block)) }
   def record(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
+  # @version >= 7.1.0.beta1
   sig { params(error: Exception, handled: T::Boolean, severity: T.nilable(Symbol), context: T::Hash[Symbol, T.untyped], source: T.nilable(String)).void }
   def report(error, handled: true, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
+
+  # @version >= 7.2.0.beta1
+  sig { params(error: T.any(Exception, String), severity: T.nilable(Symbol), context: T::Hash[Symbol, T.untyped], source: T.nilable(String)).void }
+  def unexpected(error, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
+end
+
+module ActiveSupport::Testing::Assertions
+  sig { type_parameters(:Block).params(block: T.proc.returns(T.type_parameter(:Block))).returns(T.type_parameter(:Block)) }
+  def assert_nothing_raised(&block); end
+
+  sig { type_parameters(:TResult).params(expression: T.any(Proc, Kernel), message: Kernel, from: T.anything, to: T.anything, block: T.proc.returns(T.type_parameter(:TResult))).returns(T.type_parameter(:TResult)) }
+  def assert_changes(expression, message = T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), &block); end
+end
+
+module ActiveSupport::Testing::ErrorReporterAssertions
+  # @version >= 7.1.0.rc1
+  sig { params(error_class: T.class_of(Exception), block: T.proc.void).returns(ActiveSupport::Testing::ErrorReporterAssertions::ErrorCollector::Report) }
+  def assert_error_reported(error_class = T.unsafe(nil), &block); end
+
+  # @version >= 8.1.0.beta1
+  sig { params(error_class: T.class_of(Exception), block: T.proc.void).returns(T::Array[ActiveSupport::Testing::ErrorReporterAssertions::ErrorCollector::Report]) }
+  def capture_error_reports(error_class = T.unsafe(nil), &block); end
 end
