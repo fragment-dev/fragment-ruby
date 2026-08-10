@@ -1,0 +1,113 @@
+# Input for the RBI snapshot test. Not a real Schema's operations -- it is shaped
+# to exercise every branch of the derivation in one document, so that any change
+# to a generated identifier or signature shows up as a reviewable diff.
+#
+# Covers: an unpinned version, two versions of one entry type, a parameter fixed
+# by the operation, optional and required parameters, list and non-String
+# scalars, an unknown scalar both required and optional, a camelCase parameter,
+# names that collide with a method the payload inherits, and an entry type needing
+# a constant-name prefix.
+
+mutation PostAuthCapture(
+  $ik: SafeString!
+  $ledgerIk: SafeString!
+  $posted: DateTime
+  $user_id: String!
+  $capture_amount: Int96!
+) {
+  addLedgerEntry(
+    ik: $ik
+    entry: {
+      ledger: { ik: $ledgerIk }
+      type: "auth_capture"
+      posted: $posted
+      parameters: { user_id: $user_id, capture_amount: $capture_amount }
+    }
+  ) {
+    __typename
+  }
+}
+
+mutation PostUserFundsAccount(
+  $ik: SafeString!
+  $ledgerIk: SafeString!
+  $amount: Int96!
+) {
+  addLedgerEntry(
+    ik: $ik
+    entry: {
+      ledger: { ik: $ledgerIk }
+      type: "user-funds-account"
+      typeVersion: 1
+      parameters: { amount: $amount }
+    }
+  ) {
+    __typename
+  }
+}
+
+mutation PostUserFundsAccountV2(
+  $ik: SafeString!
+  $ledgerIk: SafeString!
+  $amount: Int96!
+  $feeAmount: Int96
+  $settledAt: DateTime
+  $isExternal: Boolean!
+  $retryCount: Int
+  $tagKeys: [SafeString!]!
+  $noteLines: [String]
+  $mode: TransferMode!
+  $channel: TransferChannel
+) {
+  addLedgerEntry(
+    ik: $ik
+    entry: {
+      ledger: { ik: $ledgerIk }
+      type: "user-funds-account"
+      typeVersion: 2
+      parameters: {
+        amount: $amount
+        feeAmount: $feeAmount
+        settledAt: $settledAt
+        isExternal: $isExternal
+        retryCount: $retryCount
+        tagKeys: $tagKeys
+        noteLines: $noteLines
+        mode: $mode
+        channel: $channel
+        source: "always_api"
+      }
+    }
+  ) {
+    __typename
+  }
+}
+
+mutation PostReserved(
+  $ik: SafeString!
+  $ledgerIk: SafeString!
+  $type: String!
+  $class: String!
+  $posted_p: String!
+  $userId: String!
+) {
+  addLedgerEntry(
+    ik: $ik
+    entry: {
+      ledger: { ik: $ledgerIk }
+      type: "reserved"
+      parameters: { type: $type, class: $class, posted: $posted_p, userId: $userId }
+    }
+  ) {
+    __typename
+  }
+}
+
+mutation Post2faChallenge($ik: SafeString!, $ledgerIk: SafeString!) {
+  addLedgerEntry(
+    ik: $ik
+    entry: { ledger: { ik: $ledgerIk }, type: "2fa_challenge" }
+  ) {
+    __typename
+  }
+}

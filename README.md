@@ -142,6 +142,21 @@ FragmentClient::TypedEntries.fetch('user_funds_account', 1)
 #=> FragmentClient::Entries::UserFundsAccountV1
 ```
 
+### Sorbet
+
+The gem ships a [Tapioca](https://github.com/Shopify/tapioca) DSL compiler, so
+Sorbet can typecheck the payloads even though they are built at load time. Put a
+`TypedEntries.load` call somewhere Tapioca loads — a Rails initializer, or
+`sorbet/tapioca/require.rb` — then:
+
+```bash
+bundle exec tapioca dsl
+```
+
+That writes an RBI giving each payload a real signature. `srb tc` will then reject
+a wrong parameter type, a missing required parameter, and a parameter your Schema
+does not declare.
+
 ### Sync Transactions
 
 To sync transaction using a custom link:

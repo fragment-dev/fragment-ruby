@@ -22,6 +22,15 @@ task :lint do
   sh 'bundle exec rubocop'
 end
 
+desc 'Regenerate the typed Ledger Entry payload RBI and read the diff'
+task :snapshot do
+  # The snapshot is the reviewable record of the surface a caller touches; see
+  # test/snapshot_test.rb for why regenerating it is a decision, not a chore.
+  ENV['RECORD_SNAPSHOTS'] = '1'
+  ruby '-Itest test/snapshot_test.rb'
+  sh 'git diff --stat -- sorbet/snapshots'
+end
+
 namespace :sorbet do
   desc 'Regenerate gem RBIs, annotations, and the unresolved-constant list'
   task :update do

@@ -64,14 +64,14 @@ on every optional field.
 | 2.3 | Type and required-ness from the variable definition | `variable_types`; `NonNullType` means required | `test_requiredness_comes_from_the_variable_not_the_parameter_name` |
 | 2.3 | Payload still emitted without typed parameters | `parameters` falls back to an empty hash | `test_a_payload_is_still_derived_without_typed_parameters` |
 | 2.3a | All seven common fields exposed | `TypedLedgerEntry::COMMON_FIELDS`, fixed by `LedgerEntryInput` | `test_every_common_field_reaches_the_wire` |
-| 2.3a | `lines`, `type`, `typeVersion`, `parameters` not caller-supplied | Not declared; unknown keywords rejected | `test_lines_is_not_exposed` |
+| 2.3a | `lines`, `type`, `typeVersion`, `parameters` not caller-supplied | Not declared; unknown keywords rejected | `test_lines_is_not_exposed`; `type_check_test.rb` rejects them statically |
 | 2.4 | Parameters keep source order | `spec.parameters` is never re-sorted | `004-param-order`; and the strict-profile byte comparison, which is the assertion that actually catches a re-sort |
 | 2.5 | Name always carries the resolved version | `EntrySpec#class_name` is `<Type>V<n>` | `test_an_unpinned_version_is_normalised_to_one_in_the_name_and_on_the_wire` |
 | 2.5 | Name depends only on its own identity | Derived from `(type, version)`, nothing else | `test_a_name_does_not_depend_on_which_other_operations_are_loaded` |
 | 2.5 | Unpinned version normalised to 1 | `DEFAULT_TYPE_VERSION` at extraction, so name and wire agree | same test |
 | 2.5 | Local names unique; wire names unchanged | `local_name` claims names in source order, suffixing `_` | `003-reserved-names`; `test_colliding_local_names_stay_distinct_and_each_carries_its_own_value` |
 | 2.5 | Warn when a parameter is renamed | `logger.warn`, on `FragmentClient.configuration.logger` | `test_escaping_warns_and_never_changes_the_wire_name` |
-| 2.6 | Additive Schema changes do not break callers | Keyword arguments; identity-derived names | **snapshot pending** -- lands with the Tapioca compiler in the follow-up |
+| 2.6 | Additive Schema changes do not break callers | Keyword arguments; identity-derived names | `sorbet/snapshots/typed_entries.rbi` snapshot, `test/snapshot_test.rb` |
 | 3.1 | Batch shape and entry order | `to_entry_input`; `to_entry_inputs` maps in place | every fixture; `test_entry_order_is_preserved_and_raw_inputs_may_be_mixed_in` |
 | 3.2 | Unset omitted, never `null` | A sentinel default marks an omitted keyword; `#set?` remembers, and `entry_input` skips what was never set | `005-unset-omitted`; `test_unset_is_omitted_and_explicit_nil_is_sent`; `test_an_unset_field_is_absent_from_the_request_body` |
 | 3.3 | Wire names verbatim | `entry_parameters` keys on `wire_name` | `003-reserved-names`; `test_escaping_warns_and_never_changes_the_wire_name` |
@@ -194,6 +194,11 @@ bundle exec rake    # tests and srb tc
 | --- | --- |
 | Tests | `bundle exec rake test` |
 | Typecheck | `bundle exec rake typecheck` |
+| Regenerate the payload RBI snapshot | `bundle exec rake snapshot` |
 | Regenerate gem RBIs and annotations | `bundle exec rake sorbet:update` |
+
+The snapshot is the reviewable record of the surface callers touch. Regenerate it
+deliberately and read the diff: anything renamed or removed, and any optional
+parameter that became required, breaks existing call sites.
 
 [spec]: https://github.com/fragment-dev/graphql-queries/blob/main/shared-spec/typed-batch-entries.md

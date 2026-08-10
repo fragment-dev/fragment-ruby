@@ -17,7 +17,9 @@ Gem::Specification.new do |s|
     'lib/queries.graphql',
     'lib/fragment_client/version.rb',
     'lib/fragment_client/typed_entries.rb',
-    'lib/fragment_client/typed_ledger_entry.rb'
+    'lib/fragment_client/typed_ledger_entry.rb',
+    # Discovered by `tapioca dsl` via `Gem.find_files`, so the path matters.
+    'lib/tapioca/dsl/compilers/fragment_typed_entries.rb'
   ]
   s.required_ruby_version = '>= 3.2'
   s.summary = 'the ruby fragment client sdk'

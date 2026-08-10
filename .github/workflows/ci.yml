@@ -68,3 +68,11 @@ jobs:
         # exercises it, and this is what turns that into a check.
         - name: Typecheck
           run: bundle exec srb tc
+
+        # The RBI snapshot describes the surface callers touch, so regenerating it
+        # is a reviewed decision. A stale one has to fail here rather than be
+        # quietly refreshed on someone's machine.
+        - name: Verify the typed entry RBI snapshot is up-to-date
+          run: |
+            bundle exec rake snapshot
+            git diff --exit-code -- sorbet/snapshots
