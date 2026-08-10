@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'minitest/autorun'
-require 'fragment_client'
 
 class GemTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)

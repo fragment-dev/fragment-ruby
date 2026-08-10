@@ -17,6 +17,13 @@ task :typecheck do
   sh 'bundle exec srb tc'
 end
 
+desc 'Run the tests under SimpleCov; report in coverage/index.html'
+task :coverage do
+  # Read by test/test_helper.rb. Rake::TestTask shells out, so it is inherited.
+  ENV['COVERAGE'] = '1'
+  Rake::Task['test'].invoke
+end
+
 desc 'Lint with RuboCop'
 task :lint do
   sh 'bundle exec rubocop'

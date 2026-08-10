@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'minitest/autorun'
 require 'webmock/minitest'
 require 'base64'
-require 'fragment_client'
 
 class UnitTest < Minitest::Test
   include WebMock::API

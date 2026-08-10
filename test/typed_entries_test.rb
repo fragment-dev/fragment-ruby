@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 # typed: true
 
+require 'test_helper'
 require 'json'
 require 'logger'
 require 'minitest/autorun'
 require 'stringio'
-require 'fragment_client'
 
 # Derivation and serialization rules of the shared `typed-batch-entries.md`
 # specification that its language-neutral fixtures cannot express.

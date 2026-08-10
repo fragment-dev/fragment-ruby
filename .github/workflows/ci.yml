@@ -43,9 +43,9 @@ jobs:
               exit 1
             fi
 
-  # Checks that only need running once: Sorbet reads the same files whatever Ruby
-  # is running, the checked-in gem RBIs were generated against one resolution of
-  # the lockfile, and a coverage threshold is not per-version.
+  # Checks that only need running once. Sorbet reads the same files whatever Ruby
+  # is running, and the checked-in gem RBIs correspond to one resolution of the
+  # lockfile.
   quality:
     name: Quality
     runs-on: ubuntu-latest

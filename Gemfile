@@ -14,6 +14,7 @@ gem 'rubocop-graphql', group: :development
 gem 'rubocop-minitest', group: :development
 gem 'rubocop-performance', group: :development
 gem 'rubocop-rake', group: :development
+gem 'simplecov', group: :development
 gem 'sorbet', group: :development
 gem 'sorbet-runtime'
 gem 'tapioca', group: :development
