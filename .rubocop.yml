@@ -27,6 +27,26 @@ Metrics/ParameterLists:
 Metrics/AbcSize:
   Max: 30
 
+# A Sorbet `sig` is a line of its own, so a fully annotated class runs roughly
+# half again as long as the same code untyped. These limits are set for annotated
+# code; test classes are excluded because splitting a test file by line count
+# scatters related cases.
+Metrics/ClassLength:
+  Max: 200
+  Exclude:
+    - 'test/**/*'
+
+Metrics/ModuleLength:
+  Max: 260
+  Exclude:
+    - 'test/**/*'
+
+Naming/MethodParameterName:
+  # `ik` is Fragment's own term for an idempotency key, and it is what the API
+  # and every other SDK call it.
+  AllowedNames:
+    - ik
+
 AllCops:
   # Matches the gemspec's required_ruby_version and the CI matrix's floor.
   TargetRubyVersion: 3.2
