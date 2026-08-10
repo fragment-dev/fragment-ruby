@@ -9,6 +9,7 @@ gem 'minitest', group: :development
 gem 'pry'
 gem 'rake', group: :development
 gem 'reline'
+gem 'rexml', '>= 3.4.2'
 gem 'rubocop', group: :development
 gem 'rubocop-graphql', group: :development
 gem 'rubocop-minitest', group: :development
@@ -19,6 +20,5 @@ gem 'sorbet', group: :development
 gem 'sorbet-runtime'
 gem 'tapioca', group: :development
 gem 'thor', '>= 1.4.0'
-gem 'webmock', group: :development
-gem 'rexml', '>= 3.4.2'
 gem 'uri', '>= 1.0.4'
+gem 'webmock', group: :development

@@ -286,40 +286,41 @@ class UnitTest < Minitest::Test
       # of the target URI as the request-target."
       token_request_path = captured_request_paths.first
       assert_equal '/oauth2/token', token_request_path,
-        "Token request must use origin-form request-target (RFC 7230 §5.3.1), got: #{token_request_path}"
+                   "Token request must use origin-form request-target (RFC 7230 §5.3.1), got: #{token_request_path}"
 
       # RFC 6749 §4.4.2: "The client makes a request to the token endpoint by
       # adding the following parameters using the 'application/x-www-form-urlencoded'
       # format [...] grant_type: REQUIRED. Value MUST be set to 'client_credentials'."
       body_params = URI.decode_www_form(captured_auth_request.body).to_h
       assert_equal 'client_credentials', body_params['grant_type'],
-        'grant_type must be client_credentials (RFC 6749 §4.4.2)'
+                   'grant_type must be client_credentials (RFC 6749 §4.4.2)'
 
       # RFC 6749 §4.4.2: "scope: OPTIONAL."
       refute_nil body_params['scope'],
-        'scope parameter should be present when configured (RFC 6749 §4.4.2)'
+                 'scope parameter should be present when configured (RFC 6749 §4.4.2)'
 
       # RFC 6749 §4.4.2 requires the token request entity-body to use the
       # application/x-www-form-urlencoded format per Appendix B, and the
       # section's example request explicitly sets this Content-Type.
       content_type = captured_auth_request.headers['Content-Type']
-      assert_match(/\Aapplication\/x-www-form-urlencoded\b/, content_type,
-        'Token request Content-Type should be application/x-www-form-urlencoded (RFC 6749 §4.4.2)')
+      assert_match(%r{\Aapplication/x-www-form-urlencoded\b}, content_type,
+                   'Token request Content-Type should be application/x-www-form-urlencoded (RFC 6749 §4.4.2)')
 
       # RFC 6749 §2.3.1: "Clients in possession of a client password MAY use
       # the HTTP Basic authentication scheme [...] The client identifier is [...]
       # used as the username; the client password [...] used as the password."
       auth_header = captured_auth_request.headers['Authorization']
       assert_match(/\ABasic /, auth_header,
-        'Must use HTTP Basic authentication (RFC 6749 §2.3.1)')
+                   'Must use HTTP Basic authentication (RFC 6749 §2.3.1)')
       decoded_credentials = Base64.decode64(auth_header.sub('Basic ', ''))
       client_id, client_secret = decoded_credentials.split(':', 2)
       assert_equal 'test_client_id', client_id,
-        'Basic auth username must be client_id (RFC 6749 §2.3.1)'
+                   'Basic auth username must be client_id (RFC 6749 §2.3.1)'
       assert_equal 'test_client_secret', client_secret,
-        'Basic auth password must be client_secret (RFC 6749 §2.3.1)'
+                   'Basic auth password must be client_secret (RFC 6749 §2.3.1)'
     ensure
-      verbose, $VERBOSE = $VERBOSE, nil
+      verbose = $VERBOSE
+      $VERBOSE = nil
       Net::HTTP::Post.remove_method(:initialize)
       $VERBOSE = verbose
     end
@@ -340,9 +341,10 @@ class UnitTest < Minitest::Test
                          oauth_url: 'https://auth.us-east-1.fragment.dev/oauth2/token')
 
       assert_equal '/oauth2/token', captured_request_paths.first,
-        'Custom oauth_url must also use origin-form request-target (RFC 7230 §5.3.1)'
+                   'Custom oauth_url must also use origin-form request-target (RFC 7230 §5.3.1)'
     ensure
-      verbose, $VERBOSE = $VERBOSE, nil
+      verbose = $VERBOSE
+      $VERBOSE = nil
       Net::HTTP::Post.remove_method(:initialize)
       $VERBOSE = verbose
     end
@@ -434,8 +436,8 @@ class UnitTest < Minitest::Test
     body_params = URI.decode_www_form(captured_auth_request.body).to_h
     assert_equal 'client_credentials', body_params['grant_type']
     assert_equal oauth_scope, body_params['scope'],
-      'scope should round-trip via x-www-form-urlencoded UTF-8 encoding'
+                 'scope should round-trip via x-www-form-urlencoded UTF-8 encoding'
     assert_equal client_id, body_params['client_id'],
-      'client_id should round-trip via x-www-form-urlencoded UTF-8 encoding'
+                 'client_id should round-trip via x-www-form-urlencoded UTF-8 encoding'
   end
 end

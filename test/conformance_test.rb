@@ -144,7 +144,7 @@ class CanonicalKeyOrderTest < Minitest::Test
       end
 
       FragmentClient::TypedEntries.reset!
-    FragmentGraphQl.reset_operations!
+      FragmentGraphQl.reset_operations!
     end
   end
 
