@@ -1,0 +1,15 @@
+# A per-entry-type operation of the shape the Fragment CLI generates, for the
+# `new-entry` type of the `foo` schema the live tests post to.
+mutation PostNewEntry($ik: SafeString!, $ledgerIk: SafeString!, $amount: Int96!) {
+  addLedgerEntry(
+    ik: $ik
+    entry: {
+      ledger: { ik: $ledgerIk }
+      type: "new-entry"
+      typeVersion: 1
+      parameters: { amount: $amount }
+    }
+  ) {
+    __typename
+  }
+}
