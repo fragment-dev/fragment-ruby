@@ -72,9 +72,12 @@ class TypeCheckTest < Minitest::Test
       "FragmentClient.new('id', 'secret').get_ledger({ ik: 'k' }).data&.ledger&.name&.no_such",
       'Method `no_such` does not exist on `String`'
     ],
-    'a batch method given something other than an array' => [
-      "FragmentClient.new('id', 'secret').add_ledger_entries(entries: 'not an array')",
-      'for argument `entries`'
+    # `add_ledger_entries` takes a variables hash like every other operation method,
+    # so the `entries` value is checked at runtime by its sig rather than statically.
+    # What is still rejected here is not passing a variables hash at all.
+    'a batch method given something other than a variables hash' => [
+      "FragmentClient.new('id', 'secret').add_ledger_entries('nope')",
+      'for argument `variables`'
     ]
   }.freeze
 

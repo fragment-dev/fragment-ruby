@@ -57,6 +57,26 @@ class AddLedgerEntriesTest < Minitest::Test
     assert_equal 'auth_capture', FragmentClient::Entries::AuthCaptureV1.entry_type
   end
 
+  def test_the_variables_hash_form_works_like_every_other_operation_method
+    # Someone reading queries.graphql writes the variables hash directly, and the
+    # keyword form is the same call in Ruby. Both must reach the same request.
+    entry = { ik: 'raw-1', entry: { ledger: { ik: 'prod' }, type: 't' } }
+    positional = capture_request(extra_queries: false) { |c| c.add_ledger_entries({ entries: [entry] }) }
+    keyword = capture_request(extra_queries: false) { |c| c.add_ledger_entries(entries: [entry]) }
+
+    assert_equal positional.dig('variables', 'entries'), keyword.dig('variables', 'entries')
+    assert_equal 'raw-1', keyword.dig('variables', 'entries', 0, 'ik')
+  end
+
+  def test_a_payload_converts_to_a_hash_under_either_name
+    FragmentClient::TypedEntries.load_string(OPERATIONS)
+    entry = FragmentClient::Entries::AuthCaptureV1.new(
+      ik: 'ik-1', ledger_ik: 'prod', user_id: 'u', capture_amount: '1'
+    )
+
+    assert_equal entry.to_entry_input, entry.to_h
+  end
+
   def test_raw_entries_work_without_loading_any_typed_payloads
     # The batch method is not conditional on the typed-payload machinery: a client
     # constructed with no extra queries still posts a batch of plain hashes, which

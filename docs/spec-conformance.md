@@ -78,7 +78,7 @@ on every optional field.
 | 3.4 | Baseline equivalence | Parsed-JSON equality against `expected.json` | all six fixtures |
 | 3.4 | Strict equivalence (optional) | **Met.** See below | byte comparison in `conformance_test.rb`; `test_key_order_is_canonical` |
 | 3.5 | Raw and typed in one batch | `to_entry_inputs` passes non-payloads through untouched | `test_typed_and_raw_entries_may_be_mixed_and_keep_their_order` |
-| 3.6 | Everything accepted serialises | `add_ledger_entries` takes `T::Array[T.untyped]` and converts every payload before the encoder | `add_ledger_entries_test.rb` asserts on the request body, not on the hash |
+| 3.6 | Everything accepted serialises | `add_ledger_entries` converts every payload in `entries` before the encoder; the sig rejects a non-array | `add_ledger_entries_test.rb` asserts on the request body, not on the hash |
 | 4 | Atomicity, per-entry IK replay, narrowing, per-entry errors | The `AddLedgerEntries` operation selects `results`, and `errors { ik ... }` on `AddLedgerEntriesError` | `test_results_are_returned_per_entry_with_ik_replay`; `test_per_entry_errors_are_surfaced_with_the_ik_that_identifies_them` |
 
 ---
