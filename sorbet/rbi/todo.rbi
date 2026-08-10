@@ -4,11 +4,7 @@
 
 # typed: false
 
-module ::DateAndTime::Calculations; end
-module ::DateAndTime::Zones; end
 module ActiveSupport::ArrayInquirer; end
-module ActiveSupport::Multibyte::Chars; end
 module ActiveSupport::SafeBuffer; end
 module ActiveSupport::StringInquirer; end
-module Faraday::Connection; end
-class GraphQL::Client::HTTP; end
+module DateAndTime::Calculations; end

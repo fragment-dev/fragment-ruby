@@ -1,15 +1,20 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 require 'json'
 require 'graphql/client'
 require 'graphql/client/http'
+require 'logger'
 require 'sorbet-runtime'
 require 'uri'
 require 'net/http'
 require 'fragment_client/version'
 module GraphQL
   module StaticValidation
+    # Fragment's `parameters` is a `JSON` scalar, and graphql-ruby rejects an
+    # inline object literal for a scalar. This accepts one for the JSON-shaped
+    # scalars so that the per-entry-type operations a Schema generates parse at
+    # all.
     class LiteralValidator
       alias recursive_validate_old recursively_validate
       def recursively_validate(ast_value, type)
@@ -48,6 +53,8 @@ module FragmentGraphQl
 
   # Create a custom client class for Fragment-specific behavior
   class CustomClient < GraphQL::Client
+    # Names anonymous-module operation definitions predictably, so the operation
+    # name sent to the API does not embed a memory address.
     class Definition < GraphQL::Client::Definition
       def definition_name
         super.gsub(/#<Module.*>/, 'FragmentGraphQl__Dynamic')
@@ -154,6 +161,9 @@ class FragmentClient
 
           # Define the new method that uses the stored original method
           definition_node.singleton_class.send(:define_method, :name) do
+            # The block runs on the definition node, not on the client; Sorbet
+            # reads its `self` from the enclosing scope.
+            T.bind(self, T.untyped)
             original_name.gsub(/#<Module.*?>/, 'FragmentGraphQl__Dynamic__Custom')
           end
         end
@@ -221,6 +231,7 @@ class FragmentClient
     end
   end
 
+  # Process-wide settings, set with {FragmentClient.configure}.
   class Configuration
     extend T::Sig
 
@@ -247,7 +258,7 @@ class FragmentClient
 
     sig { params(blk: T.proc.params(config: Configuration).void).void }
     def configure(&blk)
-      yield(configuration)
+      blk.call(configuration)
     end
   end
 

@@ -28,7 +28,8 @@ Metrics/AbcSize:
   Max: 30
 
 AllCops:
-  TargetRubyVersion: 3.0
+  # Matches the gemspec's required_ruby_version and the CI matrix's floor.
+  TargetRubyVersion: 3.2
 
 Layout/LineLength:
   Max: 120
