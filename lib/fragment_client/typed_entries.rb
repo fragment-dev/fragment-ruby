@@ -5,6 +5,7 @@ require 'graphql'
 require 'logger'
 require 'sorbet-runtime'
 
+require 'fragment_client/graphql_ast'
 require 'fragment_client/typed_ledger_entry'
 
 class FragmentClient
@@ -253,51 +254,28 @@ class FragmentClient
 
         # A literal `type` is what makes an operation entry-type-specific; a
         # variable one leaves nothing to key a payload on.
-        entry_type = object_field(entry, 'type')
+        entry_type = GraphqlAst.object_field(entry, 'type')
         return nil unless entry_type.is_a?(String)
 
-        version = object_field(entry, 'typeVersion')
+        version = GraphqlAst.object_field(entry, 'typeVersion')
 
         EntrySpec.new(
           entry_type: entry_type,
           type_version: version.is_a?(Integer) ? version : DEFAULT_TYPE_VERSION,
           operation_name: name,
-          parameters: extract_parameters(object_field(entry, 'parameters'), operation)
+          parameters: extract_parameters(GraphqlAst.object_field(entry, 'parameters'), operation)
         )
       end
 
       # The inline `entry:` object of a single-field `addLedgerEntry` mutation, or
-      # `nil` for a query, a multi-field selection, a root fragment spread, or an
-      # `entry` passed as a variable.
+      # `nil` for anything that fails a condition of spec 2.1.
       sig do
         params(operation: GraphQL::Language::Nodes::OperationDefinition)
           .returns(T.nilable(GraphQL::Language::Nodes::InputObject))
       end
-      # One guard per numbered condition in spec 2.1.
-      # rubocop:disable Metrics/CyclomaticComplexity
       def entry_argument(operation)
-        return nil unless operation.operation_type == 'mutation'
-
-        selections = operation.selections
-        return nil unless selections.length == 1
-
-        root = selections.first
-        return nil unless root.is_a?(GraphQL::Language::Nodes::Field)
-        return nil unless root.name == ADD_LEDGER_ENTRY_FIELD
-
-        argument = root.arguments.find { |a| a.name == 'entry' }
-        value = argument&.value
-        value.is_a?(GraphQL::Language::Nodes::InputObject) ? value : nil
-      end
-      # rubocop:enable Metrics/CyclomaticComplexity
-
-      # One field of an inline object literal, or `nil` if absent. A field written
-      # as `null` yields a `NullValue` node, not `nil`.
-      sig do
-        params(object: GraphQL::Language::Nodes::InputObject, name: String).returns(T.untyped)
-      end
-      def object_field(object, name)
-        object.arguments.find { |argument| argument.name == name }&.value
+        root = GraphqlAst.single_root_field(operation, ADD_LEDGER_ENTRY_FIELD)
+        root && GraphqlAst.inline_object_argument(root, 'entry')
       end
 
       # The typed parameters bound to the entry's `parameters` object (spec 2.3).
@@ -309,7 +287,7 @@ class FragmentClient
       def extract_parameters(node, operation)
         return [] unless node.is_a?(GraphQL::Language::Nodes::InputObject)
 
-        types = variable_types(operation)
+        types = GraphqlAst.variable_types(operation)
         taken = T.let({}, T::Hash[Symbol, String])
 
         node.arguments.filter_map do |argument|
@@ -333,15 +311,6 @@ class FragmentClient
             required: type.is_a?(GraphQL::Language::Nodes::NonNullType)
           )
         end
-      end
-
-      # Variable name to declared type node.
-      sig do
-        params(operation: GraphQL::Language::Nodes::OperationDefinition)
-          .returns(T::Hash[String, T.untyped])
-      end
-      def variable_types(operation)
-        operation.variables.to_h { |definition| [definition.name, definition.type] }
       end
 
       # --- Naming (spec 2.5) -------------------------------------------------
