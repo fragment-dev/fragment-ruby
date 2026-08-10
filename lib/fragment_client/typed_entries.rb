@@ -8,36 +8,19 @@ require 'sorbet-runtime'
 require 'fragment_client/typed_ledger_entry'
 
 class FragmentClient
-  # Namespace the derived payload classes are registered under, so a caller can
-  # name one directly: `FragmentClient::Entries::AuthCaptureV1`.
+  # Namespace holding the derived payload classes, e.g.
+  # `FragmentClient::Entries::AuthCaptureV1`.
   #
-  # Deliberately empty. Every constant here is defined at load time from a
-  # `.graphql` document, and anything else in this namespace could collide with
-  # a Ledger Entry type. The machinery lives in {FragmentClient::TypedEntries}.
+  # Every constant here is defined at load time by {FragmentClient::TypedEntries.load};
+  # anything else would risk colliding with a Ledger Entry type.
   module Entries; end
 
-  # Derives strongly-typed `addLedgerEntries` payloads from the per-entry-type
+  # Derives typed `addLedgerEntries` payloads from the per-entry-type
   # `addLedgerEntry` operations the Fragment CLI generates for a Schema.
   #
-  # `addLedgerEntries(entries: [AddLedgerEntryInput!]!)` commits a batch
-  # atomically, and every entry's `parameters` field is an opaque `JSON` scalar.
-  # GraphQL therefore cannot type the parameters of an individual entry in a
-  # batch: one list means one input type, so callers are left passing untyped
-  # hashes.
-  #
-  # A generated single-entry operation carries both missing facts -- the entry
-  # type as a string literal, and each parameter bound to a typed variable:
-  #
-  #     mutation PostAuthCapture($ik: SafeString!, $ledgerIk: SafeString!,
-  #                              $capture_amount: String!) {
-  #       addLedgerEntry(ik: $ik, entry: {
-  #         ledger: {ik: $ledgerIk}, type: "auth_capture",
-  #         parameters: {capture_amount: $capture_amount}
-  #       }) { __typename }
-  #     }
-  #
-  # {.load} recovers that into an {EntrySpec} and defines one payload class per
-  # `(type, typeVersion)` pair:
+  # A generated operation names the entry type as a string literal and binds each
+  # parameter to a typed variable, which is what `addLedgerEntries` alone cannot
+  # express: its `parameters` is an opaque `JSON` scalar.
   #
   #     FragmentClient::TypedEntries.load('app/graphql/entries.graphql')
   #     entry = FragmentClient::Entries::AuthCaptureV1.new(
@@ -45,33 +28,23 @@ class FragmentClient
   #     )
   #     client.add_ledger_entries(entries: [entry])
   #
-  # Classes are built at load time rather than generated to disk, because that is
-  # how Ruby libraries normally do this. Sorbet learns about them from the
-  # Tapioca DSL compiler this gem ships (`bundle exec tapioca dsl`), the same way
-  # it learns about ActiveRecord attributes.
+  # Payload classes are built at load time, so Sorbet sees them only through the
+  # RBI `bundle exec tapioca dsl` generates.
   #
-  # Implements the shared SDK specification `typed-batch-entries.md` from
-  # `fragment-dev/graphql-queries`; see `docs/spec-conformance.md` for the
-  # section-by-section mapping. Section references below are to that spec.
+  # Implements `typed-batch-entries.md` from `fragment-dev/graphql-queries`.
+  # Section references throughout are to that spec; `docs/spec-conformance.md`
+  # maps it onto this SDK and explains the choices.
   module TypedEntries
     extend T::Sig
 
-    # The only field an operation may select to qualify as a typed entry
-    # operation (spec 2.1).
+    # The only field a typed entry operation may select (spec 2.1).
     ADD_LEDGER_ENTRY_FIELD = 'addLedgerEntry'
 
-    # An entry with no `typeVersion` resolves to version 1 server-side -- never
-    # to the latest version -- so an unpinned operation is normalised to 1 at
-    # extraction. That keeps one rule for the identity, the class name and the
-    # wire payload instead of letting them disagree (spec 2.5).
+    # What an entry with no `typeVersion` resolves to server-side (spec 2.5).
     DEFAULT_TYPE_VERSION = 1
 
-    # Sentinel for "the caller did not set this field", distinct from `nil`.
-    #
-    # Spec 3.2 requires an unset field to be omitted rather than serialized as
-    # `null`, because `null` is a value a caller may pass deliberately and the
-    # two must stay distinguishable. Ruby's usual `nil` default cannot express
-    # three states, so optional fields default to {UNSET} instead.
+    # Marks a keyword the caller omitted, as distinct from one set to `nil`
+    # (spec 3.2). Internal to {TypedLedgerEntry#initialize}; never returned.
     class Unset
       extend T::Sig
 
@@ -89,21 +62,18 @@ class FragmentClient
     class Parameter < T::Struct
       extend T::Sig
 
-      # The parameter name as the Schema knows it. This is the JSON key sent
-      # inside `parameters`, so it goes on the wire verbatim (spec 3.3).
+      # The Schema's name for it, and the JSON key sent in `parameters` (spec 3.3).
       const :wire_name, String
 
-      # The keyword argument and reader name on the payload class. Identical to
-      # `wire_name` unless that name is already taken (see
-      # {TypedEntries.local_name}).
+      # The keyword argument and reader on the payload class. Differs from
+      # `wire_name` only when that name is taken (spec 2.5).
       const :name, Symbol
 
-      # The GraphQL type of the bound variable, rendered as written -- `String!`,
-      # `[SafeString!]`. Carried so the Tapioca compiler can turn it into a
-      # Sorbet type; unused at runtime.
+      # The bound variable's GraphQL type as written, e.g. `String!`,
+      # `[SafeString!]`. Read by the Tapioca compiler; unused at runtime.
       const :graphql_type, String
 
-      # Whether the bound variable is non-null, i.e. the caller must supply it.
+      # Whether the bound variable is non-null.
       const :required, T::Boolean
 
       sig { returns(T::Boolean) }
@@ -111,9 +81,7 @@ class FragmentClient
         wire_name.to_sym != name
       end
 
-      # `T::Struct` compares by identity, which would make every conflict check
-      # and every snapshot comparison report a difference between two parameters
-      # that are in fact the same.
+      # By value. `T::Struct` otherwise compares by identity.
       sig { params(other: T.untyped).returns(T::Boolean) }
       def ==(other)
         other.is_a?(Parameter) && serialize == other.serialize
@@ -126,33 +94,24 @@ class FragmentClient
 
       const :entry_type, String
 
-      # Always concrete: an unpinned operation is normalised to
-      # {DEFAULT_TYPE_VERSION}, because that is what the API resolves it to.
+      # Always concrete; an unpinned operation carries {DEFAULT_TYPE_VERSION}.
       const :type_version, Integer
 
-      # The operation this was derived from. Informational -- it names the class
-      # only in the pathological collision case (spec 2.5).
+      # The operation this came from. Names the class only on collision (spec 2.5).
       const :operation_name, String
 
-      # In the order the parameters appear in the source `parameters: {...}`
-      # literal. All four SDKs read the same document, so source order is the
-      # only ordering they can agree on without coordinating (spec 2.4).
+      # In the order they appear in the source `parameters: {...}` (spec 2.4).
       const :parameters, T::Array[Parameter]
 
-      # What a payload is keyed on (spec 2.2). Not the entry type alone: the same
-      # type at two versions has different parameter sets, and collapsing them
-      # would drop one and post the wrong version.
+      # What a payload is keyed on: the pair, never the entry type alone, since
+      # one type at two versions has two parameter sets (spec 2.2).
       sig { returns([String, Integer]) }
       def identity
         [entry_type, type_version]
       end
 
-      # The payload class name, always carrying the version it resolves to.
-      #
-      # Depends only on this payload's own identity, never on which other
-      # operations are in the input. Suffixing only when versions collide would
-      # mean adding a second version later renames the first, breaking every
-      # existing call site for a purely additive Schema change (spec 2.5, 2.6).
+      # `<PascalEntryType>V<version>`. Always carries the version, and depends on
+      # nothing but this payload's own identity (spec 2.5, 2.6).
       sig { returns(String) }
       def class_name
         "#{TypedEntries.constant_name(entry_type)}V#{type_version}"
@@ -175,10 +134,8 @@ class FragmentClient
       # Derive payload classes from `.graphql` documents and define them under
       # `namespace`.
       #
-      # Idempotent: loading the same document twice reuses the classes already
-      # defined for each identity rather than redefining the constants. Needs no
-      # credentials and makes no network calls, so it is safe to call from an
-      # initializer -- which is what lets `tapioca dsl` see the classes.
+      # Idempotent, and needs neither credentials nor network, so it is safe in an
+      # initializer -- where `tapioca dsl` will see the classes.
       sig do
         params(paths: String, namespace: Module)
           .returns(T::Array[T.class_of(FragmentClient::TypedLedgerEntry)])
@@ -196,8 +153,9 @@ class FragmentClient
         define(extract(GraphQL.parse(source)), namespace: namespace, origin: origin)
       end
 
-      # The payload class for an entry type, defaulting to the version an
-      # unpinned entry resolves to.
+      # The payload class for an entry type and version.
+      #
+      # @raise [UnknownEntryTypeError] if no document declaring it was loaded.
       sig do
         params(entry_type: String, type_version: Integer)
           .returns(T.class_of(FragmentClient::TypedLedgerEntry))
@@ -218,8 +176,7 @@ class FragmentClient
                                                   T.class_of(FragmentClient::TypedLedgerEntry)]))
       end
 
-      # Forget every loaded payload class and remove the constants defined for
-      # them. For tests; a normal process loads once and keeps them.
+      # Forget every loaded payload class and remove its constant. For tests.
       sig { void }
       def reset!
         defined_constants.each do |namespace, name|
@@ -229,12 +186,8 @@ class FragmentClient
         registry.clear
       end
 
-      # Convert typed payloads and raw hashes alike into `AddLedgerEntryInput`
-      # hashes, preserving order (spec 3.1, 3.5).
-      #
-      # Raw hashes pass through untouched, so a caller who explicitly puts `null`
-      # in one gets `null` on the wire. That asymmetry with spec 3.2 is
-      # deliberate: the omission rule is a property of the typed payloads.
+      # Convert typed payloads to `AddLedgerEntryInput` hashes, in order. Raw
+      # hashes pass through untouched (spec 3.1, 3.5).
       sig { params(entries: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
       def to_entry_inputs(entries)
         entries.map do |entry|
@@ -253,7 +206,7 @@ class FragmentClient
       end
 
       # `[namespace, constant name]` for every class {load} defined, so {reset!}
-      # can undo exactly those and nothing else.
+      # removes exactly those.
       sig { returns(T::Array[[Module, String]]) }
       def defined_constants
         @defined_constants ||= T.let([], T.nilable(T::Array[[Module, String]]))
@@ -261,8 +214,7 @@ class FragmentClient
 
       # --- Derivation (spec 2) ------------------------------------------------
 
-      # Recover a spec for every typed entry operation in a parsed document,
-      # deduplicated on identity.
+      # A spec per typed entry operation, deduplicated on identity.
       sig { params(document: GraphQL::Language::Nodes::Document).returns(T::Array[EntrySpec]) }
       def extract(document)
         specs = T.let({}, T::Hash[[String, Integer], EntrySpec])
@@ -273,11 +225,7 @@ class FragmentClient
           spec = extract_spec(definition)
           next if spec.nil?
 
-          # Two operations may legitimately map to one identity, e.g. a second
-          # operation with a different selection set. The CLI and API guarantee
-          # no two Ledger Entries share a (type, version) pair, so such
-          # operations necessarily declare the same parameters. First in input
-          # order wins (spec 2.2).
+          # First in input order wins (spec 2.2).
           existing = specs[spec.identity]
           if existing
             warn_on_conflict(existing, spec)
@@ -290,12 +238,8 @@ class FragmentClient
         specs.values
       end
 
-      # Recover one spec, or `nil` if this operation is not a typed entry
-      # operation (spec 2.1).
-      #
-      # Anything that fails a condition is skipped silently rather than treated
-      # as an error -- that is what excludes the SDK's own `AddLedgerEntry` and
-      # `AddLedgerEntryRuntime`, whose `type` comes from a variable.
+      # One spec, or `nil` for anything that is not a typed entry operation.
+      # Failing a condition is silent, not an error (spec 2.1).
       sig do
         params(operation: GraphQL::Language::Nodes::OperationDefinition)
           .returns(T.nilable(EntrySpec))
@@ -307,8 +251,8 @@ class FragmentClient
         entry = entry_argument(operation)
         return nil if entry.nil?
 
-        # A literal `type` is what makes an operation entry-type-specific.
-        # Without it there is nothing to key a payload on.
+        # A literal `type` is what makes an operation entry-type-specific; a
+        # variable one leaves nothing to key a payload on.
         entry_type = object_field(entry, 'type')
         return nil unless entry_type.is_a?(String)
 
@@ -322,17 +266,14 @@ class FragmentClient
         )
       end
 
-      # The inline `entry:` object of a single-field `addLedgerEntry` mutation.
-      #
-      # `nil` for anything else: a query, a multi-field selection, a fragment
-      # spread at the root, or an `entry` passed as a variable rather than
-      # written inline.
+      # The inline `entry:` object of a single-field `addLedgerEntry` mutation, or
+      # `nil` for a query, a multi-field selection, a root fragment spread, or an
+      # `entry` passed as a variable.
       sig do
         params(operation: GraphQL::Language::Nodes::OperationDefinition)
           .returns(T.nilable(GraphQL::Language::Nodes::InputObject))
       end
-      # One guard per numbered condition in spec 2.1. Collapsing them would hide
-      # which condition rejected an operation, and that mapping is the point.
+      # One guard per numbered condition in spec 2.1.
       # rubocop:disable Metrics/CyclomaticComplexity
       def entry_argument(operation)
         return nil unless operation.operation_type == 'mutation'
@@ -350,9 +291,8 @@ class FragmentClient
       end
       # rubocop:enable Metrics/CyclomaticComplexity
 
-      # The value of one field of an inline object literal, or `nil` if the field
-      # is absent. A field written as `null` yields a `NullValue` node rather
-      # than `nil`, so the two stay distinguishable.
+      # One field of an inline object literal, or `nil` if absent. A field written
+      # as `null` yields a `NullValue` node, not `nil`.
       sig do
         params(object: GraphQL::Language::Nodes::InputObject, name: String).returns(T.untyped)
       end
@@ -360,12 +300,8 @@ class FragmentClient
         object.arguments.find { |argument| argument.name == name }&.value
       end
 
-      # Recover the typed parameters bound to the entry's `parameters` object
-      # (spec 2.3).
-      #
-      # An absent `parameters`, or one passed as a variable rather than written
-      # inline, yields no typed parameters. The payload is still defined, with
-      # `parameters` falling back to an untyped hash.
+      # The typed parameters bound to the entry's `parameters` object (spec 2.3).
+      # Empty when `parameters` is absent or passed as a variable.
       sig do
         params(node: T.untyped, operation: GraphQL::Language::Nodes::OperationDefinition)
           .returns(T::Array[Parameter])
@@ -378,15 +314,11 @@ class FragmentClient
 
         node.arguments.filter_map do |argument|
           value = argument.value
-          # Only variable-bound parameters are typeable. One hardcoded in the
-          # operation is already fixed by it and must not become a field.
+          # A parameter the operation hardcodes is fixed by it, not caller-supplied.
           next unless value.is_a?(GraphQL::Language::Nodes::VariableIdentifier)
 
           type = types[value.name]
           if type.nil?
-            # An operation may reference an undeclared variable; graphql-client
-            # rejects that at parse time, but this module also runs over
-            # documents it never sees.
             logger.warn(
               "Fragment: parameter #{argument.name.inspect} in operation " \
               "#{operation.name} is bound to undeclared variable $#{value.name}; " \
@@ -403,7 +335,7 @@ class FragmentClient
         end
       end
 
-      # Map variable name to its declared type node.
+      # Variable name to declared type node.
       sig do
         params(operation: GraphQL::Language::Nodes::OperationDefinition)
           .returns(T::Hash[String, T.untyped])
@@ -416,16 +348,9 @@ class FragmentClient
 
       # The keyword argument and reader name for a parameter.
       #
-      # Schema parameter names are kept verbatim rather than snake_cased, which
-      # is what the rest of this SDK already does with GraphQL variables --
-      # `client.create_ledger(schemaKey: ...)`. Keeping them verbatim also means
-      # `user_id` and `userId` stay distinct instead of colliding on one
-      # identifier, which is the hazard spec 2.5 warns about.
-      #
-      # A name is escaped with a trailing underscore only when it is already
-      # taken: by a method the payload class inherits (`class`, `hash`), by a
-      # common field of its own (`posted`), or by an earlier parameter. `taken`
-      # is mutated so later parameters see the names already claimed.
+      # Verbatim, so `user_id` and `userId` stay distinct. Escaped with a trailing
+      # underscore only when the name is already taken -- by an inherited method,
+      # a common field, or an earlier parameter (spec 2.5). Mutates `taken`.
       sig do
         params(wire_name: String, taken: T::Hash[Symbol, String],
                operation: GraphQL::Language::Nodes::OperationDefinition)
@@ -435,8 +360,6 @@ class FragmentClient
         name = wire_name.to_sym
         return claim(name, wire_name, taken) unless taken.key?(name) || reserved?(name)
 
-        # The first occurrence in source order keeps the plain name and later
-        # ones are suffixed, the same way class names are disambiguated above.
         candidate = :"#{wire_name}_"
         counter = 2
         while taken.key?(candidate) || reserved?(candidate)
@@ -444,8 +367,6 @@ class FragmentClient
           counter += 1
         end
 
-        # The caller ends up using a name they did not choose, so say so. The
-        # wire payload is unaffected either way.
         clash = taken[name]
         reason = clash ? "already used by parameter #{clash.inspect}" : 'reserved by the payload class'
         logger.warn(
@@ -456,9 +377,8 @@ class FragmentClient
         claim(candidate, wire_name, taken)
       end
 
-      # Names a payload class already responds to, read by reflection rather
-      # than hand-listed so adding a method to the base class cannot silently
-      # start shadowing a Schema parameter.
+      # Names a payload already responds to. By reflection, so adding a method to
+      # the base class cannot silently shadow a Schema parameter.
       sig { params(name: Symbol).returns(T::Boolean) }
       def reserved?(name)
         FragmentClient::TypedLedgerEntry.method_defined?(name) ||
@@ -473,8 +393,7 @@ class FragmentClient
                 .split(/[^a-zA-Z\d]+/)
                 .reject(&:empty?)
         name = parts.map { |part| part[0].to_s.upcase + T.must(part[1..]) }.join
-        # A constant must start with a letter, so an entry type like `2fa_hold`
-        # needs a prefix rather than dropping the leading digit.
+        # A constant must start with a letter: `2fa_hold` -> `Entry2faHold`.
         name.match?(/\A[A-Z]/) ? name : "Entry#{name}"
       end
 
@@ -486,16 +405,13 @@ class FragmentClient
         name
       end
 
-      # Define one payload class per spec and register it.
+      # Define and register one payload class per spec. Locked, because
+      # concurrent client construction would otherwise race on `const_set`.
       sig do
         params(specs: T::Array[EntrySpec], namespace: Module, origin: T.nilable(String))
           .returns(T::Array[T.class_of(FragmentClient::TypedLedgerEntry)])
       end
       def define(specs, namespace:, origin:)
-        # Two threads booting clients at once -- Puma workers, a threaded job
-        # runner -- would otherwise race on `const_set` and on the registry, and
-        # one of the two payload classes would be lost with a redefinition
-        # warning. Contended only during loading, which happens once.
         lock.synchronize { register(specs, namespace, origin) }
       end
 
@@ -520,11 +436,8 @@ class FragmentClient
         end
       end
 
-      # Two distinct entry types can pascal-case alike (`auth_hold`, `authHold`).
-      # Fall back to the operation name, then a counter, so a payload is never
-      # dropped. Pathological: it is the one place a class name depends on what
-      # else is loaded, and it only triggers for Schemas that already have two
-      # confusingly similar entry types.
+      # Two entry types can pascal-case alike (`auth_hold`, `authHold`); the
+      # operation name and then a counter break the tie so neither is dropped.
       sig { params(spec: EntrySpec, namespace: Module).returns(String) }
       def unique_constant_name(spec, namespace)
         base = spec.class_name
@@ -543,9 +456,8 @@ class FragmentClient
         candidate
       end
 
-      # Same identity from two operations is expected and fine. Differing
-      # parameters mean the `.graphql` is stale relative to the Schema, and the
-      # payload that lost the race silently posts the wrong parameter set.
+      # Silent when two operations agree; differing parameters mean the `.graphql`
+      # is stale relative to the Schema.
       sig { params(kept: EntrySpec, dropped: EntrySpec).void }
       def warn_on_conflict(kept, dropped)
         return if kept.same_parameters?(dropped)
