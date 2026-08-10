@@ -348,6 +348,75 @@ class UnitTest < Minitest::Test
     end
   end
 
+  def test_explicit_nil_oauth_settings_fall_back_to_the_defaults
+    # Both keywords are declared nilable, so nil has to mean "use the default".
+    # Asserting it raised nothing is the point: `T.let(oauth_scope, String)` used
+    # to turn an explicit nil into a TypeError.
+    captured = nil
+    stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
+      .to_return do |request|
+        captured = request
+        { status: 200, body: { access_token: 'test_token', expires_in: 3600 }.to_json }
+      end
+
+    FragmentClient.new('client_id', 'client_secret', oauth_url: nil, oauth_scope: nil)
+
+    assert_equal 'https://api.fragment.dev/*',
+                 URI.decode_www_form(captured.body).to_h['scope']
+    assert_equal 'auth.fragment.dev', captured.uri.host
+  end
+
+  def test_a_non_http_oauth_url_is_rejected_where_it_is_passed
+    # Anything without a request_uri used to get as far as create_token and fail
+    # there as a NoMethodError, which says nothing about the argument that caused
+    # it. No token request should be attempted at all.
+    stub_request(:post, /.*/).to_return(status: 200, body: '{}')
+
+    # WebMock's journal is process-global, and a test class whose teardown
+    # shadows the adapter's leaks its requests into it. Only what this test
+    # does below is relevant to the assertion at the end.
+    WebMock::RequestRegistry.instance.reset!
+
+    {
+      'ftp://auth.example.com/token' => /must be an http or https URL/,
+      'auth.fragment.dev/oauth2/token' => /must be an http or https URL/,
+      # Malformed rather than merely wrong-scheme: this used to escape as a
+      # URI::InvalidURIError that never named the argument.
+      'not a url at all' => /oauth_url is not a valid URL/
+    }.each do |bad, expected|
+      error = assert_raises(ArgumentError, "#{bad.inspect} should be rejected") do
+        FragmentClient.new('client_id', 'client_secret', oauth_url: bad)
+      end
+      assert_match expected, error.message
+      assert_match(/#{Regexp.escape(bad)}/, error.message)
+    end
+
+    assert_not_requested :post, /.*/
+  end
+
+  def test_a_plain_http_oauth_url_is_accepted
+    # The check is on the scheme family, not on TLS: a local or proxied auth
+    # endpoint over http must still work.
+    stub_request(:post, 'http://localhost:8080/oauth2/token')
+      .to_return(status: 200, body: { access_token: 't', expires_in: 3600 }.to_json)
+
+    FragmentClient.new('client_id', 'client_secret', oauth_url: 'http://localhost:8080/oauth2/token')
+
+    assert_requested :post, 'http://localhost:8080/oauth2/token'
+  end
+
+  def test_an_https_oauth_url_is_accepted
+    # URI::HTTPS subclasses URI::HTTP, so the check above must not reject it --
+    # which is the scheme every real deployment uses.
+    stub_request(:post, 'https://auth.eu-west-1.fragment.dev/oauth2/token')
+      .to_return(status: 200, body: { access_token: 't', expires_in: 3600 }.to_json)
+
+    FragmentClient.new('client_id', 'client_secret',
+                       oauth_url: 'https://auth.eu-west-1.fragment.dev/oauth2/token')
+
+    assert_requested :post, 'https://auth.eu-west-1.fragment.dev/oauth2/token'
+  end
+
   def test_token_request_uses_appendix_b_form_encoding_utf8
     captured_auth_request = nil
     stub_request(:post, 'https://auth.fragment.dev/oauth2/token')
