@@ -20,10 +20,12 @@ class TypedEntriesTest < Minitest::Test
     logger.formatter = ->(_severity, _time, _progname, message) { "#{message}\n" }
     FragmentClient.configure { |config| config.logger = logger }
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
   end
 
   def teardown
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     FragmentClient.instance_variable_set(:@configuration, nil)
     # webmock/minitest installs WebMock.reset! by aliasing Minitest::Test#teardown,
     # so a teardown here that skips super leaves its requests in the global journal.
@@ -360,6 +362,7 @@ class TypedEntriesTest < Minitest::Test
     assert_equal 'UserFundsAccountV2', only_v2.name.split('::').last
 
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     both = load(File.read(fixture('002-type-versions', 'input.graphql')), namespace: Module.new)
 
     assert_equal 'UserFundsAccountV2', both.fetch(1).name.split('::').last

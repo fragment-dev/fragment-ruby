@@ -6,6 +6,7 @@ require 'logger'
 require 'minitest/autorun'
 require 'tapioca/internal'
 require 'tapioca/dsl/compilers/fragment_typed_entries'
+require 'tapioca/dsl/compilers/fragment_query_methods'
 
 # Snapshot of the RBI the Tapioca DSL compiler generates.
 #
@@ -29,6 +30,9 @@ require 'tapioca/dsl/compilers/fragment_typed_entries'
 #
 # Regenerate with `bundle exec rake snapshot` and read the diff.
 class SnapshotTest < Minitest::Test
+  COMPILERS = [Tapioca::Dsl::Compilers::FragmentTypedEntries,
+               Tapioca::Dsl::Compilers::FragmentQueryMethods].freeze
+
   FIXTURE = File.expand_path('fixtures/snapshot_entries.graphql', __dir__)
   SNAPSHOT = File.expand_path('../sorbet/snapshots/typed_entries.rbi', __dir__)
 
@@ -50,10 +54,12 @@ class SnapshotTest < Minitest::Test
   def setup
     FragmentClient.configure { |config| config.logger = Logger.new(File::NULL) }
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
   end
 
   def teardown
     FragmentClient::TypedEntries.reset!
+    FragmentGraphQl.reset_operations!
     FragmentClient.instance_variable_set(:@configuration, nil)
   end
 
@@ -93,6 +99,20 @@ class SnapshotTest < Minitest::Test
     'an optional type with no Sorbet mapping' => ->(p) { p.graphql_type == 'TransferChannel' }
   }.freeze
 
+  def test_every_shipped_operation_gets_a_method
+    # The query methods are defined per instance, so the RBI is the only thing
+    # that tells Sorbet they exist. `add_ledger_entries` is excluded because it has
+    # a hand-written signature; a duplicate declaration here would conflict.
+    rbi = self.class.generate
+
+    (FragmentGraphQl.operation_method_names - FragmentClient::WRAPPED_OPERATIONS).each do |name|
+      assert_includes rbi, "  def #{name}(variables); end", "#{name} is missing from the RBI"
+    end
+    FragmentClient::WRAPPED_OPERATIONS.each do |name|
+      refute_includes rbi, "  def #{name}(variables); end", "#{name} must not be redeclared"
+    end
+  end
+
   def test_the_fixture_exercises_every_branch_worth_snapshotting
     # A snapshot only guards what it covers. If the fixture stops reaching one of
     # these, the snapshot silently stops protecting it.
@@ -116,14 +136,18 @@ class SnapshotTest < Minitest::Test
   # drift from it.
   def self.generate
     FragmentClient::TypedEntries.reset!
+    # Tapioca memoises each compiler's constant set, and intersects it with the
+    # requested constants by identity. `reset!` above replaces the payload classes,
+    # so without this a second call in one process matches none of them.
+    COMPILERS.each(&:reset_state)
     # Into the real namespace: a class reached only through an anonymous module is
     # named `#<Module:0x...>::AuthCaptureV1`, which Sorbet cannot resolve and the
     # compiler therefore skips.
     payloads = FragmentClient::TypedEntries.load(FIXTURE)
 
     pipeline = Tapioca::Dsl::Pipeline.new(
-      requested_constants: payloads,
-      requested_compilers: [Tapioca::Dsl::Compilers::FragmentTypedEntries],
+      requested_constants: payloads + [FragmentClient],
+      requested_compilers: COMPILERS,
       # In this process rather than forked workers. Tapioca parallelises with
       # `Parallel.map(in_processes:)`, and work done in a fork is invisible to
       # both SimpleCov and any failure this test would otherwise report directly.
