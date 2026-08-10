@@ -36,6 +36,12 @@ Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
 
+# Walking a GraphQL AST or an RBI tree is a case analysis over node types; the
+# branch count is the shape of the data, not accidental complexity.
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'test/**/*'
+
 Metrics/ModuleLength:
   Max: 260
   Exclude:
