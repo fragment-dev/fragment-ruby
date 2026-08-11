@@ -10878,6 +10878,45 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerLineTagInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "key",
+              "description": "The key of this tag. Can be up to 128 characters long.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "value",
+              "description": "The value associated with this tag's key. Can be up to 128 characters long.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "LedgerLinesConnection",
           "description": "A paginated list of Ledger Lines",
@@ -12609,7 +12648,7 @@
                 },
                 {
                   "name": "update",
-                  "description": "The payload containing the fields to update. Only a Ledger Entry's tags can be updated.",
+                  "description": "The payload containing the fields to update. Only a Ledger Entry's tags and its Ledger Lines' tags can be updated.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -16621,6 +16660,24 @@
               "defaultValue": null
             },
             {
+              "name": "ledgerLines",
+              "description": "The list of Ledger Line updates to apply to Ledger Lines on this Ledger Entry.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UpdateLedgerLineInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tags",
               "description": "The list of Tags to add and/or update on this Ledger Entry.",
               "type": {
@@ -16727,6 +16784,67 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UpdateLedgerLineInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ledgerLine",
+              "description": "The Ledger Line that is being updated. It must belong to the Ledger Entry being updated.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerLineMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "tags",
+              "description": "The list of Tags to add and/or update on this Ledger Line.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerLineTagInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "tagsToRemove",
+              "description": "The list of Tags to remove from this Ledger Line.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerLineTagInput",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             }
