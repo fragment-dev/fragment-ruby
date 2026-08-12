@@ -1,16 +1,26 @@
 # Changelog
 
+All notable changes to `fragment-dev` will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
+
+Releases prior to `2.0.0` were published before this changelog was added and
+are not documented here.
+
 ## [2.1.0]
 
 ### Added
 
-- `add_ledger_entries` commits a batch of Ledger Entries atomically. It accepts
+- `add_ledger_entries` posts a batch of Ledger Entries atomically. It accepts
   raw `AddLedgerEntryInput` hashes, typed payloads, or both in one batch, and
   preserves their order.
-- Typed batch payloads. `FragmentClient::TypedEntries.load` derives one payload
-  class per `(Ledger Entry type, typeVersion)` from the per-entry-type
-  `addLedgerEntry` operations the Fragment CLI generates for your Schema, so a
-  batch can be built with real parameter names instead of untyped hashes:
+- Strongly-typed batch payloads. `FragmentClient::TypedEntries.load` derives one
+  payload class per `(Ledger Entry type, typeVersion)` from the per-entry-type
+  `addLedgerEntry` operations the Fragment CLI generates for your Schema. Because a
+  batch mutation takes one list of one input type, GraphQL cannot type each entry's
+  `parameters` field individually; these payloads do. Payload names always carry the
+  entry type version, defaulting to `V1`:
 
   ```ruby
   fragment.add_ledger_entries(entries: [

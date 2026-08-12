@@ -14284,6 +14284,16 @@
               "defaultValue": null
             },
             {
+              "name": "payments",
+              "description": "EXPERIMENTAL: The Payment Types to add to the Schema.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaPaymentsInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "scenes",
               "description": "Any scenes associated with this Schema.",
               "type": {
@@ -15040,6 +15050,101 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentAccountingInput",
+          "description": "EXPERIMENTAL: The Ledger Entries a Payment Type posts as a payment moves\nthrough its lifecycle, keyed by lifecycle transition.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "needs_confirmation_to_processing",
+              "description": "Posted when the payment enters processing. Optional.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaPaymentEntryInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "processing_to_settled",
+              "description": "Posted when the payment settles. Every Payment Type must define it.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SchemaPaymentEntryInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentEntryInput",
+          "description": "EXPERIMENTAL: The Ledger Entry a Payment Type posts on a payment lifecycle event.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "description",
+              "description": "Human-readable description of the payment entry.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lines",
+              "description": "The Ledger Lines in the payment entry.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SchemaPaymentLineInput",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SchemaPaymentEntryStatus",
+          "description": "The status of a Payment Type.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "active",
+              "description": "The Payment Type is active.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentInput",
           "description": "EXPERIMENTAL: Marks a Ledger Account as a Payment Account.",
           "fields": null,
@@ -15054,6 +15159,265 @@
                   "kind": "SCALAR",
                   "name": "Boolean",
                   "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentLineInput",
+          "description": "EXPERIMENTAL: A Ledger Line in a payment entry.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "account",
+              "description": "The Ledger Account this line will be posted to.\nIt supports parameters in its attributes via handlebars syntax.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SchemaLedgerAccountMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "amount",
+              "description": "The amount of the line. It supports parameters via the handlebars syntax and addition (+) and subtraction (-).",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ParameterizedString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "currency",
+              "description": "The currency of the line. This is required if the Ledger Account has currencyMode multi.\nIt supports parameters in its attributes via handlebars syntax.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaCurrencyMatchInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "description",
+              "description": "Human-readable description of the line.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "key",
+              "description": "The key for the line. Keys must be unique within a payment entry.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "system",
+              "description": "Marks this as a system-owned line. Fragment fills the amounts of system\nlines when the payment entry is posted.",
+              "type": {
+                "kind": "ENUM",
+                "name": "SchemaSystemLineKind",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentTypeDetailsInput",
+          "description": "EXPERIMENTAL: The payment a Payment Type creates.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "amount",
+              "description": "The amount requested for the payment, as a parameterized expression filled\nfrom createPayment parameters.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ParameterizedString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "direction",
+              "description": "The direction the payment moves money.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SchemaPaymentTypeDirection",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SchemaPaymentTypeDirection",
+          "description": "The direction a Payment Type moves money.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "payin",
+              "description": "Money moves into the Payment Account.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payout",
+              "description": "Money moves out of the Payment Account.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentTypeInput",
+          "description": "EXPERIMENTAL: A Payment Type in a Schema. All Payment Types defined in a\nSchema must have a unique `type` and `typeVersion` pair.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accounting",
+              "description": "The Ledger Entries posted as the payment moves through its lifecycle.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SchemaPaymentAccountingInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payment",
+              "description": "The payment this Payment Type creates.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SchemaPaymentTypeDetailsInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment Type.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SchemaPaymentEntryStatus",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": "The type of this Payment Type. This is a stable, unique identifier for it.\nUniqueness is enforced at the Schema level.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the Payment Type.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SchemaPaymentsInput",
+          "description": "EXPERIMENTAL: The Payment Types in your Schema.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "types",
+              "description": "A list of Payment Type definitions.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SchemaPaymentTypeInput",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "defaultValue": null
@@ -15086,6 +15450,29 @@
           ],
           "interfaces": null,
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SchemaSystemLineKind",
+          "description": "Identifies a system-owned line in a payment entry. The amounts of system\nlines are filled by Fragment when the payment entry is posted.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "payment_fee_line",
+              "description": "The line carrying the Fragment fee amount, posted to the Payment Account.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment_settlement_line",
+              "description": "The line carrying the settled payment amount, posted to the Payment Account.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {

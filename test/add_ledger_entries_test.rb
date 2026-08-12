@@ -79,8 +79,7 @@ class AddLedgerEntriesTest < Minitest::Test
 
   def test_raw_entries_work_without_loading_any_typed_payloads
     # The batch method is not conditional on the typed-payload machinery: a client
-    # constructed with no extra queries still posts a batch of plain hashes, which
-    # is the first example in the README.
+    # constructed with no extra queries still posts a batch of plain hashes.
     entry = { ik: 'raw-1',
               entry: { ledger: { ik: 'prod' }, type: 'user_funds_account',
                        parameters: { user_id: 'user-1' } } }
