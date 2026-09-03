@@ -9981,7 +9981,7 @@
             },
             {
               "name": "typeVersion",
-              "description": "Experimental: This field is reserved for an upcoming feature and is not yet supported.",
+              "description": "The version of the Ledger Entry type to post. Defaults to 1.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
