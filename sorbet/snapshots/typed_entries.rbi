@@ -28,6 +28,9 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreateLedger) }
   def create_ledger(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreatePayment) }
+  def create_payment(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteCustomTxs) }
   def delete_custom_txs(variables); end
 
@@ -570,6 +573,48 @@ module FragmentClient::Responses
         # `isIkReplay`: Boolean!
         sig { returns(T.nilable(T::Boolean)) }
         def is_ik_replay; end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class CreatePayment
+    sig { returns(T.nilable(FragmentClient::Responses::CreatePayment::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `createPayment`: CreatePaymentResponse!
+      sig { returns(CreatePayment) }
+      def create_payment; end
+
+      class CreatePayment
+        sig { returns(::String) }
+        def __typename; end
+
+        # `clientSecret`: String!
+        sig { returns(T.nilable(::String)) }
+        def client_secret; end
+
+        # `status`: PaymentStatus!
+        sig { returns(T.untyped) }
+        def status; end
 
         # `code`: String!
         sig { returns(T.nilable(::String)) }
