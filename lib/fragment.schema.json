@@ -1371,11 +1371,15 @@
             },
             {
               "name": "typeVersion",
-              "description": "The version of the Payment Type. Defaults to the latest active version.",
+              "description": "The version of the Payment Type.",
               "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             }
@@ -1400,15 +1404,42 @@
             },
             {
               "kind": "OBJECT",
-              "name": "InternalError",
+              "name": "CreatePaymentResult",
               "ofType": null
             },
             {
               "kind": "OBJECT",
-              "name": "Payment",
+              "name": "InternalError",
               "ofType": null
             }
           ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatePaymentResult",
+          "description": "EXPERIMENTAL: The created Payment.",
+          "fields": [
+            {
+              "name": "payment",
+              "description": "The Payment that was created.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Payment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
         },
         {
           "kind": "OBJECT",
@@ -2425,6 +2456,12 @@
             },
             {
               "name": "SHP",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SLE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -4576,6 +4613,59 @@
           "possibleTypes": null
         },
         {
+          "kind": "UNION",
+          "name": "InstantiateLedgerAccountResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InstantiateLedgerAccountResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "InstantiateLedgerAccountResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "ledgerAccount",
+              "description": "The instantiated Ledger Account.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerAccount",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "SCALAR",
           "name": "Int",
           "description": "Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
@@ -5054,7 +5144,7 @@
                 },
                 {
                   "name": "filter",
-                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](https://fragment.dev/guides/query-data/ledger-accounts).",
+                  "description": "Filter the Ledger Accounts returned. Learn more about [querying Ledger Accounts](/guides/query-data#ledger-accounts).",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "LedgerAccountsFilterSet",
@@ -5465,6 +5555,73 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payments",
+              "description": "EXPERIMENTAL: List the Payments on a Ledger, most recent first.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "Filter the Payments returned.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PaymentsFilterSet",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of Payments to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of Payments to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentsConnection",
                   "ofType": null
                 }
               },
@@ -7143,7 +7300,7 @@
           "inputFields": [
             {
               "name": "ownBalance",
-              "description": "A condition that the ownBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/read-balances) for more on the different types of Ledger Account balances.",
+              "description": "A condition that the ownBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](/guides/read-balances) for more on the different types of Ledger Account balances.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "Int96ConditionInput",
@@ -7153,7 +7310,7 @@
             },
             {
               "name": "totalBalance",
-              "description": "A condition that the totalBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](https://fragment.dev/read-balances) for more on the different types of Ledger Account balances.",
+              "description": "A condition that the totalBalance field must satisfy. Note that this condition always applies to the latest balance, not to balances at a specific date or time. See [Read balances](/guides/read-balances) for more on the different types of Ledger Account balances.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "Int96ConditionInput",
@@ -7662,7 +7819,7 @@
           "description": "Payment configuration of a Ledger Account.",
           "fields": [
             {
-              "name": "penguin",
+              "name": "enabled",
               "description": null,
               "args": [],
               "type": {
@@ -11349,192 +11506,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "OBJECT",
-          "name": "LedgerPayment",
-          "description": "EXPERIMENTAL: A Payment posted to a Ledger.",
-          "fields": [
-            {
-              "name": "amount",
-              "description": "The amount of this Payment, in whole cents.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int96",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "created",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "DateTime",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "ik",
-              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) the Payment was created with.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "ledgerId",
-              "description": "The Ledger this Payment belongs to.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "parameters",
-              "description": "Parameters the Payment was created with. Only returned by the `ledgerPayment` query.",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "status",
-              "description": "The status of this Payment.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "PaymentStatus",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "type",
-              "description": "The Payment Type in the Schema this Payment was created from.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "typeVersion",
-              "description": "The version of the Payment Type.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "LedgerPaymentsConnection",
-          "description": "EXPERIMENTAL: A paginated list of Payments.",
-          "fields": [
-            {
-              "name": "nodes",
-              "description": "The current page of results.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "LedgerPayment",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "pageInfo",
-              "description": "The pagination info for this list.",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PageInfo",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "INPUT_OBJECT",
           "name": "LedgerTypeFilter",
           "description": null,
@@ -12054,7 +12025,7 @@
             },
             {
               "name": "addLedgerEntries",
-              "description": "Batch version of [addLedgerEntry](http://localhost:3001/api-reference/ledger-mutations#addledgerentry).\n\nAdds a batch of Ledger Entries in one synchronous and atomic transaction. Either every entry is added or none are.",
+              "description": "Batch version of [addLedgerEntry](/api-reference/ledger-mutations#addledgerentry).\n\nAdds a batch of Ledger Entries in one synchronous and atomic transaction. Either every entry is added or none are.",
               "args": [
                 {
                   "name": "entries",
@@ -12540,6 +12511,61 @@
               "deprecationReason": null
             },
             {
+              "name": "instantiateLedgerAccount",
+              "description": "Instantiates a Ledger Account from a template in the Ledger's Schema before any Ledger Entry is posted to it. Creates any missing templated ancestors.",
+              "args": [
+                {
+                  "name": "ledger",
+                  "description": "The Ledger whose Schema defines the account.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "parameters",
+                  "description": "Values for every parameter the account's template references: name, currency, and linked account fields.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Parameters",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "path",
+                  "description": "The fully instantiated path of the account, e.g. assets/customer:cust-1. Must not contain placeholders.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "InstantiateLedgerAccountResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "migrateLedgerEntry",
               "description": "Migrate an existing Ledger Entry to a new type and typeVersion.\n\nMigrating a Ledger Entry will do the following:\n  1. Reverse the existing Ledger Entry\n  2. Post a new Ledger Entry with the new type, typeVersion, and parameters provided",
               "args": [
@@ -13000,11 +13026,27 @@
         {
           "kind": "OBJECT",
           "name": "Payment",
-          "description": null,
+          "description": "EXPERIMENTAL: A Payment posted to a Ledger.",
           "fields": [
             {
+              "name": "amount",
+              "description": "The amount of this Payment, in whole cents.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "clientSecret",
-              "description": "The secret handed to the payments SDK to render the payment method capture.",
+              "description": "The credential the payments SDK presents to `confirmPayment`.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13012,6 +13054,118 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "currency",
+              "description": "The currency this Payment is denominated in.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentCurrency",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of this Payment.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ik",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) the Payment was created with.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledger",
+              "description": "The Ledger that this Payment belongs to.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Ledger",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "mode",
+              "description": "The mode of this Payment. Can be `sandbox` or `production`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentMode",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "parameters",
+              "description": "Parameters the Payment was created with.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "JSON",
                   "ofType": null
                 }
               },
@@ -13033,11 +13187,181 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "The Payment Type in the Schema this Payment was created from.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the Payment Type.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
           "interfaces": [],
           "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentCurrency",
+          "description": "EXPERIMENTAL: The currency a Payment is denominated in.",
+          "fields": [
+            {
+              "name": "code",
+              "description": "The currency code.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentCurrencyCode",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "name",
+              "description": "A human readable name for the currency (e.g. United States Dollar). This is used for display purposes.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "precision",
+              "description": "The number of decimal places this currency goes to. For example, United States Dollars have a precision of 2 (i.e. 100 cents in a dollar), whereas the Jordanian Dinar has a precision of 3. This is used for display purposes.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentCurrencyCode",
+          "description": "EXPERIMENTAL — subject to change.\n\nThe currencies a Payment can be denominated in.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "USD",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentMatchInput",
+          "description": "Specify a Ledger Payment by using `ledger` and `ik`.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ik",
+              "description": "The Idempotency Key the Payment was created with.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ledger",
+              "description": "The Ledger the Payment belongs to.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentMode",
+          "description": "Mode of a Payment.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "production",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "sandbox",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "possibleTypes": null
         },
         {
@@ -13048,6 +13372,12 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
+            {
+              "name": "approved",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "needs_payment_method",
               "description": null,
@@ -13067,6 +13397,127 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentStatusFilter",
+          "description": "EXPERIMENTAL: Filters a result set by Payment status.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "equalTo",
+              "description": "Results must have the specified status.",
+              "type": {
+                "kind": "ENUM",
+                "name": "PaymentStatus",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Results can have any of the specified statuses.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "PaymentStatus",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentsConnection",
+          "description": "EXPERIMENTAL: A paginated list of Payments.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Payment",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentsFilterSet",
+          "description": "EXPERIMENTAL: The filters that can be applied to a list of Payments.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "created",
+              "description": "Use this filter to filter Payments by their `created` timestamp.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "status",
+              "description": "Use this to filter Payments by their status.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PaymentStatusFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -13429,118 +13880,6 @@
               "deprecationReason": null
             },
             {
-              "name": "ledgerPayment",
-              "description": "EXPERIMENTAL: Get a single Payment by its Idempotency Key.",
-              "args": [
-                {
-                  "name": "ik",
-                  "description": "The Idempotency Key the Payment was created with.",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "SafeString",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "ledger",
-                  "description": "The Ledger the Payment belongs to.",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "LedgerMatchInput",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "LedgerPayment",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "ledgerPayments",
-              "description": "EXPERIMENTAL: List the Payments on a Ledger, most recent first.",
-              "args": [
-                {
-                  "name": "after",
-                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": "The number of Payments to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": "The number of Payments to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "ledger",
-                  "description": "The Ledger to list Payments for.",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "LedgerMatchInput",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "LedgerPaymentsConnection",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "ledgers",
               "description": "Query Ledgers in workspace. Ledgers are paginated and returned in reverse-chronological order by their created date.",
               "args": [
@@ -13646,6 +13985,33 @@
                   "name": "LinksConnection",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment",
+              "description": "EXPERIMENTAL: Get a single Payment by its Idempotency Key.",
+              "args": [
+                {
+                  "name": "payment",
+                  "description": "The Ledger Payment to query.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Payment",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -14053,21 +14419,17 @@
           "inputFields": [
             {
               "name": "entry",
-              "description": "The simulated Ledger Entry.",
+              "description": "The simulated Ledger Entry. Required when eventType is `entry`.",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "SceneEntryInput",
-                  "ofType": null
-                }
+                "kind": "INPUT_OBJECT",
+                "name": "SceneEntryInput",
+                "ofType": null
               },
               "defaultValue": null
             },
             {
               "name": "eventType",
-              "description": "The type of the Scene Event. Currently, only entries are supported.",
+              "description": "The type of the Scene Event.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -14076,6 +14438,16 @@
                   "name": "SceneEventType",
                   "ofType": null
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payment",
+              "description": "EXPERIMENTAL: The simulated Payment lifecycle transition. Required when eventType is `payment`.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ScenePaymentEventInput",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -14087,14 +14459,20 @@
         {
           "kind": "ENUM",
           "name": "SceneEventType",
-          "description": null,
+          "description": "The kind of thing a Scene Event simulates.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
             {
               "name": "entry",
-              "description": null,
+              "description": "A simulated Ledger Entry.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment",
+              "description": "EXPERIMENTAL: One lifecycle transition of a simulated Payment.",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -14109,7 +14487,7 @@
           "inputFields": [
             {
               "name": "events",
-              "description": "A list of simulated ledger entries that make up the Scene.",
+              "description": "The ordered simulated events that make up the Scene.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -14140,6 +14518,122 @@
                   "name": "String",
                   "ofType": null
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payments",
+              "description": "EXPERIMENTAL: The simulated Payments the Scene's payment events reference.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ScenePaymentInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ScenePaymentEventInput",
+          "description": "EXPERIMENTAL: One lifecycle transition of a simulated Payment, posted as a\npart of a Scene.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "event",
+              "description": "The lifecycle transition this Scene Event posts.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SchemaPaymentAccountingEventKey",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ik",
+              "description": "The Idempotency Key of the simulated Payment, as declared in scene.payments.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ScenePaymentInput",
+          "description": "EXPERIMENTAL: A simulated Payment declared by a Scene. Its lifecycle events\nreference it by `ik`, so one simulated Payment has exactly one set of\nparameters.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ik",
+              "description": "The Idempotency Key of the simulated Payment. Unique within the Scene.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "parameters",
+              "description": "Any parameters to be used as inputs to this simulated Payment.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": "The type of the simulated Payment. Must match one of the types provided in schema.payments.types.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "typeVersion",
+              "description": "The version of the Payment Type.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -15392,14 +15886,37 @@
           "possibleTypes": null
         },
         {
+          "kind": "ENUM",
+          "name": "SchemaPaymentAccountingEventKey",
+          "description": "EXPERIMENTAL: A lifecycle transition of a Payment.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "initiated",
+              "description": "The payment was approved and is guaranteed to settle.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "settled",
+              "description": "The payment settled.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentAccountingInput",
           "description": "EXPERIMENTAL: The Ledger Entries a Payment Type posts as a payment moves\nthrough its lifecycle, keyed by lifecycle transition.",
           "fields": null,
           "inputFields": [
             {
-              "name": "needs_payment_method_to_processing",
-              "description": "Posted when the payment enters processing. Optional.",
+              "name": "initiated",
+              "description": "Posted when the payment is approved. Optional.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaPaymentEntryInput",
@@ -15408,7 +15925,7 @@
               "defaultValue": null
             },
             {
-              "name": "processing_to_settled",
+              "name": "settled",
               "description": "Posted when the payment settles. Every Payment Type must define it.",
               "type": {
                 "kind": "NON_NULL",
@@ -15476,7 +15993,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "penguin",
+              "name": "enabled",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
