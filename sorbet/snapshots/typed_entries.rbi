@@ -64,11 +64,17 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetLedgerEntry) }
   def get_ledger_entry(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetPayment) }
+  def get_payment(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetSchema) }
   def get_schema(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetWorkspace) }
   def get_workspace(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::InstantiateLedgerAccount) }
+  def instantiate_ledger_account(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListLedgerAccountBalances) }
   def list_ledger_account_balances(variables); end
@@ -84,6 +90,9 @@ class FragmentClient
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListMultiCurrencyLedgerAccountBalances) }
   def list_multi_currency_ledger_account_balances(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListPayments) }
+  def list_payments(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::MigrateLedgerEntry) }
   def migrate_ledger_entry(variables); end
@@ -422,6 +431,9 @@ module FragmentClient::Responses
       def create_custom_currency; end
 
       class CreateCustomCurrency
+        sig { returns(::String) }
+        def __typename; end
+
         # `customCurrency`: Currency!
         sig { returns(T.nilable(CustomCurrency)) }
         def custom_currency; end
@@ -608,13 +620,19 @@ module FragmentClient::Responses
         sig { returns(::String) }
         def __typename; end
 
-        # `clientSecret`: String!
-        sig { returns(T.nilable(::String)) }
-        def client_secret; end
+        # `payment`: Payment!
+        sig { returns(T.nilable(Payment)) }
+        def payment; end
 
-        # `status`: PaymentStatus!
-        sig { returns(T.untyped) }
-        def status; end
+        class Payment
+          # `clientSecret`: String!
+          sig { returns(::String) }
+          def client_secret; end
+
+          # `status`: PaymentStatus!
+          sig { returns(T.untyped) }
+          def status; end
+        end
 
         # `code`: String!
         sig { returns(T.nilable(::String)) }
@@ -1597,6 +1615,79 @@ module FragmentClient::Responses
     end
   end
 
+  class GetPayment
+    sig { returns(T.nilable(FragmentClient::Responses::GetPayment::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `payment`: Payment
+      sig { returns(T.nilable(Payment)) }
+      def payment; end
+
+      class Payment
+        # `id`: ID!
+        sig { returns(::String) }
+        def id; end
+
+        # `ik`: SafeString!
+        sig { returns(::String) }
+        def ik; end
+
+        # `amount`: Int96!
+        sig { returns(::String) }
+        def amount; end
+
+        # `currency`: PaymentCurrency!
+        sig { returns(Currency) }
+        def currency; end
+
+        class Currency
+          # `code`: PaymentCurrencyCode!
+          sig { returns(T.untyped) }
+          def code; end
+
+          # `name`: String!
+          sig { returns(::String) }
+          def name; end
+
+          # `precision`: Int!
+          sig { returns(::Integer) }
+          def precision; end
+        end
+
+        # `status`: PaymentStatus!
+        sig { returns(T.untyped) }
+        def status; end
+
+        # `type`: SafeString!
+        sig { returns(::String) }
+        def type; end
+
+        # `typeVersion`: Int!
+        sig { returns(::Integer) }
+        def type_version; end
+
+        # `mode`: PaymentMode!
+        sig { returns(T.untyped) }
+        def mode; end
+
+        # `parameters`: JSON!
+        sig { returns(T.untyped) }
+        def parameters; end
+
+        # `created`: DateTime!
+        sig { returns(::String) }
+        def created; end
+      end
+    end
+  end
+
   class GetSchema
     sig { returns(T.nilable(FragmentClient::Responses::GetSchema::Data)) }
     def data; end
@@ -1665,6 +1756,66 @@ module FragmentClient::Responses
         # `name`: String!
         sig { returns(::String) }
         def name; end
+      end
+    end
+  end
+
+  class InstantiateLedgerAccount
+    sig { returns(T.nilable(FragmentClient::Responses::InstantiateLedgerAccount::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `instantiateLedgerAccount`: InstantiateLedgerAccountResponse!
+      sig { returns(InstantiateLedgerAccount) }
+      def instantiate_ledger_account; end
+
+      class InstantiateLedgerAccount
+        sig { returns(::String) }
+        def __typename; end
+
+        # `ledgerAccount`: LedgerAccount!
+        sig { returns(T.nilable(LedgerAccount)) }
+        def ledger_account; end
+
+        class LedgerAccount
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `path`: String!
+          sig { returns(::String) }
+          def path; end
+
+          # `name`: String
+          sig { returns(T.nilable(::String)) }
+          def name; end
+
+          # `type`: LedgerAccountTypes!
+          sig { returns(T.untyped) }
+          def type; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
       end
     end
   end
@@ -2194,6 +2345,97 @@ module FragmentClient::Responses
                 def amount; end
               end
             end
+          end
+
+          # `pageInfo`: PageInfo!
+          sig { returns(PageInfo) }
+          def page_info; end
+
+          class PageInfo
+            # `hasNextPage`: Boolean!
+            sig { returns(T::Boolean) }
+            def has_next_page; end
+
+            # `endCursor`: String
+            sig { returns(T.nilable(::String)) }
+            def end_cursor; end
+
+            # `hasPreviousPage`: Boolean!
+            sig { returns(T::Boolean) }
+            def has_previous_page; end
+
+            # `startCursor`: String
+            sig { returns(T.nilable(::String)) }
+            def start_cursor; end
+          end
+        end
+      end
+    end
+  end
+
+  class ListPayments
+    sig { returns(T.nilable(FragmentClient::Responses::ListPayments::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `ledger`: Ledger
+      sig { returns(T.nilable(Ledger)) }
+      def ledger; end
+
+      class Ledger
+        # `payments`: PaymentsConnection!
+        sig { returns(Payments) }
+        def payments; end
+
+        class Payments
+          # `nodes`: [Payment!]!
+          sig { returns(T::Array[Nodes]) }
+          def nodes; end
+
+          class Nodes
+            # `id`: ID!
+            sig { returns(::String) }
+            def id; end
+
+            # `ik`: SafeString!
+            sig { returns(::String) }
+            def ik; end
+
+            # `amount`: Int96!
+            sig { returns(::String) }
+            def amount; end
+
+            # `currency`: PaymentCurrency!
+            sig { returns(Currency) }
+            def currency; end
+
+            class Currency
+              # `code`: PaymentCurrencyCode!
+              sig { returns(T.untyped) }
+              def code; end
+            end
+
+            # `status`: PaymentStatus!
+            sig { returns(T.untyped) }
+            def status; end
+
+            # `type`: SafeString!
+            sig { returns(::String) }
+            def type; end
+
+            # `typeVersion`: Int!
+            sig { returns(::Integer) }
+            def type_version; end
+
+            # `created`: DateTime!
+            sig { returns(::String) }
+            def created; end
           end
 
           # `pageInfo`: PageInfo!
