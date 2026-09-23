@@ -11229,6 +11229,24 @@
               "defaultValue": null
             },
             {
+              "name": "externalTxIds",
+              "description": "Filter Ledger Lines by the external IDs of their linked transactions. Only supported on `LedgerAccount.lines` for a linked Ledger Account.",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "isReversal",
               "description": "Use this to filter Ledger Lines that were posted to this Ledger Account, using `reverseLedgerEntry`.",
               "type": {
@@ -11758,20 +11776,26 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "LinkMatchInput",
-          "description": null,
+          "description": "Specify a Link by ID, or a Custom Link by its creation IK.",
           "fields": null,
           "inputFields": [
             {
               "name": "id",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ik",
+              "description": "The IK passed to createCustomLink. If id is also provided, both must identify the same Link.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -12717,7 +12741,7 @@
                 },
                 {
                   "name": "link",
-                  "description": "An object containing the ID of a Custom Link.",
+                  "description": "An object containing the ID or creation IK of a Custom Link.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -12748,7 +12772,7 @@
               "args": [
                 {
                   "name": "link",
-                  "description": "An object containing the ID of a Custom Link.",
+                  "description": "An object containing the ID or creation IK of a Custom Link.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -13093,6 +13117,22 @@
               "deprecationReason": null
             },
             {
+              "name": "events",
+              "description": "EXPERIMENTAL: The log of events that have occurred on this Payment, most recent first.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentEventsConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": "The ID of this Payment.",
               "args": [],
@@ -13228,6 +13268,165 @@
         },
         {
           "kind": "OBJECT",
+          "name": "PaymentCardApprovedEvent",
+          "description": "EXPERIMENTAL: The card network approved the Payment.",
+          "fields": [
+            {
+              "name": "ledgerEntry",
+              "description": "The `initiated` Ledger Entry, `null` where the Payment Type defines none.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "LedgerEntry",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentConfirmedEvent",
+          "description": "EXPERIMENTAL: The payer supplied a payment method.",
+          "fields": [
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentCreatedEvent",
+          "description": "EXPERIMENTAL: The Payment was created.",
+          "fields": [
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "PaymentCurrency",
           "description": "EXPERIMENTAL: The currency a Payment is denominated in.",
           "fields": [
@@ -13303,6 +13502,121 @@
           "possibleTypes": null
         },
         {
+          "kind": "INTERFACE",
+          "name": "PaymentEvent",
+          "description": "EXPERIMENTAL: Something that happened to a Payment.",
+          "fields": [
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "PaymentCardApprovedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentConfirmedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentCreatedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentSettledEvent",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentEventsConnection",
+          "description": "EXPERIMENTAL: A paginated list of Payment events.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INTERFACE",
+                      "name": "PaymentEvent",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "PaymentMatchInput",
           "description": "Specify a Ledger Payment by using `ledger` and `ik`.",
@@ -13362,6 +13676,71 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentSettledEvent",
+          "description": "EXPERIMENTAL: The Payment settled.",
+          "fields": [
+            {
+              "name": "ledgerEntry",
+              "description": "The `settled` Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -13948,11 +14327,11 @@
             },
             {
               "name": "link",
-              "description": "Get a Link by ID. Returns a BadRequestError if the Link is not found.",
+              "description": "Get a Link by ID or a Custom Link by creation IK. Returns a BadRequestError if the Link is not found.",
               "args": [
                 {
                   "name": "link",
-                  "description": "An object containing the ID of the Link you are querying",
+                  "description": "An object containing the ID or creation IK of the Link you are querying",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
