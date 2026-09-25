@@ -625,6 +625,14 @@ module FragmentClient::Responses
         def payment; end
 
         class Payment
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `ik`: SafeString!
+          sig { returns(::String) }
+          def ik; end
+
           # `clientSecret`: String!
           sig { returns(::String) }
           def client_secret; end
@@ -632,6 +640,24 @@ module FragmentClient::Responses
           # `status`: PaymentStatus!
           sig { returns(T.untyped) }
           def status; end
+
+          # `amount`: Int96!
+          sig { returns(::String) }
+          def amount; end
+
+          # `mode`: PaymentMode!
+          sig { returns(T.untyped) }
+          def mode; end
+
+          # `currency`: PaymentCurrency!
+          sig { returns(Currency) }
+          def currency; end
+
+          class Currency
+            # `code`: PaymentCurrencyCode!
+            sig { returns(T.untyped) }
+            def code; end
+          end
         end
 
         # `code`: String!
