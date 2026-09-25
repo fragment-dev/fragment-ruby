@@ -15,8 +15,6 @@ are not documented here.
 - `createPayment` now also returns the Payment's `id`, `ik`, `amount`, `mode`,
   and `currency`, so its `payment` can be passed to `<PaymentSession>` in
   `@fragment-dev/payment-elements` as-is.
-- `LinkMatchInput` accepts `ik`, the IK passed to `createCustomLink`, as an
-  alternative to `id`.
 - `LedgerLinesFilterSet` accepts `externalTxIds`, which filters Ledger Lines by
   the external IDs of their linked transactions.
 
