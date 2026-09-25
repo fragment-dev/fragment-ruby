@@ -206,6 +206,7 @@ bundle exec rake    # tests and srb tc
 
 The snapshot is the reviewable record of the surface callers touch. Regenerate it
 deliberately and read the diff: anything renamed or removed, and any optional
-parameter that became required, breaks existing call sites.
+parameter that became required, breaks existing call sites. The query sync
+(`updateSDKQueries.yml`) regenerates it, so read the diff in the sync PR.
 
 [spec]: https://github.com/fragment-dev/graphql-queries/blob/main/shared-spec/typed-batch-entries.md
