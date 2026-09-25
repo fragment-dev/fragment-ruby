@@ -59,6 +59,13 @@ jobs:
         run: |
           bundle exec rake graphql:update_schema
 
+      # The snapshot diff lands in the sync PR, where it is reviewed with the
+      # rest of the generated code.
+      - name: Regenerate typed entry RBI snapshot
+        working-directory: ./fragment-ruby
+        run: |
+          bundle exec rake snapshot
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
