@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 Releases prior to `2.0.0` were published before this changelog was added and
 are not documented here.
 
+## [2.4.0]
+
+### Added
+
+- `createPayment` now also returns the Payment's `id`, `ik`, `amount`, `mode`,
+  and `currency`, so its `payment` can be passed to `<PaymentSession>` in
+  `@fragment-dev/payment-elements` as-is.
+- `LinkMatchInput` accepts `ik`, the IK passed to `createCustomLink`, as an
+  alternative to `id`.
+- `LedgerLinesFilterSet` accepts `externalTxIds`, which filters Ledger Lines by
+  the external IDs of their linked transactions.
+
+### Changed
+
+- `PaymentStatus` now uses `accepted` instead of `approved`. Payments are
+  experimental, so this API may change in a future release.
+
 ## [2.3.0]
 
 ### Added
