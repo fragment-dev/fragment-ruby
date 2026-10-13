@@ -378,6 +378,154 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "AgingClearingAccountsFilterSet",
+          "description": "Filters for pending clearing accounts.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "path",
+              "description": "Account path filter, with the same wildcard rules as LedgerAccountsFilterSet.path.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "StringMatchFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "AgingClearingAccountsInput",
+          "description": "Selection of pending clearing accounts to count.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "filter",
+              "description": "Additional account filters.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "AgingClearingAccountsFilterSet",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "AgingInterval",
+          "description": "Inclusive posted-time bounds usable directly in existing list filters.",
+          "fields": [
+            {
+              "name": "clearingAccountCount",
+              "description": "Unique pending accounts matching ledgerAccounts with this interval's earliestPosted filter. Different pending currencies can place an account in multiple intervals. Null when not requested.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "endTime",
+              "description": "Inclusive upper bound for earliestPosted.before or posted.before.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startTime",
+              "description": "Inclusive lower bound for earliestPosted.after or posted.after; null for the oldest interval.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "unreconciledTxCount",
+              "description": "Transactions matching unreconciledTxs with this interval's posted filter and the requested Links and filters. Null when not requested.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "AgingUnreconciledTxsInput",
+          "description": "Selection of unreconciled transactions to count.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "filter",
+              "description": "Additional posted-time bounds intersected with each interval.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerUnreconciledTxsFilterSet",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "links",
+              "description": "Links identified by Fragment ID or Custom Link creation IK. Provide between 1 and 100 selectors; duplicates are searched once.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LinkMatchInput",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "BadRequestError",
           "description": "Equivalent to an HTTP 400 - request either has missing or incorrect data",
@@ -614,6 +762,135 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CardPaymentMethod",
+          "description": "A saved card.",
+          "fields": [
+            {
+              "name": "brand",
+              "description": "The card network, for example `visa` or `mastercard`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created",
+              "description": "When the payment method was saved.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "expiryMonth",
+              "description": "The card's expiry month, 1–12.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "expiryYear",
+              "description": "The card's four-digit expiry year.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "FRAGMENT ID of the saved Payment Method.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "last4",
+              "description": "The last four digits of the card number.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who owns this payment method.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentMethod",
+              "ofType": null
+            }
+          ],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -1342,7 +1619,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "CreatePaymentInput",
-          "description": "EXPERIMENTAL: The Payment to create.",
+          "description": "The Payment to create.",
           "fields": null,
           "inputFields": [
             {
@@ -1351,6 +1628,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "paymentMethod",
+              "description": "The saved Payment Method to charge for this Payment. When set, the Payment is charged immediately.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PaymentMethodMatchInput",
                 "ofType": null
               },
               "defaultValue": null
@@ -1390,6 +1677,75 @@
         },
         {
           "kind": "UNION",
+          "name": "CreatePaymentMethodSetupResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CreatePaymentMethodSetupResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatePaymentMethodSetupResult",
+          "description": "The created Payment Method Setup.",
+          "fields": [
+            {
+              "name": "isIkReplay",
+              "description": "Whether an earlier call with the same `ik` created this Payment Method Setup.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentMethodSetup",
+              "description": "The Payment Method Setup that was created.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentMethodSetup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
           "name": "CreatePaymentResponse",
           "description": null,
           "fields": null,
@@ -1417,8 +1773,24 @@
         {
           "kind": "OBJECT",
           "name": "CreatePaymentResult",
-          "description": "EXPERIMENTAL: The created Payment.",
+          "description": "The created Payment.",
           "fields": [
+            {
+              "name": "isIkReplay",
+              "description": "Whether an earlier call with the same `ik` created this Payment.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "payment",
               "description": "The Payment that was created.",
@@ -3330,6 +3702,59 @@
         },
         {
           "kind": "UNION",
+          "name": "DeletePaymentMethodResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "DeletePaymentMethodResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeletePaymentMethodResult",
+          "description": "The result of deleting a Payment Method.",
+          "fields": [
+            {
+              "name": "success",
+              "description": "Whether the Payment Method was deleted.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
           "name": "DeleteSchemaResponse",
           "description": null,
           "fields": null,
@@ -3405,6 +3830,31 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "EmailFilter",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "equalTo",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5563,7 +6013,7 @@
             },
             {
               "name": "payments",
-              "description": "EXPERIMENTAL: List the Payments on a Ledger, most recent first.",
+              "description": "List the Payments on a Ledger, most recent first.",
               "args": [
                 {
                   "name": "after",
@@ -5629,6 +6079,71 @@
               "deprecationReason": null
             },
             {
+              "name": "reconciliationReport",
+              "description": "Counts of pending clearing accounts and unreconciled transactions, grouped by age measured from the time of the request.",
+              "args": [
+                {
+                  "name": "clearingAccounts",
+                  "description": "Requests clearing-account counts. Omit to skip them; provide an empty object for all pending accounts.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AgingClearingAccountsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "granularity",
+                  "description": "Unit of age. Monthly intervals use calendar months.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Granularity",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "intervals",
+                  "description": "Number of intervals, including the open-ended oldest interval. Between 1 and 7.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "unreconciledTxs",
+                  "description": "Requests transaction counts for the specified Links. Requires link.read.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "AgingUnreconciledTxsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ReconciliationReport",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "schema",
               "description": "Schema key associated with this Ledger.",
               "args": [],
@@ -5650,6 +6165,95 @@
                 "ofType": {
                   "kind": "ENUM",
                   "name": "LedgerTypes",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "unreconciledTxs",
+              "description": "Transactions in the specified Links that have not been reconciled to any account in this Ledger. Includes external accounts not linked to this Ledger. Sorted by posted timestamp, newest first.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "Filter the unreconciled transactions returned.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerUnreconciledTxsFilterSet",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "The number of unreconciled transactions to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "The number of unreconciled transactions to return per page, when paginating backwards. Defaults to 20, maximum is 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "links",
+                  "description": "Links to search, identified by Fragment ID or Custom Link creation IK. Provide between 1 and 100 selectors. Duplicate Links are searched once.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "LinkMatchInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TxsConnection",
                   "ofType": null
                 }
               },
@@ -7159,6 +7763,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "filter",
+                  "description": "Filters for unreconciled transactions.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LedgerAccountUnreconciledTxsFilterSet",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "first",
                   "description": "The number of unreconciled transactions to return per page, when paginating forwards. Defaults to 20, maximum is 200.",
                   "type": {
@@ -7912,6 +8526,27 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerAccountUnreconciledTxsFilterSet",
+          "description": "Filters for a ledger account's unreconciled transactions.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "posted",
+              "description": "The transaction's posted timestamp. Bounds are inclusive; when both are supplied, before must be later than after.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -10431,7 +11066,7 @@
             },
             {
               "name": "value",
-              "description": "The value associated with this tag's key. Can be up to 128 characters long.",
+              "description": "The value associated with this tag's key. Can be up to 256 characters long.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11101,7 +11736,7 @@
             },
             {
               "name": "value",
-              "description": "The value associated with this tag's key. Can be up to 128 characters long.",
+              "description": "The value associated with this tag's key. Can be up to 256 characters long.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11577,6 +12212,27 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerUnreconciledTxsFilterSet",
+          "description": "Filters for transactions not reconciled to any account in a Ledger.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "posted",
+              "description": "Filter by the external transaction's posted timestamp. Bounds are inclusive.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
           "possibleTypes": null
         },
         {
@@ -12376,11 +13032,11 @@
             },
             {
               "name": "createPayment",
-              "description": "EXPERIMENTAL — subject to change.\n\nCreate a Payment.",
+              "description": "Create a Payment.",
               "args": [
                 {
                   "name": "ik",
-                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency)",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency). Can be up to 128 characters long.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -12427,6 +13083,65 @@
                 "ofType": {
                   "kind": "UNION",
                   "name": "CreatePaymentResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createPaymentMethodSetup",
+              "description": "Save a Payment Method for a User without charging it.",
+              "args": [
+                {
+                  "name": "ik",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for the Payment Method Setup. Can be up to 128 characters long. This is not the idempotency key for the saved Payment Method.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "SafeString",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "ledger",
+                  "description": "The Ledger the Payment Method is saved in.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "LedgerMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "user",
+                  "description": "The User whose payment method to save.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "UserMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "CreatePaymentMethodSetupResponse",
                   "ofType": null
                 }
               },
@@ -12497,6 +13212,37 @@
                 "ofType": {
                   "kind": "UNION",
                   "name": "DeleteLedgerResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "deletePaymentMethod",
+              "description": "Delete a Payment Method saved for a User.",
+              "args": [
+                {
+                  "name": "paymentMethod",
+                  "description": "The Payment Method to delete.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMethodMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "DeletePaymentMethodResponse",
                   "ofType": null
                 }
               },
@@ -13050,7 +13796,7 @@
         {
           "kind": "OBJECT",
           "name": "Payment",
-          "description": "EXPERIMENTAL: A Payment posted to a Ledger.",
+          "description": "A Payment posted to a Ledger.",
           "fields": [
             {
               "name": "amount",
@@ -13118,7 +13864,7 @@
             },
             {
               "name": "events",
-              "description": "EXPERIMENTAL: The log of events that have occurred on this Payment, most recent first.",
+              "description": "The log of events that have occurred on this Payment, most recent first.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -13269,8 +14015,24 @@
         {
           "kind": "OBJECT",
           "name": "PaymentCardCapturedEvent",
-          "description": "EXPERIMENTAL: The card network captured the Payment.",
+          "description": "The card network captured the Payment.",
           "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "ledgerEntry",
               "description": "The `initiated` Ledger Entry, `null` where the Payment Type defines none.",
@@ -13329,9 +14091,25 @@
         },
         {
           "kind": "OBJECT",
-          "name": "PaymentCheckoutCompletedEvent",
-          "description": "EXPERIMENTAL: The payer completed checkout.",
+          "name": "PaymentCheckoutEvent",
+          "description": "The payer went through checkout.",
           "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "occurredAt",
               "description": "When this event occurred.",
@@ -13379,8 +14157,24 @@
         {
           "kind": "OBJECT",
           "name": "PaymentCreatedEvent",
-          "description": "EXPERIMENTAL: The Payment was created.",
+          "description": "The Payment was created.",
           "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "occurredAt",
               "description": "When this event occurred.",
@@ -13428,7 +14222,7 @@
         {
           "kind": "OBJECT",
           "name": "PaymentCurrency",
-          "description": "EXPERIMENTAL: The currency a Payment is denominated in.",
+          "description": "The currency a Payment is denominated in.",
           "fields": [
             {
               "name": "code",
@@ -13487,7 +14281,7 @@
         {
           "kind": "ENUM",
           "name": "PaymentCurrencyCode",
-          "description": "EXPERIMENTAL — subject to change.\n\nThe currencies a Payment can be denominated in.",
+          "description": "The currencies a Payment can be denominated in.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -13504,8 +14298,24 @@
         {
           "kind": "INTERFACE",
           "name": "PaymentEvent",
-          "description": "EXPERIMENTAL: Something that happened to a Payment.",
+          "description": "Something that happened to a Payment.",
           "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "occurredAt",
               "description": "When this event occurred.",
@@ -13550,7 +14360,7 @@
             },
             {
               "kind": "OBJECT",
-              "name": "PaymentCheckoutCompletedEvent",
+              "name": "PaymentCheckoutEvent",
               "ofType": null
             },
             {
@@ -13568,7 +14378,7 @@
         {
           "kind": "OBJECT",
           "name": "PaymentEventsConnection",
-          "description": "EXPERIMENTAL: A paginated list of Payment events.",
+          "description": "A paginated list of Payment events.",
           "fields": [
             {
               "name": "nodes",
@@ -13656,6 +14466,389 @@
           "possibleTypes": null
         },
         {
+          "kind": "INTERFACE",
+          "name": "PaymentMethod",
+          "description": "A payment method saved for a User.",
+          "fields": [
+            {
+              "name": "created",
+              "description": "When the payment method was saved.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "FRAGMENT ID of the saved Payment Method.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who owns this payment method.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CardPaymentMethod",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentMethodMatchInput",
+          "description": "Specify a saved Payment Method by its ID.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": "FRAGMENT ID of the Payment Method.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentMethodSetup",
+          "description": "An attempt to save the Payment Method for a User.",
+          "fields": [
+            {
+              "name": "clientSecret",
+              "description": "The credential to provide to the `<PaymentMethodSetupSession>` component in the Fragment Elements SDK.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created",
+              "description": "When the Payment Method Setup was created.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "currency",
+              "description": "The currency the saved payment method will be charged in.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentCurrency",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The Fragment ID of this Payment Method Setup.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ik",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) the Payment Method Setup was created with.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "mode",
+              "description": "Whether this Payment Method Setup was created in sandbox or production.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentMode",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentMethod",
+              "description": "The Payment Method this setup saved, once its status is `saved`.",
+              "args": [],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "PaymentMethod",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment Method Setup.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentMethodSetupStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentMethodSetupMatchInput",
+          "description": "Specify a Payment Method Setup by using `id`, or `ik` and `ledger`, or all three when they name the same Payment Method Setup.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": "The FRAGMENT ID of the Payment Method Setup.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ik",
+              "description": "The IK passed to `createPaymentMethodSetup`. Required if you have not provided `id`.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ledger",
+              "description": "The Ledger the Payment Method Setup belongs to. Required if you have not provided `id`.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerMatchInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentMethodSetupStatus",
+          "description": "Status of a Payment Method Setup.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "canceled",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "needs_action",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "needs_payment_method",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "processing",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "saved",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentMethodsConnection",
+          "description": "A list of Payment Methods, all in one page.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "Every Payment Method in the list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INTERFACE",
+                      "name": "PaymentMethod",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The pagination info for this list. It never reports another page.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentMethodsFilterSet",
+          "description": "Filter the list of saved Payment Methods returned.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "user",
+              "description": "Filter by the User the Payment Method belongs to.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "UserFilter",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "ENUM",
           "name": "PaymentMode",
           "description": "Mode of a Payment.",
@@ -13681,8 +14874,24 @@
         {
           "kind": "OBJECT",
           "name": "PaymentSettledEvent",
-          "description": "EXPERIMENTAL: The Payment settled.",
+          "description": "The Payment settled.",
           "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "ledgerEntry",
               "description": "The `settled` Ledger Entry.",
@@ -13746,7 +14955,7 @@
         {
           "kind": "ENUM",
           "name": "PaymentStatus",
-          "description": "EXPERIMENTAL — subject to change.\n\nStatus of a Payment.",
+          "description": "Status of a Payment.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -13781,7 +14990,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "PaymentStatusFilter",
-          "description": "EXPERIMENTAL: Filters a result set by Payment status.",
+          "description": "Filters a result set by Payment status.",
           "fields": null,
           "inputFields": [
             {
@@ -13820,7 +15029,7 @@
         {
           "kind": "OBJECT",
           "name": "PaymentsConnection",
-          "description": "EXPERIMENTAL: A paginated list of Payments.",
+          "description": "A paginated list of Payments.",
           "fields": [
             {
               "name": "nodes",
@@ -13871,7 +15080,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "PaymentsFilterSet",
-          "description": "EXPERIMENTAL: The filters that can be applied to a list of Payments.",
+          "description": "The filters that can be applied to a list of Payments.",
           "fields": null,
           "inputFields": [
             {
@@ -14370,7 +15579,7 @@
             },
             {
               "name": "payment",
-              "description": "EXPERIMENTAL: Get a single Payment by its Idempotency Key.",
+              "description": "Get a single Payment by its Idempotency Key.",
               "args": [
                 {
                   "name": "payment",
@@ -14391,6 +15600,135 @@
                 "kind": "OBJECT",
                 "name": "Payment",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentMethod",
+              "description": "Get a Payment Method saved for a User.",
+              "args": [
+                {
+                  "name": "paymentMethod",
+                  "description": "The Payment Method to get.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMethodMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "PaymentMethod",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentMethodSetup",
+              "description": "Get a Payment Method Setup.",
+              "args": [
+                {
+                  "name": "paymentMethodSetup",
+                  "description": "The Payment Method Setup to get.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMethodSetupMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentMethodSetup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentMethods",
+              "description": "List the Payment Methods a User saved in a Ledger, newest first. Deleted Payment Methods are not listed.",
+              "args": [
+                {
+                  "name": "after",
+                  "description": "Ignored. The list is always one page.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "Ignored. The list is always one page.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "filter",
+                  "description": "The User whose Payment Methods to list.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMethodsFilterSet",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "Ignored. The list is always one page.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "Ignored. The list is always one page.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentMethodsConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -14651,6 +15989,73 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "ReconciliationReport",
+          "description": "Reconciliation counts grouped by age, measured from endTime.",
+          "fields": [
+            {
+              "name": "endTime",
+              "description": "Time of the request; the exclusive cutoff used to compute interval boundaries.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "granularity",
+              "description": "Unit used to compute interval boundaries.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Granularity",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "intervals",
+              "description": "Intervals ordered youngest first. The final interval has no lower time bound.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "AgingInterval",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "UNION",
           "name": "ReverseLedgerEntryResponse",
           "description": null,
@@ -14822,7 +16227,7 @@
             },
             {
               "name": "payment",
-              "description": "EXPERIMENTAL: The simulated Payment lifecycle transition. Required when eventType is `payment`.",
+              "description": "The simulated Payment lifecycle transition. Required when eventType is `payment`.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "ScenePaymentEventInput",
@@ -14851,7 +16256,7 @@
             },
             {
               "name": "payment",
-              "description": "EXPERIMENTAL: One lifecycle transition of a simulated Payment.",
+              "description": "One lifecycle transition of a simulated Payment.",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -14902,7 +16307,7 @@
             },
             {
               "name": "payments",
-              "description": "EXPERIMENTAL: The simulated Payments the Scene's payment events reference.",
+              "description": "The simulated Payments the Scene's payment events reference.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -14926,7 +16331,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ScenePaymentEventInput",
-          "description": "EXPERIMENTAL: One lifecycle transition of a simulated Payment, posted as a\npart of a Scene.",
+          "description": "One lifecycle transition of a simulated Payment, posted as a\npart of a Scene.",
           "fields": null,
           "inputFields": [
             {
@@ -14965,7 +16370,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ScenePaymentInput",
-          "description": "EXPERIMENTAL: A simulated Payment declared by a Scene. Its lifecycle events\nreference it by `ik`, so one simulated Payment has exactly one set of\nparameters.",
+          "description": "A simulated Payment declared by a Scene. Its lifecycle events\nreference it by `ik`, so one simulated Payment has exactly one set of\nparameters.",
           "fields": null,
           "inputFields": [
             {
@@ -15403,6 +16808,16 @@
               "defaultValue": null
             },
             {
+              "name": "linkIk",
+              "description": "The idempotency key of a CustomLink, expressed with a schema parameter. Requires linkType: CustomLink.\nIf linkId is also supplied, both must identify the same Link.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ParameterizedString",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "linkType",
               "description": "The type of Link this external account belongs to. Must be one of: IncreaseLink, UnitLink, CustomLink, or StripeLink.",
               "type": {
@@ -15501,7 +16916,7 @@
             },
             {
               "name": "payments",
-              "description": "EXPERIMENTAL: The Payment Types to add to the Schema.",
+              "description": "The Payment Types to add to the Schema.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaPaymentsInput",
@@ -15673,7 +17088,7 @@
             },
             {
               "name": "payment",
-              "description": "EXPERIMENTAL: Marks this as a Payment Account.",
+              "description": "Marks this as a Payment Account.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaPaymentInput",
@@ -16267,7 +17682,7 @@
         {
           "kind": "ENUM",
           "name": "SchemaPaymentAccountingEventKey",
-          "description": "EXPERIMENTAL: A lifecycle transition of a Payment.",
+          "description": "A lifecycle transition of a Payment.",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -16290,7 +17705,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentAccountingInput",
-          "description": "EXPERIMENTAL: The Ledger Entries a Payment Type posts as a payment moves\nthrough its lifecycle, keyed by lifecycle transition.",
+          "description": "The Ledger Entries a Payment Type posts as a payment moves\nthrough its lifecycle, keyed by lifecycle transition.",
           "fields": null,
           "inputFields": [
             {
@@ -16325,7 +17740,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentEntryInput",
-          "description": "EXPERIMENTAL: The Ledger Entry a Payment Type posts on a payment lifecycle event.",
+          "description": "The Ledger Entry a Payment Type posts on a payment lifecycle event.",
           "fields": null,
           "inputFields": [
             {
@@ -16368,7 +17783,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentInput",
-          "description": "EXPERIMENTAL: Marks a Ledger Account as a Payment Account.",
+          "description": "Marks a Ledger Account as a Payment Account.",
           "fields": null,
           "inputFields": [
             {
@@ -16393,7 +17808,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentLineInput",
-          "description": "EXPERIMENTAL: A Ledger Line in a payment entry.",
+          "description": "A Ledger Line in a payment entry.",
           "fields": null,
           "inputFields": [
             {
@@ -16476,7 +17891,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentTypeDetailsInput",
-          "description": "EXPERIMENTAL: The payment a Payment Type creates.",
+          "description": "The payment a Payment Type creates.",
           "fields": null,
           "inputFields": [
             {
@@ -16538,7 +17953,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentTypeInput",
-          "description": "EXPERIMENTAL: A Payment Type in a Schema. All Payment Types defined in a\nSchema must have a unique `type` and `typeVersion` pair.",
+          "description": "A Payment Type in a Schema. All Payment Types defined in a\nSchema must have a unique `type` and `typeVersion` pair.",
           "fields": null,
           "inputFields": [
             {
@@ -16636,7 +18051,7 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "SchemaPaymentsInput",
-          "description": "EXPERIMENTAL: The Payment Types in your Schema.",
+          "description": "The Payment Types in your Schema.",
           "fields": null,
           "inputFields": [
             {
@@ -18529,6 +19944,97 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "User",
+          "description": "A User who pays through a Ledger.",
+          "fields": [
+            {
+              "name": "email",
+              "description": "The User's email address.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UserFilter",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "email",
+              "description": "Filter by the User's email address.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "EmailFilter",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ledger",
+              "description": "The Ledger the User belongs to.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UserMatchInput",
+          "description": "Specify a User by their email.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "email",
+              "description": "The User's email.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },

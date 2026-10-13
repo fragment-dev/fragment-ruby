@@ -31,11 +31,17 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreatePayment) }
   def create_payment(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreatePaymentMethodSetup) }
+  def create_payment_method_setup(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteCustomTxs) }
   def delete_custom_txs(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteLedger) }
   def delete_ledger(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeletePaymentMethod) }
+  def delete_payment_method(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteSchema) }
   def delete_schema(variables); end
@@ -67,6 +73,12 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetPayment) }
   def get_payment(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetPaymentMethod) }
+  def get_payment_method(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetPaymentMethodSetup) }
+  def get_payment_method_setup(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetSchema) }
   def get_schema(variables); end
 
@@ -91,6 +103,9 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListMultiCurrencyLedgerAccountBalances) }
   def list_multi_currency_ledger_account_balances(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListPaymentMethods) }
+  def list_payment_methods(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListPayments) }
   def list_payments(variables); end
 
@@ -112,8 +127,14 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::SyncCustomAccounts) }
   def sync_custom_accounts(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::SyncCustomAccountsByLinkIk) }
+  def sync_custom_accounts_by_link_ik(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::SyncCustomTxs) }
   def sync_custom_txs(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::SyncCustomTxsByLinkIk) }
+  def sync_custom_txs_by_link_ik(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::UpdateLedger) }
   def update_ledger(variables); end
@@ -675,6 +696,117 @@ module FragmentClient::Responses
     end
   end
 
+  class CreatePaymentMethodSetup
+    sig { returns(T.nilable(FragmentClient::Responses::CreatePaymentMethodSetup::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `createPaymentMethodSetup`: CreatePaymentMethodSetupResponse!
+      sig { returns(CreatePaymentMethodSetup) }
+      def create_payment_method_setup; end
+
+      class CreatePaymentMethodSetup
+        sig { returns(::String) }
+        def __typename; end
+
+        # `paymentMethodSetup`: PaymentMethodSetup!
+        sig { returns(T.nilable(PaymentMethodSetup)) }
+        def payment_method_setup; end
+
+        class PaymentMethodSetup
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `ik`: SafeString!
+          sig { returns(::String) }
+          def ik; end
+
+          # `clientSecret`: String!
+          sig { returns(::String) }
+          def client_secret; end
+
+          # `status`: PaymentMethodSetupStatus!
+          sig { returns(T.untyped) }
+          def status; end
+
+          # `mode`: PaymentMode!
+          sig { returns(T.untyped) }
+          def mode; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+
+          # `currency`: PaymentCurrency!
+          sig { returns(Currency) }
+          def currency; end
+
+          class Currency
+            # `code`: PaymentCurrencyCode!
+            sig { returns(T.untyped) }
+            def code; end
+          end
+
+          # `paymentMethod`: PaymentMethod
+          sig { returns(T.nilable(PaymentMethod)) }
+          def payment_method; end
+
+          class PaymentMethod
+            sig { returns(::String) }
+            def __typename; end
+
+            # `id`: ID!
+            sig { returns(::String) }
+            def id; end
+
+            # `created`: DateTime!
+            sig { returns(::String) }
+            def created; end
+
+            # `brand`: String!
+            sig { returns(T.nilable(::String)) }
+            def brand; end
+
+            # `last4`: String!
+            sig { returns(T.nilable(::String)) }
+            def last4; end
+
+            # `expiryMonth`: Int!
+            sig { returns(T.nilable(::Integer)) }
+            def expiry_month; end
+
+            # `expiryYear`: Int!
+            sig { returns(T.nilable(::Integer)) }
+            def expiry_year; end
+          end
+        end
+
+        # `isIkReplay`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def is_ik_replay; end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
   class DeleteCustomTxs
     sig { returns(T.nilable(FragmentClient::Responses::DeleteCustomTxs::Data)) }
     def data; end
@@ -769,6 +901,44 @@ module FragmentClient::Responses
       def delete_ledger; end
 
       class DeleteLedger
+        sig { returns(::String) }
+        def __typename; end
+
+        # `success`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def success; end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class DeletePaymentMethod
+    sig { returns(T.nilable(FragmentClient::Responses::DeletePaymentMethod::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `deletePaymentMethod`: DeletePaymentMethodResponse!
+      sig { returns(DeletePaymentMethod) }
+      def delete_payment_method; end
+
+      class DeletePaymentMethod
         sig { returns(::String) }
         def __typename; end
 
@@ -1714,6 +1884,138 @@ module FragmentClient::Responses
     end
   end
 
+  class GetPaymentMethod
+    sig { returns(T.nilable(FragmentClient::Responses::GetPaymentMethod::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `paymentMethod`: PaymentMethod
+      sig { returns(T.nilable(PaymentMethod)) }
+      def payment_method; end
+
+      class PaymentMethod
+        sig { returns(::String) }
+        def __typename; end
+
+        # `id`: ID!
+        sig { returns(::String) }
+        def id; end
+
+        # `created`: DateTime!
+        sig { returns(::String) }
+        def created; end
+
+        # `brand`: String!
+        sig { returns(T.nilable(::String)) }
+        def brand; end
+
+        # `last4`: String!
+        sig { returns(T.nilable(::String)) }
+        def last4; end
+
+        # `expiryMonth`: Int!
+        sig { returns(T.nilable(::Integer)) }
+        def expiry_month; end
+
+        # `expiryYear`: Int!
+        sig { returns(T.nilable(::Integer)) }
+        def expiry_year; end
+      end
+    end
+  end
+
+  class GetPaymentMethodSetup
+    sig { returns(T.nilable(FragmentClient::Responses::GetPaymentMethodSetup::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `paymentMethodSetup`: PaymentMethodSetup!
+      sig { returns(PaymentMethodSetup) }
+      def payment_method_setup; end
+
+      class PaymentMethodSetup
+        # `id`: ID!
+        sig { returns(::String) }
+        def id; end
+
+        # `ik`: SafeString!
+        sig { returns(::String) }
+        def ik; end
+
+        # `clientSecret`: String!
+        sig { returns(::String) }
+        def client_secret; end
+
+        # `status`: PaymentMethodSetupStatus!
+        sig { returns(T.untyped) }
+        def status; end
+
+        # `mode`: PaymentMode!
+        sig { returns(T.untyped) }
+        def mode; end
+
+        # `created`: DateTime!
+        sig { returns(::String) }
+        def created; end
+
+        # `currency`: PaymentCurrency!
+        sig { returns(Currency) }
+        def currency; end
+
+        class Currency
+          # `code`: PaymentCurrencyCode!
+          sig { returns(T.untyped) }
+          def code; end
+        end
+
+        # `paymentMethod`: PaymentMethod
+        sig { returns(T.nilable(PaymentMethod)) }
+        def payment_method; end
+
+        class PaymentMethod
+          sig { returns(::String) }
+          def __typename; end
+
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+
+          # `brand`: String!
+          sig { returns(T.nilable(::String)) }
+          def brand; end
+
+          # `last4`: String!
+          sig { returns(T.nilable(::String)) }
+          def last4; end
+
+          # `expiryMonth`: Int!
+          sig { returns(T.nilable(::Integer)) }
+          def expiry_month; end
+
+          # `expiryYear`: Int!
+          sig { returns(T.nilable(::Integer)) }
+          def expiry_year; end
+        end
+      end
+    end
+  end
+
   class GetSchema
     sig { returns(T.nilable(FragmentClient::Responses::GetSchema::Data)) }
     def data; end
@@ -2394,6 +2696,80 @@ module FragmentClient::Responses
             sig { returns(T.nilable(::String)) }
             def start_cursor; end
           end
+        end
+      end
+    end
+  end
+
+  class ListPaymentMethods
+    sig { returns(T.nilable(FragmentClient::Responses::ListPaymentMethods::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `paymentMethods`: PaymentMethodsConnection!
+      sig { returns(PaymentMethods) }
+      def payment_methods; end
+
+      class PaymentMethods
+        # `nodes`: [PaymentMethod!]!
+        sig { returns(T::Array[Nodes]) }
+        def nodes; end
+
+        class Nodes
+          sig { returns(::String) }
+          def __typename; end
+
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+
+          # `brand`: String!
+          sig { returns(T.nilable(::String)) }
+          def brand; end
+
+          # `last4`: String!
+          sig { returns(T.nilable(::String)) }
+          def last4; end
+
+          # `expiryMonth`: Int!
+          sig { returns(T.nilable(::Integer)) }
+          def expiry_month; end
+
+          # `expiryYear`: Int!
+          sig { returns(T.nilable(::Integer)) }
+          def expiry_year; end
+        end
+
+        # `pageInfo`: PageInfo!
+        sig { returns(PageInfo) }
+        def page_info; end
+
+        class PageInfo
+          # `hasNextPage`: Boolean!
+          sig { returns(T::Boolean) }
+          def has_next_page; end
+
+          # `endCursor`: String
+          sig { returns(T.nilable(::String)) }
+          def end_cursor; end
+
+          # `hasPreviousPage`: Boolean!
+          sig { returns(T::Boolean) }
+          def has_previous_page; end
+
+          # `startCursor`: String
+          sig { returns(T.nilable(::String)) }
+          def start_cursor; end
         end
       end
     end
@@ -3210,8 +3586,145 @@ module FragmentClient::Responses
     end
   end
 
+  class SyncCustomAccountsByLinkIk
+    sig { returns(T.nilable(FragmentClient::Responses::SyncCustomAccountsByLinkIk::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `syncCustomAccounts`: SyncCustomAccountsResponse!
+      sig { returns(SyncCustomAccounts) }
+      def sync_custom_accounts; end
+
+      class SyncCustomAccounts
+        sig { returns(::String) }
+        def __typename; end
+
+        # `accounts`: [ExternalAccount!]!
+        sig { returns(T.nilable(T::Array[Accounts])) }
+        def accounts; end
+
+        class Accounts
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `externalId`: ID!
+          sig { returns(::String) }
+          def external_id; end
+
+          # `name`: String!
+          sig { returns(::String) }
+          def name; end
+
+          # `currency`: Currency
+          sig { returns(T.nilable(Currency)) }
+          def currency; end
+
+          class Currency
+            # `code`: CurrencyCode!
+            sig { returns(T.untyped) }
+            def code; end
+
+            # `customCurrencyId`: SafeString
+            sig { returns(T.nilable(::String)) }
+            def custom_currency_id; end
+          end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
   class SyncCustomTxs
     sig { returns(T.nilable(FragmentClient::Responses::SyncCustomTxs::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `syncCustomTxs`: SyncCustomTxsResponse!
+      sig { returns(SyncCustomTxs) }
+      def sync_custom_txs; end
+
+      class SyncCustomTxs
+        sig { returns(::String) }
+        def __typename; end
+
+        # `txs`: [Tx!]!
+        sig { returns(T.nilable(T::Array[Txs])) }
+        def txs; end
+
+        class Txs
+          sig { returns(::String) }
+          def __typename; end
+
+          # `linkId`: ID!
+          sig { returns(::String) }
+          def link_id; end
+
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `externalId`: ID!
+          sig { returns(::String) }
+          def external_id; end
+
+          # `externalAccountId`: ID!
+          sig { returns(::String) }
+          def external_account_id; end
+
+          # `amount`: Int96!
+          sig { returns(::String) }
+          def amount; end
+
+          # `description`: String!
+          sig { returns(::String) }
+          def description; end
+
+          # `posted`: DateTime!
+          sig { returns(::String) }
+          def posted; end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class SyncCustomTxsByLinkIk
+    sig { returns(T.nilable(FragmentClient::Responses::SyncCustomTxsByLinkIk::Data)) }
     def data; end
 
     sig { returns(T.untyped) }
