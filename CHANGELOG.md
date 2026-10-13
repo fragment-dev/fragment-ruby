@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 Releases prior to `2.0.0` were published before this changelog was added and
 are not documented here.
 
+## [2.4.1]
+
+### Added
+
+- `createPayment` accepts an optional `paymentMethod`. When it is set, the
+  Payment is charged to that saved Payment Method immediately.
+- `createPaymentMethodSetup` to save a Payment Method for a user. It takes
+  an `ik`, a `ledgerIk` and the user's `email`. It returns the Payment Method
+  Setup's `clientSecret`, `status` and `paymentMethod`.
+- `getPaymentMethodSetup` to retrieve a Payment Method Setup.
+- `listPaymentMethods` to list a user's saved Payment Methods on a Ledger. It takes
+  an `email`, a `ledgerIk` and optional pagination.
+- `getPaymentMethod` to fetch a saved Payment Method by its `id`.
+  `deletePaymentMethod` to delete a saved Payment Method by `id`.
+- `syncCustomAccountsByLinkIk` and `syncCustomTxsByLinkIk` to sync Custom Link
+  Accounts and Transactions using the Custom Link's `ik`.
+
 ## [2.4.0]
 
 ### Added
