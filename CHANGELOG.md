@@ -25,12 +25,6 @@ are not documented here.
 - `syncCustomAccountsByLinkIk` and `syncCustomTxsByLinkIk` to sync Custom Link
   Accounts and Transactions using the Custom Link's `ik`.
 
-### Changed
-
-- `lib/fragment.schema.json` is refreshed. It no longer marks Payments as
-  experimental. It adds `reconciliationReport` on `Ledger`, which no bundled
-  query uses yet.
-
 ## [2.4.0]
 
 ### Added
