@@ -958,6 +958,55 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "CheckoutPaymentAttempt",
+          "description": "An attempt the payer made through checkout.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentAttempt",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "INPUT_OBJECT",
           "name": "CreateCustomCurrencyInput",
           "description": null,
@@ -13398,6 +13447,120 @@
               "deprecationReason": null
             },
             {
+              "name": "refundPayment",
+              "description": "Refund a settled Payment.\n\nThe Payment's Payment Type must define the `refund_initiated` and `refund_failed` Ledger Entries.\nA Payment can be refunded at most 10 times.",
+              "args": [
+                {
+                  "name": "ik",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for this Payment Refund. Can be up to 128 characters long.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "SafeString",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "payment",
+                  "description": "The Payment to refund.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "refund",
+                  "description": "The Payment Refund to create.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "RefundPaymentInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "RefundPaymentResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "retryPayment",
+              "description": "Retry a Payment on a saved Payment Method after its latest attempt was declined, rejected or canceled.",
+              "args": [
+                {
+                  "name": "attemptIk",
+                  "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) for this Retry, unique within the Payment. Can be up to 128 characters long.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "SafeString",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "payment",
+                  "description": "The Payment to retry.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PaymentMatchInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "paymentMethod",
+                  "description": "The saved Payment Method to charge. When omitted, charges the previous attempt's saved Payment Method.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PaymentMethodMatchInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "RetryPaymentResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "reverseLedgerEntry",
               "description": "Reverses a Ledger Entry",
               "args": [
@@ -13815,6 +13978,22 @@
               "deprecationReason": null
             },
             {
+              "name": "attempts",
+              "description": "The Payment's attempts, newest first.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentAttemptsConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "clientSecret",
               "description": "The credential the payments SDK presents to `confirmPayment`.",
               "args": [],
@@ -13959,6 +14138,38 @@
               "deprecationReason": null
             },
             {
+              "name": "refundedAmount",
+              "description": "The amount refunded from this Payment, in whole cents.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refunds",
+              "description": "The Payment's refunds, newest first.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentRefundsConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "status",
               "description": "The status of this Payment.",
               "args": [],
@@ -14013,10 +14224,249 @@
           "possibleTypes": null
         },
         {
+          "kind": "INTERFACE",
+          "name": "PaymentAttempt",
+          "description": "One try at charging a Payment.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CheckoutPaymentAttempt",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "SavedPaymentMethodPaymentAttempt",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentAttemptStatus",
+          "description": "Status of a Payment attempt.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "failed",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "processing",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "succeeded",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentAttemptsConnection",
+          "description": "A paginated list of Payment attempts.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INTERFACE",
+                      "name": "PaymentAttempt",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentCard3DSCanceledEvent",
+          "description": "The payer abandoned or failed the 3DS check.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `needs_payment_method`, even while a newer attempt keeps the Payment `processing`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "PaymentCardCapturedEvent",
           "description": "The card network captured the Payment.",
           "fields": [
+            {
+              "name": "attempt",
+              "description": "The captured attempt. `null` on events recorded before attempts.",
+              "args": [],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "PaymentAttempt",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "attemptStatus",
+              "description": "The status of the attempt after this event. Always `succeeded`. `null` on events recorded before attempt statuses.",
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "PaymentAttemptStatus",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "id",
               "description": "The ID of this Payment event.",
@@ -14062,8 +14512,8 @@
               "deprecationReason": null
             },
             {
-              "name": "status",
-              "description": "The status of the Payment after this event.",
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `accepted`.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14076,6 +14526,22 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
             }
           ],
           "inputFields": null,
@@ -14091,9 +14557,53 @@
         },
         {
           "kind": "OBJECT",
-          "name": "PaymentCheckoutEvent",
-          "description": "The payer went through checkout.",
+          "name": "PaymentCardDeclinedEvent",
+          "description": "The card was declined, or the charge refused.",
           "fields": [
+            {
+              "name": "attempt",
+              "description": "The attempt that failed.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INTERFACE",
+                  "name": "PaymentAttempt",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "attemptStatus",
+              "description": "The status of the attempt after this event. Always `failed`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "declineCode",
+              "description": "The payment processor's reason for the decline, `null` when it gave none.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "id",
               "description": "The ID of this Payment event.",
@@ -14127,8 +14637,8 @@
               "deprecationReason": null
             },
             {
-              "name": "status",
-              "description": "The status of the Payment after this event.",
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `needs_payment_method`, even while a newer attempt keeps the Payment `processing`.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14141,6 +14651,127 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentCheckoutEvent",
+          "description": "The payer went through checkout.",
+          "fields": [
+            {
+              "name": "attempt",
+              "description": "The attempt checkout started. `null` on events recorded before attempts.",
+              "args": [],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "PaymentAttempt",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "attemptStatus",
+              "description": "The status of the attempt after this event. Always `processing`. `null` on events recorded before attempt statuses.",
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "PaymentAttemptStatus",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `processing`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
             }
           ],
           "inputFields": null,
@@ -14192,8 +14823,8 @@
               "deprecationReason": null
             },
             {
-              "name": "status",
-              "description": "The status of the Payment after this event.",
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event: `needs_payment_method` for checkout, `processing` for a saved Payment Method.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14206,6 +14837,22 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
             }
           ],
           "inputFields": null,
@@ -14345,8 +14992,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
             }
           ],
           "inputFields": null,
@@ -14355,7 +15002,17 @@
           "possibleTypes": [
             {
               "kind": "OBJECT",
+              "name": "PaymentCard3DSCanceledEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
               "name": "PaymentCardCapturedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentCardDeclinedEvent",
               "ofType": null
             },
             {
@@ -14366,6 +15023,26 @@
             {
               "kind": "OBJECT",
               "name": "PaymentCreatedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentRefundFailedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentRefundInitiatedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentRefundSettledEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PaymentRetryEvent",
               "ofType": null
             },
             {
@@ -14429,20 +15106,26 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "PaymentMatchInput",
-          "description": "Specify a Ledger Payment by using `ledger` and `ik`.",
+          "description": "Specify a Payment by `id`, or by `ledger` and `ik`.",
           "fields": null,
           "inputFields": [
+            {
+              "name": "id",
+              "description": "The FRAGMENT ID of the Payment.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "ik",
               "description": "The Idempotency Key the Payment was created with.",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "SafeString",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "SafeString",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -14450,13 +15133,9 @@
               "name": "ledger",
               "description": "The Ledger the Payment belongs to.",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "LedgerMatchInput",
-                  "ofType": null
-                }
+                "kind": "INPUT_OBJECT",
+                "name": "LedgerMatchInput",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -14873,6 +15552,661 @@
         },
         {
           "kind": "OBJECT",
+          "name": "PaymentRefund",
+          "description": "A refund issued against a Payment.",
+          "fields": [
+            {
+              "name": "amount",
+              "description": "The amount of this Payment Refund, in whole cents.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created",
+              "description": "When this Payment Refund was created.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of this Payment Refund.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ik",
+              "description": "The [Idempotency Key](https://fragment.dev/api-reference/api-overview#idempotency) the Payment Refund was created with.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "SafeString",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment Refund.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentRefundStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentRefundFailedEvent",
+          "description": "A refund against the Payment failed.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerEntry",
+              "description": "The refund reversal's Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refund",
+              "description": "The Payment Refund this event describes.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentRefund",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refundStatus",
+              "description": "The status of the refund after this event. Always `failed`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentRefundStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentRefundInitiatedEvent",
+          "description": "A refund was initiated against the Payment.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerEntry",
+              "description": "The refund's Ledger Entry.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerEntry",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refund",
+              "description": "The Payment Refund this event describes.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentRefund",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refundStatus",
+              "description": "The status of the refund after this event. Always `processing`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentRefundStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentRefundSettledEvent",
+          "description": "A refund against the Payment settled.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refund",
+              "description": "The Payment Refund this event describes.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentRefund",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refundStatus",
+              "description": "The status of the refund after this event. Always `settled`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentRefundStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentRefundStatus",
+          "description": "Status of a Payment refund.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "failed",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "processing",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "settled",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentRefundsConnection",
+          "description": "A paginated list of Payment refunds.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The current page of results.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "PaymentRefund",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "The pagination info for this list.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentRetryEvent",
+          "description": "The Customer retried the Payment on a saved payment method.",
+          "fields": [
+            {
+              "name": "attempt",
+              "description": "The attempt the Retry started.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SavedPaymentMethodPaymentAttempt",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "attemptStatus",
+              "description": "The status of the attempt after this event. Always `processing`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of this Payment event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this event occurred.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `processing`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentEvent",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "PaymentSettledEvent",
           "description": "The Payment settled.",
           "fields": [
@@ -14925,8 +16259,8 @@
               "deprecationReason": null
             },
             {
-              "name": "status",
-              "description": "The status of the Payment after this event.",
+              "name": "paymentStatus",
+              "description": "The status of the Payment after this event. Always `settled`.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14939,6 +16273,22 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of the Payment after this event.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use `paymentStatus` on each event type."
             }
           ],
           "inputFields": null,
@@ -15579,7 +16929,7 @@
             },
             {
               "name": "payment",
-              "description": "Get a single Payment by its Idempotency Key.",
+              "description": "Get a single Payment by its ID or Idempotency Key in a Ledger.",
               "args": [
                 {
                   "name": "payment",
@@ -16056,6 +17406,211 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "RefundPaymentInput",
+          "description": "The Payment Refund to create.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "amount",
+              "description": "The amount to refund, in whole cents.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "parameters",
+              "description": "Values for the parameters only the refund entries use.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "RefundPaymentResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RefundPaymentResult",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RefundPaymentResult",
+          "description": "The created Payment Refund.",
+          "fields": [
+            {
+              "name": "isIkReplay",
+              "description": "Whether an earlier call with the same `ik` created this Payment Refund.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment",
+              "description": "The Payment after reserving the refund amount.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Payment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refund",
+              "description": "The created Payment Refund.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PaymentRefund",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "RetryPaymentResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RetryPaymentResult",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RetryPaymentResult",
+          "description": "The Payment and the attempt the Retry started.",
+          "fields": [
+            {
+              "name": "attempt",
+              "description": "The attempt this `attemptIk` started. Its outcome events name it.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SavedPaymentMethodPaymentAttempt",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isIkReplay",
+              "description": "Whether an earlier call with the same `attemptIk` started this attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment",
+              "description": "The retried Payment.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Payment",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "UNION",
           "name": "ReverseLedgerEntryResponse",
           "description": null,
@@ -16147,6 +17702,55 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SavedPaymentMethodPaymentAttempt",
+          "description": "An attempt that charged a saved Payment Method.",
+          "fields": [
+            {
+              "name": "id",
+              "description": "The ID of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "The status of this Payment attempt.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaymentAttempt",
+              "ofType": null
+            }
+          ],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -17694,6 +19298,18 @@
               "deprecationReason": null
             },
             {
+              "name": "refund_failed",
+              "description": "EXPERIMENTAL: An initiated refund failed.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "refund_initiated",
+              "description": "EXPERIMENTAL: A refund of the settled payment is initiated.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "settled",
               "description": "The payment settled.",
               "isDeprecated": false,
@@ -17711,6 +19327,26 @@
             {
               "name": "initiated",
               "description": "Posted when the payment is captured. Optional.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaPaymentEntryInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "refund_failed",
+              "description": "EXPERIMENTAL: Posted when an initiated refund fails. Optional.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SchemaPaymentEntryInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "refund_initiated",
+              "description": "EXPERIMENTAL: Posted when a refund of the settled payment is initiated. Optional.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "SchemaPaymentEntryInput",
@@ -18117,6 +19753,18 @@
             {
               "name": "payment_fee_line",
               "description": "The line carrying the Fragment fee amount, posted to the Payment Account.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment_refund_line",
+              "description": "The line removing the refund amount from the Payment Account when a Refund is initiated.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "payment_refund_reversal_line",
+              "description": "The line restoring the refund amount to the Payment Account when a Refund fails.",
               "isDeprecated": false,
               "deprecationReason": null
             },

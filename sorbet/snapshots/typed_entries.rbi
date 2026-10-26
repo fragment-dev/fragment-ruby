@@ -118,6 +118,12 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ReconcileTxRuntime) }
   def reconcile_tx_runtime(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::RefundPayment) }
+  def refund_payment(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::RetryPayment) }
+  def retry_payment(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ReverseLedgerEntry) }
   def reverse_ledger_entry(variables); end
 
@@ -678,6 +684,42 @@ module FragmentClient::Responses
             # `code`: PaymentCurrencyCode!
             sig { returns(T.untyped) }
             def code; end
+          end
+
+          # `refundedAmount`: Int96!
+          sig { returns(::String) }
+          def refunded_amount; end
+
+          # `refunds`: PaymentRefundsConnection!
+          sig { returns(Refunds) }
+          def refunds; end
+
+          class Refunds
+            # `nodes`: [PaymentRefund!]!
+            sig { returns(T::Array[Nodes]) }
+            def nodes; end
+
+            class Nodes
+              # `id`: ID!
+              sig { returns(::String) }
+              def id; end
+
+              # `ik`: SafeString!
+              sig { returns(::String) }
+              def ik; end
+
+              # `amount`: Int96!
+              sig { returns(::String) }
+              def amount; end
+
+              # `status`: PaymentRefundStatus!
+              sig { returns(T.untyped) }
+              def status; end
+
+              # `created`: DateTime!
+              sig { returns(::String) }
+              def created; end
+            end
           end
         end
 
@@ -1880,6 +1922,42 @@ module FragmentClient::Responses
         # `created`: DateTime!
         sig { returns(::String) }
         def created; end
+
+        # `refundedAmount`: Int96!
+        sig { returns(::String) }
+        def refunded_amount; end
+
+        # `refunds`: PaymentRefundsConnection!
+        sig { returns(Refunds) }
+        def refunds; end
+
+        class Refunds
+          # `nodes`: [PaymentRefund!]!
+          sig { returns(T::Array[Nodes]) }
+          def nodes; end
+
+          class Nodes
+            # `id`: ID!
+            sig { returns(::String) }
+            def id; end
+
+            # `ik`: SafeString!
+            sig { returns(::String) }
+            def ik; end
+
+            # `amount`: Int96!
+            sig { returns(::String) }
+            def amount; end
+
+            # `status`: PaymentRefundStatus!
+            sig { returns(T.untyped) }
+            def status; end
+
+            # `created`: DateTime!
+            sig { returns(::String) }
+            def created; end
+          end
+        end
       end
     end
   end
@@ -2838,6 +2916,42 @@ module FragmentClient::Responses
             # `created`: DateTime!
             sig { returns(::String) }
             def created; end
+
+            # `refundedAmount`: Int96!
+            sig { returns(::String) }
+            def refunded_amount; end
+
+            # `refunds`: PaymentRefundsConnection!
+            sig { returns(Refunds) }
+            def refunds; end
+
+            class Refunds
+              # `nodes`: [PaymentRefund!]!
+              sig { returns(T::Array[Nodes]) }
+              def nodes; end
+
+              class Nodes
+                # `id`: ID!
+                sig { returns(::String) }
+                def id; end
+
+                # `ik`: SafeString!
+                sig { returns(::String) }
+                def ik; end
+
+                # `amount`: Int96!
+                sig { returns(::String) }
+                def amount; end
+
+                # `status`: PaymentRefundStatus!
+                sig { returns(T.untyped) }
+                def status; end
+
+                # `created`: DateTime!
+                sig { returns(::String) }
+                def created; end
+              end
+            end
           end
 
           # `pageInfo`: PageInfo!
@@ -3275,6 +3389,266 @@ module FragmentClient::Responses
           # `externalTxId`: String
           sig { returns(T.nilable(::String)) }
           def external_tx_id; end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class RefundPayment
+    sig { returns(T.nilable(FragmentClient::Responses::RefundPayment::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `refundPayment`: RefundPaymentResponse!
+      sig { returns(RefundPayment) }
+      def refund_payment; end
+
+      class RefundPayment
+        sig { returns(::String) }
+        def __typename; end
+
+        # `isIkReplay`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def is_ik_replay; end
+
+        # `refund`: PaymentRefund!
+        sig { returns(T.nilable(Refund)) }
+        def refund; end
+
+        class Refund
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `ik`: SafeString!
+          sig { returns(::String) }
+          def ik; end
+
+          # `amount`: Int96!
+          sig { returns(::String) }
+          def amount; end
+
+          # `status`: PaymentRefundStatus!
+          sig { returns(T.untyped) }
+          def status; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+        end
+
+        # `payment`: Payment!
+        sig { returns(T.nilable(Payment)) }
+        def payment; end
+
+        class Payment
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `ik`: SafeString!
+          sig { returns(::String) }
+          def ik; end
+
+          # `status`: PaymentStatus!
+          sig { returns(T.untyped) }
+          def status; end
+
+          # `amount`: Int96!
+          sig { returns(::String) }
+          def amount; end
+
+          # `mode`: PaymentMode!
+          sig { returns(T.untyped) }
+          def mode; end
+
+          # `currency`: PaymentCurrency!
+          sig { returns(Currency) }
+          def currency; end
+
+          class Currency
+            # `code`: PaymentCurrencyCode!
+            sig { returns(T.untyped) }
+            def code; end
+          end
+
+          # `refundedAmount`: Int96!
+          sig { returns(::String) }
+          def refunded_amount; end
+
+          # `refunds`: PaymentRefundsConnection!
+          sig { returns(Refunds) }
+          def refunds; end
+
+          class Refunds
+            # `nodes`: [PaymentRefund!]!
+            sig { returns(T::Array[Nodes]) }
+            def nodes; end
+
+            class Nodes
+              # `id`: ID!
+              sig { returns(::String) }
+              def id; end
+
+              # `ik`: SafeString!
+              sig { returns(::String) }
+              def ik; end
+
+              # `amount`: Int96!
+              sig { returns(::String) }
+              def amount; end
+
+              # `status`: PaymentRefundStatus!
+              sig { returns(T.untyped) }
+              def status; end
+
+              # `created`: DateTime!
+              sig { returns(::String) }
+              def created; end
+            end
+          end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class RetryPayment
+    sig { returns(T.nilable(FragmentClient::Responses::RetryPayment::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `retryPayment`: RetryPaymentResponse!
+      sig { returns(RetryPayment) }
+      def retry_payment; end
+
+      class RetryPayment
+        sig { returns(::String) }
+        def __typename; end
+
+        # `isIkReplay`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def is_ik_replay; end
+
+        # `attempt`: SavedPaymentMethodPaymentAttempt!
+        sig { returns(T.nilable(Attempt)) }
+        def attempt; end
+
+        class Attempt
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `status`: PaymentAttemptStatus!
+          sig { returns(T.untyped) }
+          def status; end
+        end
+
+        # `payment`: Payment!
+        sig { returns(T.nilable(Payment)) }
+        def payment; end
+
+        class Payment
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `ik`: SafeString!
+          sig { returns(::String) }
+          def ik; end
+
+          # `status`: PaymentStatus!
+          sig { returns(T.untyped) }
+          def status; end
+
+          # `amount`: Int96!
+          sig { returns(::String) }
+          def amount; end
+
+          # `mode`: PaymentMode!
+          sig { returns(T.untyped) }
+          def mode; end
+
+          # `currency`: PaymentCurrency!
+          sig { returns(Currency) }
+          def currency; end
+
+          class Currency
+            # `code`: PaymentCurrencyCode!
+            sig { returns(T.untyped) }
+            def code; end
+          end
+
+          # `refundedAmount`: Int96!
+          sig { returns(::String) }
+          def refunded_amount; end
+
+          # `refunds`: PaymentRefundsConnection!
+          sig { returns(Refunds) }
+          def refunds; end
+
+          class Refunds
+            # `nodes`: [PaymentRefund!]!
+            sig { returns(T::Array[Nodes]) }
+            def nodes; end
+
+            class Nodes
+              # `id`: ID!
+              sig { returns(::String) }
+              def id; end
+
+              # `ik`: SafeString!
+              sig { returns(::String) }
+              def ik; end
+
+              # `amount`: Int96!
+              sig { returns(::String) }
+              def amount; end
+
+              # `status`: PaymentRefundStatus!
+              sig { returns(T.untyped) }
+              def status; end
+
+              # `created`: DateTime!
+              sig { returns(::String) }
+              def created; end
+            end
+          end
         end
 
         # `code`: String!
