@@ -34,6 +34,9 @@ class FragmentClient
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreatePaymentMethodSetup) }
   def create_payment_method_setup(variables); end
 
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::CreateWebhookSubscription) }
+  def create_webhook_subscription(variables); end
+
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteCustomTxs) }
   def delete_custom_txs(variables); end
 
@@ -45,6 +48,9 @@ class FragmentClient
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteSchema) }
   def delete_schema(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::DeleteWebhookSubscription) }
+  def delete_webhook_subscription(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::GetAccountDataMigrations) }
   def get_account_data_migrations(variables); end
@@ -108,6 +114,9 @@ class FragmentClient
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListPayments) }
   def list_payments(variables); end
+
+  sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::ListWebhookSubscriptions) }
+  def list_webhook_subscriptions(variables); end
 
   sig { params(variables: T::Hash[Symbol, T.untyped]).returns(::FragmentClient::Responses::MigrateLedgerEntry) }
   def migrate_ledger_entry(variables); end
@@ -849,6 +858,62 @@ module FragmentClient::Responses
     end
   end
 
+  class CreateWebhookSubscription
+    sig { returns(T.nilable(FragmentClient::Responses::CreateWebhookSubscription::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `createWebhookSubscription`: CreateWebhookSubscriptionResponse!
+      sig { returns(CreateWebhookSubscription) }
+      def create_webhook_subscription; end
+
+      class CreateWebhookSubscription
+        sig { returns(::String) }
+        def __typename; end
+
+        # `signingSecret`: String!
+        sig { returns(T.nilable(::String)) }
+        def signing_secret; end
+
+        # `subscription`: WebhookSubscription!
+        sig { returns(T.nilable(Subscription)) }
+        def subscription; end
+
+        class Subscription
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `url`: String!
+          sig { returns(::String) }
+          def url; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+        end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
   class DeleteCustomTxs
     sig { returns(T.nilable(FragmentClient::Responses::DeleteCustomTxs::Data)) }
     def data; end
@@ -1019,6 +1084,44 @@ module FragmentClient::Responses
       def delete_schema; end
 
       class DeleteSchema
+        sig { returns(::String) }
+        def __typename; end
+
+        # `success`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def success; end
+
+        # `code`: String!
+        sig { returns(T.nilable(::String)) }
+        def code; end
+
+        # `message`: String!
+        sig { returns(T.nilable(::String)) }
+        def message; end
+
+        # `retryable`: Boolean!
+        sig { returns(T.nilable(T::Boolean)) }
+        def retryable; end
+      end
+    end
+  end
+
+  class DeleteWebhookSubscription
+    sig { returns(T.nilable(FragmentClient::Responses::DeleteWebhookSubscription::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `deleteWebhookSubscription`: DeleteWebhookSubscriptionResponse!
+      sig { returns(DeleteWebhookSubscription) }
+      def delete_webhook_subscription; end
+
+      class DeleteWebhookSubscription
         sig { returns(::String) }
         def __typename; end
 
@@ -2975,6 +3078,57 @@ module FragmentClient::Responses
             sig { returns(T.nilable(::String)) }
             def start_cursor; end
           end
+        end
+      end
+    end
+  end
+
+  class ListWebhookSubscriptions
+    sig { returns(T.nilable(FragmentClient::Responses::ListWebhookSubscriptions::Data)) }
+    def data; end
+
+    sig { returns(T.untyped) }
+    def errors; end
+
+    sig { returns(T::Hash[String, T.untyped]) }
+    def original_hash; end
+
+    class Data
+      # `webhookSubscriptions`: WebhookSubscriptionsConnection!
+      sig { returns(WebhookSubscriptions) }
+      def webhook_subscriptions; end
+
+      class WebhookSubscriptions
+        # `nodes`: [WebhookSubscription!]!
+        sig { returns(T::Array[Nodes]) }
+        def nodes; end
+
+        class Nodes
+          # `id`: ID!
+          sig { returns(::String) }
+          def id; end
+
+          # `url`: String!
+          sig { returns(::String) }
+          def url; end
+
+          # `created`: DateTime!
+          sig { returns(::String) }
+          def created; end
+        end
+
+        # `pageInfo`: PageInfo!
+        sig { returns(PageInfo) }
+        def page_info; end
+
+        class PageInfo
+          # `hasNextPage`: Boolean!
+          sig { returns(T::Boolean) }
+          def has_next_page; end
+
+          # `endCursor`: String
+          sig { returns(T.nilable(::String)) }
+          def end_cursor; end
         end
       end
     end

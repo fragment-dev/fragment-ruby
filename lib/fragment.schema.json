@@ -1863,6 +1863,100 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "CreateWebhookSubscriptionInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "url",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "CreateWebhookSubscriptionResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CreateWebhookSubscriptionResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreateWebhookSubscriptionResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "signingSecret",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "subscription",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "WebhookSubscription",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "Currency",
           "description": null,
@@ -3831,6 +3925,59 @@
         {
           "kind": "OBJECT",
           "name": "DeleteSchemaResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "success",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "DeleteWebhookSubscriptionResponse",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "BadRequestError",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "DeleteWebhookSubscriptionResult",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "InternalError",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteWebhookSubscriptionResult",
           "description": null,
           "fields": [
             {
@@ -7877,6 +8024,187 @@
           "possibleTypes": null
         },
         {
+          "kind": "OBJECT",
+          "name": "LedgerAccountBalance",
+          "description": "The balances of one Ledger Account in one currency.",
+          "fields": [
+            {
+              "name": "balance",
+              "description": "Total of all lines in this Ledger Account and its child Ledger Accounts.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "childBalance",
+              "description": "Total of all lines in child Ledger Accounts.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "currency",
+              "description": "The currency of these balances.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Currency",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ledgerAccount",
+              "description": "The Ledger Account these balances belong to.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerAccount",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ownBalance",
+              "description": "Total of all lines in this Ledger Account, excluding child Ledger Accounts.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int96",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LedgerAccountBalanceMatchInput",
+          "description": "One Ledger Account and the currency of the balance to read.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "currency",
+              "description": "The currency of the balance to read.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "CurrencyMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ledgerAccount",
+              "description": "The Ledger Account, by ID or by Ledger and path.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "LedgerAccountMatchInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "LedgerAccountBalancesConnection",
+          "description": "A list of Ledger Account balances. It is always one page, in the order the balances were requested.",
+          "fields": [
+            {
+              "name": "nodes",
+              "description": "The balances, in the order they were requested.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "LedgerAccountBalance",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Pagination info for this list. It never has another page.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "ENUM",
           "name": "LedgerAccountClearingStatus",
           "description": "The clearing status of a Ledger Account.",
@@ -8737,7 +9065,7 @@
             },
             {
               "name": "path",
-              "description": "A filter that must match the account path. Wildcards ('*') may be used only for template variables, and will only match a single variable each.\nFor example: 'assets-root/accounts-receivable/merchant:*' would match: 'assets-root/accounts-receivable/merchant:1' and 'assets-root/accounts-receivable/merchant:1/child'.\nWildcards may not be used outside of template variables. For example, passing in 'assets-root/*' as a filter is invalid and would raise a GraphQL error.",
+              "description": "A filter that must match the account path. Wildcards ('*') may be used in place of template variables, and will only match a single variable each.\nFor example: 'assets-root/accounts-receivable/merchant:*' would match 'assets-root/accounts-receivable/merchant:1' and 'assets-root/accounts-receivable/merchant:2', but not 'assets-root/accounts-receivable/merchant:1/child'.\nTo list every descendant of a Ledger Account at any depth, use a trailing '/*' in 'matches', e.g. 'assets-root/*'. This returns every account under 'assets-root', but not 'assets-root' itself.\nA single pattern cannot combine a trailing '/*' with a template wildcard, and wildcards may not appear anywhere else in the path.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "StringMatchFilter",
@@ -9098,6 +9426,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "created",
+              "description": "Use this filter to filter Ledger Entries by their `created` timestamp. This is the wall-clock time when the Ledger Entry was created.",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateTimeFilter",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "date",
               "description": "Use this filter to filter Ledger Entries by their `posted` date.",
@@ -13198,6 +13536,37 @@
               "deprecationReason": null
             },
             {
+              "name": "createWebhookSubscription",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CreateWebhookSubscriptionInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "CreateWebhookSubscriptionResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "deleteCustomTxs",
               "description": "Delete Txs on a Custom Link. Once deleted, a Tx will not show up in listing queries, but can be resolved by if you lookup by its Fragment ID.",
               "args": [
@@ -13323,6 +13692,37 @@
                 "ofType": {
                   "kind": "UNION",
                   "name": "DeleteSchemaResponse",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "deleteWebhookSubscription",
+              "description": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "DeleteWebhookSubscriptionResponse",
                   "ofType": null
                 }
               },
@@ -14362,6 +14762,38 @@
           "name": "PaymentCard3DSCanceledEvent",
           "description": "The payer abandoned or failed the 3DS check.",
           "fields": [
+            {
+              "name": "attempt",
+              "description": "The attempt the payer canceled or failed 3DS on.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INTERFACE",
+                  "name": "PaymentAttempt",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "attemptStatus",
+              "description": "The status of the attempt after this event. Always `failed`.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PaymentAttemptStatus",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "id",
               "description": "The ID of this Payment event.",
@@ -15419,18 +15851,6 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "canceled",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "needs_action",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "needs_payment_method",
               "description": null,
               "isDeprecated": false,
@@ -15454,11 +15874,11 @@
         {
           "kind": "OBJECT",
           "name": "PaymentMethodsConnection",
-          "description": "A list of Payment Methods, all in one page.",
+          "description": "A page of Payment Methods.",
           "fields": [
             {
               "name": "nodes",
-              "description": "Every Payment Method in the list.",
+              "description": "The Payment Methods in this page.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15482,7 +15902,7 @@
             },
             {
               "name": "pageInfo",
-              "description": "The pagination info for this list. It never reports another page.",
+              "description": "The pagination info for this page.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -16706,6 +17126,59 @@
               "deprecationReason": null
             },
             {
+              "name": "ledgerAccountBalances",
+              "description": "Read the balances of several Ledger Accounts in one query, at most 50 account and currency pairs. Each pair may be listed once.",
+              "args": [
+                {
+                  "name": "balances",
+                  "description": "The Ledger Accounts and currencies to read.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "LedgerAccountBalanceMatchInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "consistencyMode",
+                  "description": "How the balances are read. `transactional` reads every balance from one snapshot.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "ReadBalancesConsistencyMode",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "LedgerAccountBalancesConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ledgerEntry",
               "description": "Get Ledger Entry by ID.",
               "args": [
@@ -17018,7 +17491,7 @@
               "args": [
                 {
                   "name": "after",
-                  "description": "Ignored. The list is always one page.",
+                  "description": "Where to start paginating from, when paginating forwards. Send endCursor from a response to get its next page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -17028,7 +17501,7 @@
                 },
                 {
                   "name": "before",
-                  "description": "Ignored. The list is always one page.",
+                  "description": "Where to start paginating from, when paginating backwards. Send startCursor from a response to get the previous page. Learn more about [pagination](https://fragment.dev/guides/query-data#basics-pagination).",
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
@@ -17052,7 +17525,7 @@
                 },
                 {
                   "name": "first",
-                  "description": "Ignored. The list is always one page.",
+                  "description": "The number of Payment Methods to return per page, when paginating forwards. Defaults to 20, maximum is 100.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -17062,7 +17535,7 @@
                 },
                 {
                   "name": "last",
-                  "description": "Ignored. The list is always one page.",
+                  "description": "The number of Payment Methods to return per page, when paginating backwards. Requires before. Defaults to 20, maximum is 100.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -17195,6 +17668,43 @@
               "deprecationReason": null
             },
             {
+              "name": "webhookSubscriptions",
+              "description": null,
+              "args": [
+                {
+                  "name": "after",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "WebhookSubscriptionsConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "workspace",
               "description": "Get the current Workspace",
               "args": [],
@@ -17239,6 +17749,35 @@
             {
               "name": "use_account",
               "description": "Balance queries will use the value from the Ledger Account's `ownBalanceUpdates` in its `consistencyConfig`.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "ReadBalancesConsistencyMode",
+          "description": "How a list of Ledger Account balances is read. See [Configure consistency](https://fragment.dev/guides/configure-consistency).",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "eventual",
+              "description": "Each balance is an independent eventually consistent read. Any Ledger Account qualifies.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "strong",
+              "description": "Each balance is an independent strongly consistent read, so the own and child balances of one pair may come from different moments. Every Ledger Account must have `totalBalanceUpdates` set to `strong` in its `consistencyConfig`.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "transactional",
+              "description": "Every balance is read from one snapshot, so a Ledger Entry in flight between two of the Ledger Accounts is either in all of them or in none. Every Ledger Account must have `totalBalanceUpdates` set to `strong` in its `consistencyConfig`.",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -21683,6 +22222,116 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "WebhookSubscription",
+          "description": null,
+          "fields": [
+            {
+              "name": "created",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "WebhookSubscriptionsConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "nodes",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "WebhookSubscription",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
