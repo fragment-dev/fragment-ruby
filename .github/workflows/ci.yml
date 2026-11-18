@@ -22,7 +22,7 @@ jobs:
 
         - name: Bundle install
           run: |
-            gem install bundler
+            gem install bundler -v "$(tail -n 1 Gemfile.lock | tr -d ' ')"
             bundle install --jobs 4 --retry 3
 
         - name: Run tests
@@ -60,7 +60,7 @@ jobs:
 
         - name: Bundle install
           run: |
-            gem install bundler
+            gem install bundler -v "$(tail -n 1 Gemfile.lock | tr -d ' ')"
             bundle install --jobs 4 --retry 3
 
         # The typed Ledger Entry payloads are built at load time, so their RBI is
